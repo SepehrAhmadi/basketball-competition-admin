@@ -9,6 +9,7 @@ export function useDropdownState() {
   const categoriesResult = ref<any[]>([]);
   const companyTypeResult = ref<any[]>([]);
   const paymentStatusResult = ref<any[]>([]);
+  const roles = ref<{ value: string; label: string }[]>([]);
 
   return {
     unitsResult,
@@ -18,6 +19,7 @@ export function useDropdownState() {
     productsResult,
     categoriesResult,
     companyTypeResult,
-    paymentStatusResult
+    paymentStatusResult,
+    roles,
   };
 }

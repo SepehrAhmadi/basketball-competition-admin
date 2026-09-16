@@ -1,13 +1,11 @@
 import { useApi } from "~/composables/useApi";
 import type { useDropdownState } from "./state";
 import { useHandlerStore } from "../handler";
-import { useLanguageStore } from "../language";
 
 type StateType = ReturnType<typeof useDropdownState>;
 
 export function useDropdownActions(state: StateType) {
   const handlerStore = useHandlerStore();
-  const langStore = useLanguageStore();
 
   const getUnits = () => {
     const axios = useApi();
@@ -193,6 +191,27 @@ export function useDropdownActions(state: StateType) {
       });
   };
 
+  const getRoles = () => {
+    const axios = useApi();
+    handlerStore.loading = true;
+
+    return axios
+      .get("/roles")
+      .then((res) => {
+        state.roles.value = res.data.data.roles;
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          handlerStore.loading = false;
+        }, 500);
+      });
+  };
+
   return {
     getUnits,
     getPackagings,
@@ -202,5 +221,6 @@ export function useDropdownActions(state: StateType) {
     getProducts,
     getCompanyType,
     getPaymentStatus,
+    getRoles,
   };
 }

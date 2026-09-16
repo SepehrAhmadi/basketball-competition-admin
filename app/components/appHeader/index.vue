@@ -1,13 +1,13 @@
 <template>
   <div class="header-sidebar">
-    <v-app-bar app color="transparetn" class="tw:px-4.5!">
+    <v-app-bar app color="transparetn" class="tw:px-4.5! tw:bg-primary-dark!">
       <div class="tw:flex tw:justify-between tw:items-center tw:w-full">
         <div>
           <button
             icon
             variant="text"
             @click="handleSidebar"
-            class="tw:bg-primary-dark! tw:hover:bg-primary-dark!/80! tw:group tw:p-2! tw:rounded-full"
+            class="tw:bg-secondary-dark! tw:hover:bg-secondary-dark!/80! tw:group tw:p-2! tw:rounded-full"
           >
             <icon-more-vertical
               v-if="rail"
@@ -30,6 +30,7 @@
       rail-width="70"
       app
       :temporary="$vuetify.display.smAndDown"
+      class="tw:bg-primary-dark!"
     >
       <div
         class="tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-2 tw:m-4.25! tw:mt-1!"
@@ -43,7 +44,7 @@
           <div
             class="tw:relative tw:flex tw:justify-between tw:items-center tw:gap-3 tw:cursor-pointer tw:group tw:w-full tw:py-2.5! tw:px-2.5!"
             :class="{
-              'tw:bg-white tw:dark:bg-primary-dark tw:rounded-lg tw:border-b tw:border-gray-300 tw:dark:border-gray-500':
+              'tw:bg-secondary-dark tw:dark:bg-secondary-dark! tw:rounded-lg tw:border-b tw:border-slate-400':
                 activeItem === item.id && !rail,
             }"
             @click="onMainItemClick(item)"
@@ -51,11 +52,11 @@
             <div class="tw:flex tw:justify-center tw:items-center tw:gap-3">
               <component
                 :is="item.icon"
-                class="tw:text-[23px] tw:text-gray-600! tw:group-hover:text-gray-900! tw:dark:text-gray-300! tw:dark:group-hover:text-gray-200! tw:transition tw:duration-150"
+                class="tw:text-[23px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
               />
               <transition name="slide-text">
                 <div
-                  class="tw:text-gray-600! tw:group-hover:text-gray-900! tw:dark:text-gray-300! tw:dark:group-hover:text-gray-200! tw:transition tw:duration-150 tw:text-[15px] tw:text-nowrap!"
+                  class="tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[15px] tw:text-nowrap!"
                   v-if="!rail"
                 >
                   {{ item.title }}
@@ -65,19 +66,19 @@
             <div class="tw:flex tw:justify-center tw:items-center">
               <icon-arrow-down
                 v-if="item.subItems && !rail"
-                class="tw:text-[17px] tw:text-gray-600! tw:group-hover:text-gray-900! tw:dark:text-gray-300! tw:dark:group-hover:text-gray-200! tw:transition tw:duration-150"
+                class="tw:text-[17px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
                 :class="{ 'tw:rotate-180': openGroup === item.id }"
               />
             </div>
 
             <!-- active icon when slider in minimum size -->
             <icon-circle
-              class="tw:hidden tw:text-[6px] tw:text-gray-600! tw:dark:text-gray-300! tw:absolute tw:top-5"
+              class="tw:hidden tw:text-[6px] tw:text-white! tw:group-hover:text-gray-100! tw:absolute tw:top-5"
               :class="{
                 'tw:md:block!':
                   rail && (activeItem === item.id || isAnySubItemActive(item)),
-                'tw:right-0': false,
-                'tw:left-0': true,
+                'tw:right-0': true,
+                'tw:left-0': false,
               }"
             />
           </div>
@@ -100,12 +101,12 @@
               >
                 <div class="tw:flex tw:justify-center tw:items-center tw:gap-3">
                   <icon-arrow-down-right
-                    class="tw:text-[17px] tw:text-gray-600! tw:group-hover:text-gray-900! tw:dark:text-gray-300! tw:dark:group-hover:text-gray-200! tw:transition tw:duration-150"
+                    class="tw:text-[17px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
                   />
                   <transition name="slide-text">
                     <div
                       v-if="!rail"
-                      class="tw:text-gray-600! tw:group-hover:text-gray-900! tw:dark:text-gray-300! tw:dark:group-hover:text-gray-200! tw:transition tw:duration-150 tw:text-[15px] tw:text-nowrap"
+                      class="tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[15px] tw:text-nowrap"
                     >
                       {{ subItem.title }}
                     </div>
@@ -124,9 +125,9 @@
 
 <script setup lang="ts">
 import dashboardIcon from "~/components/icon/dashboard.vue";
-import baseInfoIcon from "~/components/icon/database.vue";
 import operationsIcon from "~/components/icon/layer.vue";
 import reportsIcon from "~/components/icon/documents.vue";
+import userIcon from "../icon/user.vue";
 
 import ThemeSwitcher from "./themeSwitcher.vue";
 
@@ -156,21 +157,21 @@ interface MainItem {
 const menuItems = computed(() => [
   {
     id: "dashboard",
-    title: "Dashboard",
+    title: "داشبورد",
     icon: dashboardIcon,
     routeName: "index",
     subItems: null,
   },
   {
-    id: "baseInfo",
-    title: "Base Info",
-    icon: baseInfoIcon,
-    routeName: "base",
+    id: "users",
+    title: "مدیریت کاربران",
+    icon: userIcon,
+    routeName: "users",
     subItems: null,
   },
   {
     id: "operations",
-    title: "Operations",
+    title: "عملیات",
     icon: operationsIcon,
     routeName: "operations",
     subItems: [
@@ -183,7 +184,7 @@ const menuItems = computed(() => [
   },
   {
     id: "reports",
-    title: "Reports",
+    title: "گزارش",
     icon: reportsIcon,
     routeName: "reports",
     subItems: [

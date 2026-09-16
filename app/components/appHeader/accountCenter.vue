@@ -2,7 +2,7 @@
   <v-menu class="tw:relative tw:z-9999!">
     <template v-slot:activator="{ props }">
       <div
-        class="tw:w-10 tw:h-10 tw:flex tw:justify-center tw:items-center tw:bg-white tw:dark:bg-gray-800 tw:border-3 tw:border-white tw:dark:border-gray-800 tw:rounded-full tw:overflow-hidden tw:hover:bg-gray-50 tw:hover:border-gray-50 tw:dark:hover:border-gray-800 tw:dark:hover:bg-primary-dark tw:transition tw:duration-200 tw:cursor-pointer"
+        class="tw:w-10 tw:h-10 tw:flex tw:justify-center tw:items-center tw:bg-secondary-dark! tw:dark:bg-gray-800 tw:rounded-full tw:overflow-hidden tw:hover:bg-secondary-dark/80 tw:transition tw:duration-200 tw:cursor-pointer"
         v-bind="props"
       >
         <img
@@ -64,10 +64,8 @@
 // pictures
 import avatar from "~/assets/image/default-avatar.png";
 
-import { useConfigStore } from "~/store/config";
-import Edit from "../icon/edit.vue";
-const configStore = useConfigStore();
-const { profileResult: profile } = storeToRefs(configStore);
+import { useAuthStore } from "~/store/auth";
+const authStore = useAuthStore()
 
 // composables
 const { editProfileDrawer } = useEditProfile();
@@ -75,6 +73,6 @@ const { editProfileDrawer } = useEditProfile();
 const username = ref<any>("");
 
 const logout = () => {
-  configStore.logout();
+  authStore.logout();
 };
 </script>
