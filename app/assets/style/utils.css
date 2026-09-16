@@ -1,0 +1,45 @@
+@layer utilities {
+  .tw-text-color {
+    @apply tw:text-gray-600! tw:dark:text-gray-300!;
+  }
+
+  .tw-text-color-lighter {
+    @apply tw:text-gray-500! tw:dark:text-gray-300!;
+  }
+
+  .tw-text-color-hover {
+    @apply tw:text-gray-700! tw:dark:text-gray-200! tw:group-hover:text-black! tw:dark:group-hover:text-white!;
+  }
+
+  .tw-text-color-reverse {
+    @apply tw:text-gray-300! tw:dark:text-gray-300!;
+  }
+
+  .tw-text-color-reverse-hover {
+    @apply tw:text-gray-700! tw:dark:text-gray-200! tw:group-hover:text-black! tw:dark:group-hover:text-white!;
+  }
+
+  .tw-text-require {
+    @apply tw:text-red-900! tw:dark:text-red-300!;
+  }
+
+  .header-title { 
+    @apply tw:text-[18px] tw:lg:text-[20px] tw:3xl:text-[23px]!
+  }
+
+  .header-desc {
+    @apply tw:text-[14px]/6 tw:3xl:text-[15px]/5
+  }
+
+  .header-icon {
+    @apply tw:text-[30px] tw:3xl:text-[32px]
+  }
+
+  .blur-dialog {
+    @apply tw:backdrop-blur-[1px]!
+  }
+}
+
+html[dir="rtl"] .yekan-font {
+  font-family: iranyekan !important;
+}
