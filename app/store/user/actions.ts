@@ -111,5 +111,31 @@ export function useUserActions(state: StateType) {
       });
   };
 
-  return { getUsers, getUserById, createUser, updateUser, deleteUser };
+  const resetPassword = (id: number, newPassword: string) => {
+    const axios = useApi();
+    handlerStore.loadingBtn = true;
+
+    return axios
+      .patch(`/admin/users/${id}/password`, { newPassword })
+      .then((res) => {
+        handlerStore.setSuccess(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      })
+      .finally(() => {
+        handlerStore.loadingBtn = false;
+      });
+  };
+
+  return {
+    getUsers,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser,
+    resetPassword,
+  };
 }

@@ -36,7 +36,7 @@ export function useAuthActions(state: StateType) {
     const axios = useApi();
 
     return axios
-      .post("/auth/refresh-token", { withCredentials: true })
+      .post("/auth/refresh-token", {}, { withCredentials: true })
       .then((res) => {
         if (res.data.data?.accessToken) {
           useCookie("token").value = res.data.data.accessToken;

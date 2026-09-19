@@ -69,6 +69,7 @@ export default defineNuxtPlugin(() => {
           try {
             const { data } = await axios.post(
               `${config.public.API_URL}/auth/refresh-token`,
+              {},
               {
                 withCredentials: true,
               },

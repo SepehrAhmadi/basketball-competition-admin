@@ -126,6 +126,16 @@
                 </td>
                 <td>
                   <div class="tw:flex tw:justify-center tw:text-nowrap!">
+                    {{ item.nationalId }}
+                  </div>
+                </td>
+                <td>
+                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
+                    {{ item.birthDate }}
+                  </div>
+                </td>
+                <td>
+                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
                     {{ item.email }}
                   </div>
                 </td>
@@ -172,6 +182,23 @@
                         </v-btn>
                       </template>
                       <span class="tw:text-xs tw:p-2">ویرایش</span>
+                    </v-tooltip>
+
+                    <v-tooltip location="top">
+                      <template #activator="{ props }">
+                        <v-btn
+                          v-bind="props"
+                          size="x-small"
+                          variant="plain"
+                          rounded="pill"
+                          @click="openResetPasswordDialog(item)"
+                        >
+                          <icon-lock
+                            class="tw:text-color-lighter tw:text-[21px]"
+                          />
+                        </v-btn>
+                      </template>
+                      <span class="tw:text-xs tw:p-2">بازنشانی رمز عبور</span>
                     </v-tooltip>
 
                     <v-tooltip location="top">
@@ -311,6 +338,82 @@
       </v-card>
     </v-dialog>
 
+    <!-- ─── Reset Password Dialog ── -->
+    <v-dialog
+      v-model="resetPasswordDialogOpen"
+      max-width="400"
+      dir="rtl"
+      class="blur-dialog"
+    >
+      <v-card rounded="lg">
+        <v-card-title class="tw:bg-primary-dark! tw:mb-3!">
+          <div class="tw:flex tw:justify-between tw:items-center">
+            <div class="tw:invisible">
+              <v-btn
+                icon
+                variant="plain"
+                size="x-small"
+                @click="resetPasswordDialogOpen = false"
+              >
+                <icon-close class="tw:text-[18px] tw:text-white!" />
+              </v-btn>
+            </div>
+            <div class="tw:text-[14px]! tw:text-white">بازنشانی رمز عبور</div>
+            <div>
+              <v-btn
+                icon
+                variant="plain"
+                size="x-small"
+                @click="resetPasswordDialogOpen = false"
+              >
+                <icon-close class="tw:text-[18px] tw:text-white!" />
+              </v-btn>
+            </div>
+          </div>
+        </v-card-title>
+        <v-card-text>
+          <div class="tw:text-[14px]! tw:text-center! tw:mb-4!">
+            بازنشانی رمز عبور برای «{{ resetPasswordTarget?.fullName }}»
+          </div>
+          <v-text-field
+            v-model="newPassword"
+            variant="outlined"
+            density="compact"
+            type="password"
+            hide-details
+            dir="rtl"
+          >
+            <template #label>
+              <span class="tw:text-[12px]">رمز عبور جدید</span>
+              <span
+                class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+              >
+                (الزامی)
+              </span>
+            </template>
+          </v-text-field>
+        </v-card-text>
+        <v-card-actions class="tw:justify-end!">
+          <v-btn
+            variant="text"
+            @click="resetPasswordDialogOpen = false"
+            class="tw:text-[12px]!"
+          >
+            انصراف
+          </v-btn>
+          <v-btn
+            class="tw:bg-primary-dark! tw:text-white! tw:rounded-md!"
+            :loading="handlerStore.loadingBtn"
+            :disabled="handlerStore.loadingBtn || !newPassword"
+            @click="onResetPasswordConfirm"
+          >
+            <icon-lock class="tw:text-[18px]" />
+            <span class="tw:mr-1! tw:text-[12px]! tw:px-2!">بازنشانی</span>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <!-- ─── Add / Edit Dialog ── -->
     <v-dialog
       v-model="dialogOpen"
@@ -412,7 +515,7 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12" md="6" lg="4" xl="3">
-                <v-text-field
+                <!-- <v-text-field
                   v-model="form.birthDate"
                   variant="outlined"
                   density="compact"
@@ -421,7 +524,22 @@
                   <template #label>
                     <span class="tw:text-[12px]">تاریخ تولد</span>
                   </template>
-                </v-text-field>
+                </v-text-field> -->
+                <label
+                  for="birthDate"
+                  class="tw:text-[11px] tw:absolute! tw:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw-text-color-reverse"
+                  >تاریخ توبد</label
+                >
+                <date-picker
+                  v-model="form.birthDate"
+                  id="birthDate"
+                  simple
+                  placeholder="تاریخ تولد"
+                  format="jYYYY/jMM/jDD"
+                  display-format="jYYYY/jMM/jDD"
+                  class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!"
+                  color="#1d202e"
+                />
               </v-col>
               <v-col cols="12" md="6" lg="4" xl="3">
                 <v-text-field
@@ -573,6 +691,8 @@ const tableHeaders = [
   },
   { title: "موبایل", key: "phone", sortable: false, align: "center" as const },
   { title: "ایمیل", key: "email", sortable: false, align: "center" as const },
+  { title: "کد ملی", key: "email", sortable: false, align: "center" as const },
+  { title: "تاریخ تولد", key: "email", sortable: false, align: "center" as const },
   { title: "نقش‌ها", key: "roles", sortable: false, align: "center" as const },
   { title: "وضعیت", key: "status", sortable: false, align: "center" as const },
   {
@@ -645,6 +765,29 @@ const onDeleteConfirm = () => {
     deleteTarget.value = null;
     loadUsers();
   });
+};
+
+// ─── Reset Password ──
+const resetPasswordDialogOpen = ref<boolean>(false);
+const resetPasswordTarget = ref<any>(null);
+const newPassword = ref<string>("");
+
+const openResetPasswordDialog = (item: any) => {
+  resetPasswordTarget.value = item;
+  newPassword.value = "";
+  resetPasswordDialogOpen.value = true;
+};
+
+const onResetPasswordConfirm = () => {
+  if (!newPassword.value) return;
+
+  userStore
+    .resetPassword(resetPasswordTarget.value.id, newPassword.value)
+    .then(() => {
+      resetPasswordDialogOpen.value = false;
+      resetPasswordTarget.value = null;
+      newPassword.value = "";
+    });
 };
 
 // ─── Add / Edit Dialog ──

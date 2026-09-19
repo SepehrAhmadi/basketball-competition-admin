@@ -189,8 +189,9 @@ tbody tr th {
 
 /* ======= date picker ======= */
 .vpd-input-group {
-  border: 1px solid #72747d !important;
-  border-radius: 80px !important;
+  border: 1px solid #9da0a8 !important;
+  color: black !important;
+  border-radius: 6px !important;
 }
 
 .vpd-input-group input {
@@ -252,7 +253,7 @@ html[dir="ltr"] .vpd-clear-btn {
 
 .vpd-content {
   box-shadow: none !important;
-  border-radius: 15px !important;
+  border-radius: 8px !important;
   overflow: hidden !important;
 }
 
@@ -313,24 +314,24 @@ html[dir="ltr"] .vpd-clear-btn {
 
 .vpd-addon-list-item:hover {
   background-color: var(--color-primary-light) !important;
-  border-radius: 500px !important;
+  border-radius: 6px !important;
 }
 
 .vpd-addon-list-item.vpd-selected {
   border: none !important;
   background-color: var(--color-primary-dark) !important;
   color: var(--color-primary-light) !important;
-  border-radius: 500px !important;
+  border-radius: 6px !important;
 }
 
 .dark .vpd-addon-list-item:hover {
   background-color: #1e2939 !important;
-  border-radius: 500px !important;
+  border-radius: 6px !important;
 }
 
 .dark .vpd-addon-list-item.vpd-selected {
   border: none !important;
   background-color: var(--color-background-dark) !important;
   color: var(--color-primary-light) !important;
-  border-radius: 500px !important;
+  border-radius: 6px !important;
 }
