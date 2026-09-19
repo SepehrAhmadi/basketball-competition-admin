@@ -5,7 +5,7 @@
     <Transition name="slide-down" mode="out-in">
       <h1
         :key="pageTitle"
-        class="tw:text-[23px] tw:text-white! tw:group-hover:text-gray-100!"
+        class="tw:text-[19px] tw:text-white! tw:group-hover:text-gray-100! tw:translate-y-1"
       >
         {{ pageTitle }}
       </h1>
