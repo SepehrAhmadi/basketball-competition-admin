@@ -372,14 +372,16 @@
           </div>
         </v-card-title>
         <v-card-text>
-          <div class="tw:text-[14px]! tw:text-center! tw:mb-4!">
+          <div class="tw:text-[14px]! tw:text-center! tw:mb-5!">
             بازنشانی رمز عبور برای «{{ resetPasswordTarget?.fullName }}»
           </div>
           <v-text-field
             v-model="newPassword"
             variant="outlined"
             density="compact"
-            type="password"
+            :type="showNewPassword ? 'text' : 'password'"
+            :append-inner-icon="showNewPassword ? 'mdi-eye-off' : 'mdi-eye'"
+            @click:append-inner="showNewPassword = !showNewPassword"
             hide-details
             dir="rtl"
           >
@@ -564,7 +566,9 @@
                   v-model="form.password"
                   variant="outlined"
                   density="compact"
-                  type="password"
+                  :type="showCreatePassword ? 'text' : 'password'"
+                  :append-inner-icon="showCreatePassword ? 'mdi-eye-off' : 'mdi-eye'"
+                  @click:append-inner="showCreatePassword = !showCreatePassword"
                   hide-details
                   :rules="[(v: string) => !!v || '']"
                 >
@@ -771,10 +775,12 @@ const onDeleteConfirm = () => {
 const resetPasswordDialogOpen = ref<boolean>(false);
 const resetPasswordTarget = ref<any>(null);
 const newPassword = ref<string>("");
+const showNewPassword = ref<boolean>(false);
 
 const openResetPasswordDialog = (item: any) => {
   resetPasswordTarget.value = item;
   newPassword.value = "";
+  showNewPassword.value = false;
   resetPasswordDialogOpen.value = true;
 };
 
@@ -807,11 +813,13 @@ const defaultForm = () => ({
 });
 
 const form = reactive(defaultForm());
+const showCreatePassword = ref<boolean>(false);
 
 const openCreateDialog = () => {
   dialogMode.value = "create";
   editingId.value = null;
   Object.assign(form, defaultForm());
+  showCreatePassword.value = false;
   dialogOpen.value = true;
 };
 
