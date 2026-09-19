@@ -126,6 +126,11 @@
                 </td>
                 <td>
                   <div class="tw:flex tw:justify-center tw:text-nowrap!">
+                    {{ item.email }}
+                  </div>
+                </td>
+                <td>
+                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
                     {{ item.nationalId }}
                   </div>
                 </td>
@@ -134,11 +139,7 @@
                     {{ item.birthDate }}
                   </div>
                 </td>
-                <td>
-                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
-                    {{ item.email }}
-                  </div>
-                </td>
+
                 <td>
                   <div
                     class="tw:flex tw:items-center tw:justify-center tw:text-nowrap! tw:flex-wrap tw:gap-1"
