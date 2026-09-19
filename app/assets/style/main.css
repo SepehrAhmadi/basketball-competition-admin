@@ -119,13 +119,13 @@ html {
   border-radius: 10px !important;
 }
 
-.v-list-item__content > .v-list-item-title {
+.v-list-item__content>.v-list-item-title {
   font-size: 14px !important;
   font-weight: 400 !important;
   color: #52525c !important;
 }
 
-.dark .v-list-item__content > .v-list-item-title {
+.dark .v-list-item__content>.v-list-item-title {
   font-size: 14px !important;
   font-weight: 400 !important;
   color: #d1d5dc !important;
@@ -142,24 +142,23 @@ html {
 .v-data-table__td.v-data-table__th {
   background-color: var(--color-white) !important;
 }
+
 .dark .dark-table .v-data-table__td.v-data-table__th {
   background-color: var(--color-primary-dark) !important;
 }
 
-.v-data-table__td.v-data-table__th--sortable.v-data-table__th
-  > .v-data-table-header__content
-  > i {
+.v-data-table__td.v-data-table__th--sortable.v-data-table__th>.v-data-table-header__content>i {
   display: none !important;
 }
-.v-data-table__td.v-data-table__th--sortable.v-data-table__th--sorted.v-data-table__th
-  > .v-data-table-header__content
-  > i {
+
+.v-data-table__td.v-data-table__th--sortable.v-data-table__th--sorted.v-data-table__th>.v-data-table-header__content>i {
   display: block !important;
 }
 
 .v-data-table__td.v-data-table__th {
   white-space: nowrap !important;
 }
+
 .centred-input input {
   text-align: center !important;
 }
@@ -167,6 +166,26 @@ html {
 .v-btn {
   text-transform: none !important;
 }
+
+.v-pagination__item button .v-btn__content {
+  font-family: 'iranyekan' !important;
+  font-size: 12px !important;
+}
+
+thead {
+  background-color: white !important;
+  color: black !important;
+}
+
+.dark thead {
+  background-color: var(--color-primary-dark) !important;
+  color: white !important;
+}
+
+tbody tr th {
+  color: var(--color-gray-700) !important;
+}
+
 
 /* ======= date picker ======= */
 .vpd-input-group {

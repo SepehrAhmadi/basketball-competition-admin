@@ -11,9 +11,9 @@
           >
             <icon-more-vertical
               v-if="rail"
-              class="tw:text-[25px] tw:text-white"
+              class="tw:text-[23px] tw:text-white"
             />
-            <icon-menu v-else class="tw:text-[25px] tw:text-white" />
+            <icon-menu v-else class="tw:text-[23px] tw:text-white" />
           </button>
         </div>
         <div class="tw:flex tw:justify-start tw:items-center tw:gap-4">
@@ -42,21 +42,21 @@
         >
           <!-- main items -->
           <div
-            class="tw:relative tw:flex tw:justify-between tw:items-center tw:gap-3 tw:cursor-pointer tw:group tw:w-full tw:py-2.5! tw:px-2.5!"
+            class="tw:relative tw:flex tw:justify-between tw:items-center tw:gap-2 tw:cursor-pointer tw:group tw:w-full tw:py-2! tw:px-2.5!"
             :class="{
               'tw:bg-secondary-dark tw:dark:bg-secondary-dark! tw:rounded-lg tw:border-b tw:border-slate-400':
                 activeItem === item.id && !rail,
             }"
             @click="onMainItemClick(item)"
           >
-            <div class="tw:flex tw:justify-center tw:items-center tw:gap-3">
+            <div class="tw:flex tw:justify-center tw:items-center tw:gap-2">
               <component
                 :is="item.icon"
-                class="tw:text-[23px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
+                class="tw:text-[20px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
               />
               <transition name="slide-text">
                 <div
-                  class="tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[15px] tw:text-nowrap!"
+                  class="tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[13px] tw:text-nowrap!"
                   v-if="!rail"
                 >
                   {{ item.title }}
@@ -66,7 +66,7 @@
             <div class="tw:flex tw:justify-center tw:items-center">
               <icon-arrow-down
                 v-if="item.subItems && !rail"
-                class="tw:text-[17px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
+                class="tw:text-[16px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
                 :class="{ 'tw:rotate-180': openGroup === item.id }"
               />
             </div>
@@ -83,7 +83,7 @@
             />
           </div>
 
-          <!-- wrapper div برای subItems -->
+          <!-- wrapper div for subItems -->
           <transition name="submenu">
             <div
               v-show="item.subItems && openGroup === item.id && !rail"
@@ -92,7 +92,7 @@
               <div
                 v-for="subItem in item.subItems"
                 :key="subItem.id"
-                class="tw:relative tw:flex tw:justify-between tw:items-center tw:gap-3 tw:cursor-pointer tw:group tw:w-full tw:py-2.5! tw:px-2.5!"
+                class="tw:relative tw:flex tw:justify-between tw:items-center tw:gap-2 tw:cursor-pointer tw:group tw:w-full tw:py-2! tw:px-2.5!"
                 :class="{
                   'tw:bg-white tw:dark:bg-primary-dark tw:rounded-lg tw:border-b tw:border-gray-300 tw:dark:border-gray-500':
                     activeItem === subItem.id && !rail,
@@ -101,12 +101,12 @@
               >
                 <div class="tw:flex tw:justify-center tw:items-center tw:gap-3">
                   <icon-arrow-down-right
-                    class="tw:text-[17px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
+                    class="tw:text-[16px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
                   />
                   <transition name="slide-text">
                     <div
                       v-if="!rail"
-                      class="tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[15px] tw:text-nowrap"
+                      class="tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[13px] tw:text-nowrap"
                     >
                       {{ subItem.title }}
                     </div>
