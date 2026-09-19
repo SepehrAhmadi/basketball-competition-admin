@@ -194,6 +194,13 @@ tbody tr th {
   border-radius: 6px !important;
 }
 
+.dark .vpd-input-group {
+  border: 1px solid #888b92 !important;
+  color: white !important;
+  border-radius: 6px !important;
+}
+
+
 .vpd-input-group input {
   border: none !important;
   padding-block: 4px !important;

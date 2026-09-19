@@ -388,9 +388,7 @@
           >
             <template #label>
               <span class="tw:text-[12px]">رمز عبور جدید</span>
-              <span
-                class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
-              >
+              <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]">
                 (الزامی)
               </span>
             </template>
@@ -528,21 +526,24 @@
                     <span class="tw:text-[12px]">تاریخ تولد</span>
                   </template>
                 </v-text-field> -->
-                <label
-                  for="birthDate"
-                  class="tw:text-[11px] tw:absolute! tw:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw-text-color-reverse"
-                  >تاریخ توبد</label
-                >
-                <date-picker
-                  v-model="form.birthDate"
-                  id="birthDate"
-                  simple
-                  placeholder="تاریخ تولد"
-                  format="jYYYY/jMM/jDD"
-                  display-format="jYYYY/jMM/jDD"
-                  class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!"
-                  color="#1d202e"
-                />
+                <div class="tw:relative!">
+                  <label
+                    v-if="form.birthDate"
+                    for="birthDate"
+                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw-text-color-reverse"
+                    >تاریخ تولد</label
+                  >
+                  <date-picker
+                    v-model="form.birthDate"
+                    id="birthDate"
+                    simple
+                    placeholder="تاریخ تولد"
+                    format="jYYYY/jMM/jDD"
+                    display-format="jYYYY/jMM/jDD"
+                    class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!"
+                    color="#1d202e"
+                  />
+                </div>
               </v-col>
               <v-col cols="12" md="6" lg="4" xl="3">
                 <v-text-field
@@ -568,7 +569,9 @@
                   variant="outlined"
                   density="compact"
                   :type="showCreatePassword ? 'text' : 'password'"
-                  :append-inner-icon="showCreatePassword ? 'mdi-eye-off' : 'mdi-eye'"
+                  :append-inner-icon="
+                    showCreatePassword ? 'mdi-eye-off' : 'mdi-eye'
+                  "
                   @click:append-inner="showCreatePassword = !showCreatePassword"
                   hide-details
                   :rules="[(v: string) => !!v || '']"
@@ -697,7 +700,12 @@ const tableHeaders = [
   { title: "موبایل", key: "phone", sortable: false, align: "center" as const },
   { title: "ایمیل", key: "email", sortable: false, align: "center" as const },
   { title: "کد ملی", key: "email", sortable: false, align: "center" as const },
-  { title: "تاریخ تولد", key: "email", sortable: false, align: "center" as const },
+  {
+    title: "تاریخ تولد",
+    key: "email",
+    sortable: false,
+    align: "center" as const,
+  },
   { title: "نقش‌ها", key: "roles", sortable: false, align: "center" as const },
   { title: "وضعیت", key: "status", sortable: false, align: "center" as const },
   {
