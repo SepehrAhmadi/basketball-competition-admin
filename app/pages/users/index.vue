@@ -516,16 +516,6 @@
                 </v-text-field>
               </v-col>
               <v-col cols="12" md="6" lg="4" xl="3">
-                <!-- <v-text-field
-                  v-model="form.birthDate"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                >
-                  <template #label>
-                    <span class="tw:text-[12px]">تاریخ تولد</span>
-                  </template>
-                </v-text-field> -->
                 <div class="tw:relative!">
                   <label
                     v-if="form.birthDate"

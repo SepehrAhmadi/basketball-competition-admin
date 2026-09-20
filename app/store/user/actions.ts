@@ -59,7 +59,7 @@ export function useUserActions(state: StateType) {
     handlerStore.loadingBtn = true;
 
     return axios
-      .post("/auth/admin/users", value)
+      .post("/admin/users", value)
       .then((res) => {
         handlerStore.setSuccess(res.data.message);
       })
@@ -97,7 +97,7 @@ export function useUserActions(state: StateType) {
     handlerStore.loadingBtn = true;
 
     return axios
-      .delete(`/auth/admin/users/${id}`)
+      .delete(`/admin/users/${id}`)
       .then((res) => {
         handlerStore.setSuccess(res.data.message);
       })
