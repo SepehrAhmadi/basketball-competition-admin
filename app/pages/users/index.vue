@@ -2,27 +2,12 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <!-- toolbar -->
+        <!-- ── toolbar ── -->
         <v-row class="tw:mb-2!">
           <v-col cols="12" lg="11">
             <v-row>
               <v-col cols="12" md="4" xl="1">
-                <v-select
-                  v-model="pageSize"
-                  :items="[
-                    { value: 10, title: '10' },
-                    { value: 25, title: '25' },
-                    { value: 50, title: '50' },
-                  ]"
-                  @update:model-value="onPageSizeChange"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                >
-                  <template #label>
-                    <span class="tw:text-[12px]">تعداد</span>
-                  </template>
-                </v-select>
+                <TablePageSize v-model="pageSize" />
               </v-col>
               <v-col cols="12" md="4" xl="3">
                 <v-text-field
@@ -94,18 +79,14 @@
 
         <!-- ─── Table ── -->
         <v-card class="tw:rounded-xl!">
-          <v-data-table-server
-            v-model:items-per-page="pageSize"
+          <GeneralDataTable
             v-model:page="page"
-            :items-length="totalItems"
+            v-model:items-per-page="pageSize"
             :items="userStore.userList"
             :headers="tableHeaders"
+            :items-length="totalItems"
             :loading="userStore.loading"
-            @update:options="onOptionsChange"
-            height="720"
-            fixed-header
-            fixed-footer
-            class="tw:bg-white! tw:dark:bg-primary-dark!"
+            @update-options="onOptionsChange"
           >
             <template #item="{ item, index }">
               <tr>
@@ -222,62 +203,7 @@
                 </td>
               </tr>
             </template>
-
-            <template #bottom>
-              <v-divider> </v-divider>
-              <div
-                class="tw:px-3! tw:my-3! tw:flex tw:justify-between tw:items-center"
-              >
-                <div class="tw:text-[12px]">
-                  {{ paginationMeta(page, pageSize, totalItems) }}
-                </div>
-                <div class="tw:flex tw:items-center tw:gap-2">
-                  <v-pagination
-                    v-if="totalItems"
-                    v-model="page"
-                    :length="Math.ceil(totalItems / pageSize)"
-                    density="compact"
-                    total-visible="true"
-                  >
-                    <template #prev="slotProps">
-                      <VBtn
-                        variant="tonal"
-                        color="default"
-                        v-bind="slotProps"
-                        size="small"
-                        :icon="false"
-                      >
-                        قبلی
-                      </VBtn>
-                    </template>
-
-                    <template #next="slotProps">
-                      <VBtn
-                        variant="tonal"
-                        color="default"
-                        v-bind="slotProps"
-                        size="small"
-                        :icon="false"
-                      >
-                        بعدی
-                      </VBtn>
-                    </template>
-                  </v-pagination>
-                </div>
-              </div>
-            </template>
-
-            <template #no-data>
-              <div
-                class="tw:h-full! tw:flex tw:justify-center tw:items-center tw:gap-2"
-              >
-                <icon-row-chart class="tw:text-color-lighter tw:text-[35px]" />
-                <div class="tw:text-color-lighter tw:text-[14px]">
-                  اطلاعاتی یافت نشد
-                </div>
-              </div>
-            </template>
-          </v-data-table-server>
+          </GeneralDataTable>
         </v-card>
       </v-col>
     </v-row>
