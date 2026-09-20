@@ -53,11 +53,11 @@
             <div class="tw:flex tw:justify-center tw:items-center tw:gap-2">
               <component
                 :is="item.icon"
-                class="tw:text-[20px] tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150"
+                class="tw:text-[20px] tw:text-secondary-dark tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150"
               />
               <transition name="slide-text">
                 <div
-                  class="tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[13px] tw:text-nowrap!"
+                  class="tw:text-secondary-dark tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[13px] tw:text-nowrap!"
                   v-if="!rail"
                 >
                   {{ item.title }}
@@ -67,14 +67,14 @@
             <div class="tw:flex tw:justify-center tw:items-center">
               <icon-arrow-down
                 v-if="item.subItems && !rail"
-                class="tw:text-[16px] tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150"
+                class="tw:text-[16px] tw:text-secondary-dark tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150"
                 :class="{ 'tw:rotate-180': openGroup === item.id }"
               />
             </div>
 
             <!-- active icon when slider in minimum size -->
             <icon-circle
-              class="tw:hidden tw:text-[6px] tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:absolute tw:top-5"
+              class="tw:hidden tw:text-[6px] tw:text-secondary-dark tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:absolute tw:top-5"
               :class="{
                 'tw:md:block!':
                   rail && (activeItem === item.id || isAnySubItemActive(item)),
@@ -102,12 +102,12 @@
               >
                 <div class="tw:flex tw:justify-center tw:items-center tw:gap-3">
                   <icon-arrow-down-right
-                    class="tw:text-[16px] tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150"
+                    class="tw:text-[16px] tw:text-secondary-dark tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150"
                   />
                   <transition name="slide-text">
                     <div
                       v-if="!rail"
-                      class="tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[13px] tw:text-nowrap"
+                      class="tw:text-secondary-dark tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[13px] tw:text-nowrap"
                     >
                       {{ subItem.title }}
                     </div>
