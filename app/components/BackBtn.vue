@@ -2,7 +2,7 @@
   <v-btn
     @click="handleClick"
     rounded="lg"
-    class="tw:px-4! tw:bg-primary-dark! tw:text-white! tw:group"
+    class="tw:px-4! tw:bg-secondary-dark! tw:dark:bg-primary-dark!  tw:text-white! tw:group"
   >
     <div class="tw:text-[14px]!">بارگشت</div>
     <icon-arrow-left

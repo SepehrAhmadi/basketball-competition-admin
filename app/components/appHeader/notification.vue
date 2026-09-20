@@ -3,10 +3,10 @@
     <v-menu v-model="menu" class="tw:relative tw:z-9999!">
       <template v-slot:activator="{ props }">
         <div
-          class="tw:w-10 tw:h-10 tw:flex tw:justify-center tw:items-center tw:bg-secondary-dark! tw:dark:bg-gray-800 tw:rounded-full tw:overflow-hidden tw:hover:bg-secondary-dark/80 tw:transition tw:duration-200 tw:cursor-pointer"
+          class="tw:w-10 tw:h-10 tw:flex tw:justify-center tw:items-center tw:bg-gray-200! tw:dark:bg-secondary-dark! tw:rounded-full tw:overflow-hidden tw:hover:bg-secondary-dark/80 tw:transition tw:duration-200 tw:cursor-pointer"
           v-bind="props"
         >
-          <icon-bell class="tw:text-[22px] tw:text-white" />
+          <icon-bell class="tw:text-[22px] tw:text-secondary-dark tw:dark:text-white!" />
         </div>
       </template>
       <div

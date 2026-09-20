@@ -2,18 +2,18 @@
   <v-menu class="tw:relative tw:z-9999!">
     <template v-slot:activator="{ props }">
       <div
-        class="tw:w-10 tw:h-10 tw:flex tw:justify-center tw:items-center tw:bg-secondary-dark! tw:dark:bg-gray-800 tw:rounded-full tw:overflow-hidden tw:hover:bg-secondary-dark/80 tw:transition tw:duration-200 tw:cursor-pointer"
+        class="tw:overflow-y-hidden tw:w-10 tw:h-10 tw:flex tw:justify-center tw:items-center tw:bg-gray-200! tw:dark:bg-secondary-dark! tw:rounded-full tw:overflow-hidden tw:hover:bg-secondary-dark/80 tw:transition tw:duration-200 tw:cursor-pointer"
         v-bind="props"
       >
         <img
           :src="avatar"
-          class="tw:w-full tw:h-full tw:object-cover tw:block"
+          class="tw:w-full tw:h-full tw:object-cover tw:block tw:translate-y-0.75!"
           alt="avatar"
         />
       </div>
     </template>
     <div
-      class="tw:bg-white tw:dark:bg-primary-dark tw:rounded-lg tw:min-w-37 tw:overflow-hidden tw:mt-3! tw:border tw:border-gray-200 tw:dark:border-gray-700"
+      class="tw:bg-white tw:dark:bg-secondary-dark! tw:rounded-lg tw:min-w-37 tw:overflow-hidden tw:mt-3! tw:border tw:border-gray-200 tw:dark:border-gray-700"
     >
       <div
         class="tw:flex tw:justify-start tw:items-center tw:p-2! tw:border-b tw:border-gray-200 tw:dark:border-gray-700"

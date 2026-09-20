@@ -1,22 +1,23 @@
 <template>
   <div class="header-sidebar">
-    <v-app-bar app color="transparetn" class="tw:px-4.5! tw:bg-primary-dark!">
+    <v-app-bar app color="transparetn" class="tw:px-4.5! tw:bg-white! tw:dark:bg-primary-dark!">
       <div class="tw:flex tw:justify-between tw:items-center tw:w-full">
         <div>
           <button
             icon
             variant="text"
             @click="handleSidebar"
-            class="tw:bg-secondary-dark! tw:hover:bg-secondary-dark!/80! tw:group tw:p-2! tw:rounded-full"
+            class="tw:bg-gray-200! tw:dark:bg-secondary-dark! tw:hover:bg-secondary-dark!/80! tw:group tw:p-2! tw:rounded-full"
           >
             <icon-more-vertical
               v-if="rail"
-              class="tw:text-[23px] tw:text-white"
+              class="tw:text-[23px] tw:text-secondary-dark tw:dark:text-white"!
             />
-            <icon-menu v-else class="tw:text-[23px] tw:text-white" />
+            <icon-menu v-else class="tw:text-[23px] tw:text-secondary-dark tw:dark:text-white!" />
           </button>
         </div>
         <div class="tw:flex tw:justify-start tw:items-center tw:gap-4">
+          <app-header-theme-switcher/>
           <app-header-notification />
           <app-header-account-center />
         </div>
@@ -30,7 +31,7 @@
       rail-width="70"
       app
       :temporary="$vuetify.display.smAndDown"
-      class="tw:bg-primary-dark!"
+      class="tw:bg-white! tw:dark:bg-primary-dark!"
     >
       <div
         class="tw:flex tw:flex-col tw:justify-start tw:items-start tw:gap-2 tw:m-4.25! tw:mt-1!"
@@ -44,7 +45,7 @@
           <div
             class="tw:relative tw:flex tw:justify-between tw:items-center tw:gap-2 tw:cursor-pointer tw:group tw:w-full tw:py-2! tw:px-2.5!"
             :class="{
-              'tw:bg-secondary-dark tw:dark:bg-secondary-dark! tw:rounded-lg tw:border-b tw:border-slate-400':
+              'tw:bg-gray-200! tw:dark:bg-secondary-dark! tw:rounded-lg tw:border-b tw:border-slate-400':
                 activeItem === item.id && !rail,
             }"
             @click="onMainItemClick(item)"
@@ -52,11 +53,11 @@
             <div class="tw:flex tw:justify-center tw:items-center tw:gap-2">
               <component
                 :is="item.icon"
-                class="tw:text-[20px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
+                class="tw:text-[20px] tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150"
               />
               <transition name="slide-text">
                 <div
-                  class="tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[13px] tw:text-nowrap!"
+                  class="tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[13px] tw:text-nowrap!"
                   v-if="!rail"
                 >
                   {{ item.title }}
@@ -66,14 +67,14 @@
             <div class="tw:flex tw:justify-center tw:items-center">
               <icon-arrow-down
                 v-if="item.subItems && !rail"
-                class="tw:text-[16px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
+                class="tw:text-[16px] tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150"
                 :class="{ 'tw:rotate-180': openGroup === item.id }"
               />
             </div>
 
             <!-- active icon when slider in minimum size -->
             <icon-circle
-              class="tw:hidden tw:text-[6px] tw:text-white! tw:group-hover:text-gray-100! tw:absolute tw:top-5"
+              class="tw:hidden tw:text-[6px] tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:absolute tw:top-5"
               :class="{
                 'tw:md:block!':
                   rail && (activeItem === item.id || isAnySubItemActive(item)),
@@ -94,19 +95,19 @@
                 :key="subItem.id"
                 class="tw:relative tw:flex tw:justify-between tw:items-center tw:gap-2 tw:cursor-pointer tw:group tw:w-full tw:py-2! tw:px-2.5!"
                 :class="{
-                  'tw:bg-white tw:dark:bg-primary-dark tw:rounded-lg tw:border-b tw:border-gray-300 tw:dark:border-gray-500':
+                  'tw:bg-gray-200! tw:dark:bg-secondary-dark! tw:rounded-lg tw:border-b tw:border-gray-300 tw:dark:border-gray-500':
                     activeItem === subItem.id && !rail,
                 }"
                 @click="onSubItemClick(item as any, subItem)"
               >
                 <div class="tw:flex tw:justify-center tw:items-center tw:gap-3">
                   <icon-arrow-down-right
-                    class="tw:text-[16px] tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150"
+                    class="tw:text-[16px] tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150"
                   />
                   <transition name="slide-text">
                     <div
                       v-if="!rail"
-                      class="tw:text-white! tw:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[13px] tw:text-nowrap"
+                      class="tw:text-gray-800 tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:transition tw:duration-150 tw:text-[13px] tw:text-nowrap"
                     >
                       {{ subItem.title }}
                     </div>
@@ -118,8 +119,6 @@
         </div>
       </div>
     </v-navigation-drawer>
-
-    <theme-switcher />
   </div>
 </template>
 

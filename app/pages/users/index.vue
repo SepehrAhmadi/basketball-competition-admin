@@ -63,7 +63,7 @@
               </v-col>
               <v-col cols="12" md="2">
                 <v-btn
-                  class="tw:bg-primary-dark! tw:text-white! tw:rounded-md!"
+                  class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md!"
                   @click="openCreateDialog"
                 >
                   <icon-plus class="tw:text-[20px]" />
@@ -216,7 +216,7 @@
       class="blur-dialog"
     >
       <v-card rounded="lg">
-        <v-card-title class="tw:bg-primary-dark! tw:mb-3!">
+        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
           <div class="tw:flex tw:justify-between tw:items-center">
             <div class="tw:invisible">
               <v-btn
@@ -253,7 +253,7 @@
             انصراف
           </v-btn>
           <v-btn
-            class="tw:bg-primary-dark! tw:text-white! tw:rounded-md!"
+            class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md!"
             :loading="handlerStore.loadingBtn"
             :disabled="handlerStore.loadingBtn"
             @click="onDeleteConfirm"
@@ -273,7 +273,7 @@
       class="blur-dialog"
     >
       <v-card rounded="lg">
-        <v-card-title class="tw:bg-primary-dark! tw:mb-3!">
+        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
           <div class="tw:flex tw:justify-between tw:items-center">
             <div class="tw:invisible">
               <v-btn
@@ -329,7 +329,7 @@
             انصراف
           </v-btn>
           <v-btn
-            class="tw:bg-primary-dark! tw:text-white! tw:rounded-md!"
+            class="tw:bg-secondary-dark! tw:dark:bg-primary-dark!  tw:text-white! tw:rounded-md!"
             :loading="handlerStore.loadingBtn"
             :disabled="handlerStore.loadingBtn || !newPassword"
             @click="onResetPasswordConfirm"
@@ -349,7 +349,7 @@
       class="blur-dialog"
     >
       <v-card rounded="lg">
-        <v-card-title class="tw:bg-primary-dark! tw:mb-3!">
+        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
           <div class="tw:flex tw:justify-between tw:items-center">
             <div class="tw:invisible">
               <v-btn
@@ -539,7 +539,7 @@
             انصراف
           </v-btn>
           <v-btn
-            class="tw:bg-primary-dark! tw:text-white! tw:rounded-md! tw:px-4!"
+            class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md! tw:px-4!"
             :loading="handlerStore.loadingBtn"
             :disabled="handlerStore.loadingBtn"
             @click="onDialogSubmit"
