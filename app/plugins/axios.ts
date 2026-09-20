@@ -75,7 +75,7 @@ export default defineNuxtPlugin(() => {
               },
             );
 
-            const newToken = data.accessToken;
+            const newToken = data.data.accessToken;
 
             useCookie("token").value = newToken;
             api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
