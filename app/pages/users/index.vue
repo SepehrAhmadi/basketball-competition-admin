@@ -216,7 +216,9 @@
       class="blur-dialog"
     >
       <v-card rounded="lg">
-        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
+        <v-card-title
+          class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!"
+        >
           <div class="tw:flex tw:justify-between tw:items-center">
             <div class="tw:invisible">
               <v-btn
@@ -273,7 +275,9 @@
       class="blur-dialog"
     >
       <v-card rounded="lg">
-        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
+        <v-card-title
+          class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!"
+        >
           <div class="tw:flex tw:justify-between tw:items-center">
             <div class="tw:invisible">
               <v-btn
@@ -329,7 +333,7 @@
             انصراف
           </v-btn>
           <v-btn
-            class="tw:bg-secondary-dark!  tw:text-white! tw:rounded-md!"
+            class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
             :loading="handlerStore.loadingBtn"
             :disabled="handlerStore.loadingBtn || !newPassword"
             @click="onResetPasswordConfirm"
@@ -349,7 +353,9 @@
       class="blur-dialog"
     >
       <v-card rounded="lg">
-        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
+        <v-card-title
+          class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!"
+        >
           <div class="tw:flex tw:justify-between tw:items-center">
             <div class="tw:invisible">
               <v-btn
@@ -710,7 +716,10 @@ const openResetPasswordDialog = (item: any) => {
 };
 
 const onResetPasswordConfirm = () => {
-  if (!newPassword.value) return;
+  if (!newPassword.value) {
+    handlerStore.setError("لطفا رمز عبور جدید را وارد کنید.");
+    return;
+  }
 
   userStore
     .resetPassword(resetPasswordTarget.value.id, newPassword.value)
@@ -765,6 +774,10 @@ const openEditDialog = (id: number) => {
 };
 
 const onDialogSubmit = () => {
+  if (!form.fullName || !form.phone || !form.email || !form.roles.length) {
+    handlerStore.setError("لطفا تمام فیلدهای الزامی را پر کنید.");
+    return;
+  }
   formRef.value!.validate().then(({ valid }: { valid: boolean }) => {
     if (!valid) return;
 

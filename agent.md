@@ -317,6 +317,21 @@ user-management page:
   Vuetify's own `v-form` validation: call it as `formRef.value!.validate().then(({ valid }) =>
   { ... })`, never `await formRef.value!.validate()` — the whole page layer stays `.then`-based,
   not just the store layer.
+- **Manual required-field guard, inside every submit handler, in addition to `:rules`:** right
+  after `v-form` validation passes (or as the first check inside the `.then` callback), re-check
+  the same required fields explicitly and bail out with a toast if any are empty:
+  ```ts
+  if (!form.fullName || !form.phone || !form.email || !form.roles.length) {
+    handlerStore.setError("لطفا تمام فیلدهای الزامی را پر کنید.");
+    return;
+  }
+  ```
+  This isn't a replacement for `:rules` (§7) — it's a second, explicit guard in the submit handler
+  itself, so a submit can never fire with a missing required value even if a rule was skipped or
+  misconfigured on some field. List every required field of that specific form here, matching
+  §7's required fields exactly (a text field's emptiness is `!form.x`, a multi-select's is
+  `!form.x.length`, adjust the check per field type). Every submit handler needs its own version
+  of this line, listing that form's own required fields — don't reuse another form's guard.
 - Debounced search (like the user combobox search in `PlayerRoster.vue`) uses a manually managed
   `setTimeout`/`clearTimeout` pair, not a debounce library — stay consistent with that unless
   a library is already a project dependency.
@@ -370,7 +385,7 @@ shares one header/frame shape. Don't invent a new dialog chrome per feature; reu
     <v-card-actions class="tw:justify-end!">
       <v-btn variant="text" @click="someDialogOpen = false" class="tw:text-[12px]!">انصراف</v-btn>
       <v-btn
-        class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
+        class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md!"
         :loading="handlerStore.loadingBtn"
         :disabled="handlerStore.loadingBtn"
         @click="onConfirm"
@@ -522,6 +537,8 @@ explicitly rather than silently assumed by whoever implements a page:
 - [ ] Vuetify components used wherever possible
 - [ ] Store actions use `.then/.catch/.finally`, never `async/await` — including page-side
       `formRef.value!.validate().then(...)`
+- [ ] Every submit handler has its own manual required-field guard after validation, listing that
+      form's required fields, before calling the store action
 - [ ] Errors surfaced via `handlerStore.setError`, successes via `handlerStore.setSuccess`
 - [ ] Delete flows confirm first, using the shared dialog frame (§6)
 - [ ] Every dialog reuses the §6 header/frame — confirm, single-input, or full-form weight

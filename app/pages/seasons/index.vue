@@ -207,13 +207,19 @@
                   v-if="form.startDate"
                   for="startDate"
                   class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
-                  >تاریخ شروع</label
                 >
+                  <span class="tw:text-[12px]">تاریخ شروع</span>
+                  <span
+                    class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                  >
+                    (الزامی)
+                  </span>
+                </label>
                 <date-picker
                   v-model="form.startDate"
                   id="startDate"
                   simple
-                  placeholder="تاریخ شروع"
+                  placeholder="تاریخ شروع (الزامی)"
                   format="jYYYY/jMM/jDD"
                   display-format="jYYYY/jMM/jDD"
                   class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!"
@@ -226,13 +232,19 @@
                   v-if="form.endDate"
                   for="endDate"
                   class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
-                  >تاریخ پایان</label
                 >
+                  <span class="tw:text-[12px]">تاریخ پایان</span>
+                  <span
+                    class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                  >
+                    (الزامی)
+                  </span>
+                </label>
                 <date-picker
                   v-model="form.endDate"
                   id="endDate"
                   simple
-                  placeholder="تاریخ پایان"
+                  placeholder="تاریخ پایان (الزامی)"
                   format="jYYYY/jMM/jDD"
                   display-format="jYYYY/jMM/jDD"
                   class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!"
@@ -419,6 +431,11 @@ const openEdit = (id: number) => {
 };
 
 const onFormSubmit = () => {
+    if(!form.name || !form.startDate || !form.endDate) {
+        handlerStore.setError("لطفا تمام فیلدهای الزامی را پر کنید.");
+        return;
+    }
+
   formRef.value!.validate().then(({ valid }: { valid: boolean }) => {
     if (!valid) return;
 
