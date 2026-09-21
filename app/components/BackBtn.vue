@@ -13,8 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import CircleOutline from "./icon/circleOutline.vue";
-
 const props = defineProps({
   color: {
     type: String,

@@ -52,6 +52,7 @@ html[dir="rtl"] .v-locale--is-rtl {
 
 html {
   overflow: hidden !important;
+  font-family: "iranyekan" !important;
 }
 
 /* ======= scrollbar ======= */

@@ -124,10 +124,9 @@
 
 <script setup lang="ts">
 import dashboardIcon from "~/components/icon/dashboard.vue";
-import operationsIcon from "~/components/icon/layer.vue";
-import reportsIcon from "~/components/icon/documents.vue";
+import operationIcon from "~/components/icon/layer.vue";
 import userIcon from "../icon/user.vue";
-
+import dateIcon from "../icon/date.vue";
 import ThemeSwitcher from "./themeSwitcher.vue";
 
 const isDesktop = ref(false);
@@ -169,33 +168,22 @@ const menuItems = computed(() => [
     subItems: null,
   },
   {
+    id: "seasons",
+    title: "مدیریت فصل ها",
+    icon: dateIcon,
+    routeName: "seasons",
+    subItems: null,
+  },
+  {
     id: "operations",
     title: "عملیات",
-    icon: operationsIcon,
+    icon: operationIcon,
     routeName: "operations",
     subItems: [
       {
         id: "invoices",
         title: "Invoices",
         routeName: "operations-invoice",
-      },
-    ],
-  },
-  {
-    id: "reports",
-    title: "گزارش",
-    icon: reportsIcon,
-    routeName: "reports",
-    subItems: [
-      {
-        id: "reportByPackaging",
-        title: "Report by Packaging",
-        routeName: "reports-packaging",
-      },
-      {
-        id: "reportByCompany",
-        title: "Report by Company",
-        routeName: "reports-company",
       },
     ],
   },

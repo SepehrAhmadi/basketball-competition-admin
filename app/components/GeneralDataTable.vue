@@ -29,15 +29,6 @@ const emit = defineEmits<{
   ];
 }>();
 
-const paginationMeta = (page: number, pageSize: number, totalItems: number) => {
-  if (!totalItems) return "نمایش 0 مورد";
-
-  const start = (page - 1) * pageSize + 1;
-  const end = Math.min(page * pageSize, totalItems);
-
-  return `نمایش ${start} تا ${end} از ${totalItems} مورد`;
-};
-
 const onOptionsChange = (options: { page: number; itemsPerPage: number }) => {
   page.value = options.page;
   itemsPerPage.value = options.itemsPerPage;
@@ -82,56 +73,21 @@ const onOptionsChange = (options: { page: number; itemsPerPage: number }) => {
       </template>
 
       <template #bottom>
-        <v-divider />
-
-        <div
-          class="tw:px-3! tw:my-3! tw:flex tw:justify-between tw:items-center"
+        <Pagination
+          v-model:page="page"
+          v-model:items-per-page="itemsPerPage"
+          :items-length="itemsLength"
+          @update-options="onOptionsChange"
         >
-          <div class="tw:text-[12px]">
+          <template #pagination-info="{ page: p, itemsPerPage: ipp, itemsLength: il }">
             <slot
               name="pagination-info"
-              :page="page"
-              :items-per-page="itemsPerPage"
-              :items-length="itemsLength"
-            >
-              {{ paginationMeta(page, itemsPerPage, itemsLength) }}
-            </slot>
-          </div>
-
-          <div class="tw:flex tw:items-center tw:gap-2">
-            <v-pagination
-              v-if="itemsLength"
-              v-model="page"
-              :length="Math.ceil(itemsLength / itemsPerPage)"
-              density="compact"
-              total-visible="true"
-            >
-              <template #prev="slotProps">
-                <v-btn
-                  variant="tonal"
-                  color="default"
-                  v-bind="slotProps"
-                  size="small"
-                  :icon="false"
-                >
-                  قبلی
-                </v-btn>
-              </template>
-
-              <template #next="slotProps">
-                <v-btn
-                  variant="tonal"
-                  color="default"
-                  v-bind="slotProps"
-                  size="small"
-                  :icon="false"
-                >
-                  بعدی
-                </v-btn>
-              </template>
-            </v-pagination>
-          </div>
-        </div>
+              :page="p"
+              :items-per-page="ipp"
+              :items-length="il"
+            />
+          </template>
+        </Pagination>
       </template>
     </v-data-table-server>
   </v-card>
