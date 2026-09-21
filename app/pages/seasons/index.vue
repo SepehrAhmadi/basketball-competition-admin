@@ -55,7 +55,7 @@
               </v-col>
               <v-col cols="12" sm="2">
                 <v-btn
-                  class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md!"
+                  class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
                   @click="openCreateMode"
                 >
                   <icon-plus class="tw:text-[20px]" />
@@ -258,7 +258,7 @@
                 block
                 :loading="handlerStore.loadingBtn"
                 :disabled="handlerStore.loadingBtn"
-                class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md! tw:mt-4!"
+                class="tw:bg-secondary-dark! tw:dark:bg-secondary-dark! tw:text-white! tw:rounded-md! tw:mt-4!"
                 @click="onFormSubmit"
               >
                 <icon-check class="tw:text-[18px]" />
@@ -319,7 +319,7 @@
             انصراف
           </v-btn>
           <v-btn
-            class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md!"
+            class="tw:bg-secondary-dark! tw:dark:bg-secondary-dark! tw:text-white! tw:rounded-md!"
             :loading="handlerStore.loadingBtn"
             :disabled="handlerStore.loadingBtn"
             @click="onDeleteConfirm"

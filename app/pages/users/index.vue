@@ -63,7 +63,7 @@
               </v-col>
               <v-col cols="12" md="2">
                 <v-btn
-                  class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md!"
+                  class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
                   @click="openCreateDialog"
                 >
                   <icon-plus class="tw:text-[20px]" />
@@ -253,7 +253,7 @@
             انصراف
           </v-btn>
           <v-btn
-            class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md!"
+            class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
             :loading="handlerStore.loadingBtn"
             :disabled="handlerStore.loadingBtn"
             @click="onDeleteConfirm"
@@ -329,7 +329,7 @@
             انصراف
           </v-btn>
           <v-btn
-            class="tw:bg-secondary-dark! tw:dark:bg-primary-dark!  tw:text-white! tw:rounded-md!"
+            class="tw:bg-secondary-dark!  tw:text-white! tw:rounded-md!"
             :loading="handlerStore.loadingBtn"
             :disabled="handlerStore.loadingBtn || !newPassword"
             @click="onResetPasswordConfirm"
@@ -539,7 +539,7 @@
             انصراف
           </v-btn>
           <v-btn
-            class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md! tw:px-4!"
+            class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md! tw:px-4!"
             :loading="handlerStore.loadingBtn"
             :disabled="handlerStore.loadingBtn"
             @click="onDialogSubmit"

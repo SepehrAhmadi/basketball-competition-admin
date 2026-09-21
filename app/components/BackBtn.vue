@@ -3,7 +3,7 @@
     @click="handleClick"
     variant="outlined"
     rounded="lg"
-    class="tw:px-4! tw:group"
+    class="tw:px-4! tw:group tw:dark:border-gray-300! tw:dark:text-gray-300!"
   >
     <div class="tw:text-[12px]!">بارگشت</div>
     <icon-arrow-left

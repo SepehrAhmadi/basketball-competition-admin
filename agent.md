@@ -370,7 +370,7 @@ shares one header/frame shape. Don't invent a new dialog chrome per feature; reu
     <v-card-actions class="tw:justify-end!">
       <v-btn variant="text" @click="someDialogOpen = false" class="tw:text-[12px]!">انصراف</v-btn>
       <v-btn
-        class="tw:bg-secondary-dark! tw:dark:bg-primary-dark! tw:text-white! tw:rounded-md!"
+        class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
         :loading="handlerStore.loadingBtn"
         :disabled="handlerStore.loadingBtn"
         @click="onConfirm"
