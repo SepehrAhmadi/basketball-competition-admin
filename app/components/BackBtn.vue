@@ -1,12 +1,13 @@
 <template>
   <v-btn
     @click="handleClick"
+    variant="outlined"
     rounded="lg"
-    class="tw:px-4! tw:bg-secondary-dark! tw:dark:bg-primary-dark!  tw:text-white! tw:group"
+    class="tw:px-4! tw:group"
   >
-    <div class="tw:text-[14px]!">بارگشت</div>
+    <div class="tw:text-[12px]!">بارگشت</div>
     <icon-arrow-left
-      class="tw:text-[20px]! tw:ms-1! tw:group-hover:-translate-x-1.5 tw:transition tw:duration-200"
+      class="tw:text-[18px]! tw:ms-1! tw:group-hover:-translate-x-1.5 tw:transition tw:duration-200"
       :class="''"
     />
   </v-btn>
