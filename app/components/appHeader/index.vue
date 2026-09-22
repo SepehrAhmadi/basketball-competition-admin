@@ -74,7 +74,7 @@
 
             <!-- active icon when slider in minimum size -->
             <icon-circle
-              class="tw:hidden tw:text-[6px] tw:text-secondary-dark tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:absolute tw:top-5"
+              class="tw:hidden tw:text-[6px] tw:text-secondary-dark tw:dark:text-white! tw:group-hover:text-gray-900! tw:dark:group-hover:text-gray-100! tw:absolute tw:top-3.75"
               :class="{
                 'tw:md:block!':
                   rail && (activeItem === item.id || isAnySubItemActive(item)),

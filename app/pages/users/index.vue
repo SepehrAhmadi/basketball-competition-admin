@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12">
+      <v-col>
         <!-- ── toolbar ── -->
         <v-row class="tw:mb-2!">
           <v-col cols="12" lg="11">
@@ -10,62 +10,35 @@
                 <TablePageSize v-model="pageSize" />
               </v-col>
               <v-col cols="12" md="4" xl="3">
-                <v-text-field
-                  v-model="query"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  dir="rtl"
-                  @update:model-value="onSearchChange"
-                >
+                <v-text-field v-model="query" variant="outlined" density="compact" hide-details dir="rtl"
+                  @update:model-value="onSearchChange">
                   <template #label>
                     <span class="tw:text-[12px]">جستجو</span>
                   </template>
                   <template #prepend-inner>
-                    <icon-magnify
-                      class="tw:text-[18px] tw:text-color-lighter"
-                    />
+                    <icon-magnify class="tw:text-[18px] tw:text-color-lighter" />
                   </template>
                 </v-text-field>
               </v-col>
               <v-col cols="6" md="3" xl="2">
-                <v-select
-                  v-model="selectedRole"
-                  :items="dropdownStore.roles"
-                  item-title="label"
-                  item-value="value"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  clearable
-                  dir="rtl"
-                  @update:model-value="onFilterChange"
-                >
+                <v-select v-model="selectedRole" :items="dropdownStore.roles" item-title="label" item-value="value"
+                  variant="outlined" density="compact" hide-details clearable dir="rtl"
+                  @update:model-value="onFilterChange">
                   <template #label>
                     <span class="tw:text-[12px]">نقش</span>
                   </template>
                 </v-select>
               </v-col>
               <v-col cols="6" md="3" xl="2">
-                <v-select
-                  v-model="selectedStatus"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  clearable
-                  dir="rtl"
-                  @update:model-value="onFilterChange"
-                >
+                <v-select v-model="selectedStatus" variant="outlined" density="compact" hide-details clearable dir="rtl"
+                  @update:model-value="onFilterChange">
                   <template #label>
                     <span class="tw:text-[12px]">وضعیت</span>
                   </template>
                 </v-select>
               </v-col>
               <v-col cols="12" md="2">
-                <v-btn
-                  class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
-                  @click="openCreateDialog"
-                >
+                <v-btn class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!" @click="openCreateDialog">
                   <icon-plus class="tw:text-[20px]" />
                   <span class="tw:mr-1!">افزودن کاربر</span>
                 </v-btn>
@@ -78,166 +51,197 @@
         </v-row>
 
         <!-- ─── Table ── -->
-        <v-card class="tw:rounded-xl!">
-          <GeneralDataTable
-            v-model:page="page"
-            v-model:items-per-page="pageSize"
-            :items="userStore.userList"
-            :headers="tableHeaders"
-            :items-length="totalItems"
-            :loading="userStore.loading"
-            @update-options="onOptionsChange"
-          >
-            <template #item="{ item, index }">
-              <tr>
-                <td>
-                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
-                    {{ (page - 1) * pageSize + index + 1 }}
-                  </div>
-                </td>
-                <td>
-                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
-                    {{ item.fullName }}
-                  </div>
-                </td>
-                <td>
-                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
-                    {{ item.phone }}
-                  </div>
-                </td>
-                <td>
-                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
-                    {{ item.email }}
-                  </div>
-                </td>
-                <td>
-                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
-                    {{ item.nationalId }}
-                  </div>
-                </td>
-                <td>
-                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
-                    {{ item.birthDate }}
-                  </div>
-                </td>
+        <v-row>
+          <v-col :cols="permissionsDrawerOpen && !isMobile ? 9 : 12"">
+            <v-card class=" tw:rounded-xl!">
+              <GeneralDataTable v-model:page="page" v-model:items-per-page="pageSize" :items="userStore.userList"
+                :headers="tableHeaders" :items-length="totalItems" :loading="userStore.loading"
+                @update-options="onOptionsChange">
+                <template #item="{ item, index }">
+                  <tr>
+                    <td>
+                      <div class="tw:flex tw:justify-center tw:text-nowrap!">
+                        {{ (page - 1) * pageSize + index + 1 }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="tw:flex tw:justify-center tw:text-nowrap!">
+                        {{ item.fullName }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="tw:flex tw:justify-center tw:text-nowrap!">
+                        {{ item.phone }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="tw:flex tw:justify-center tw:text-nowrap!">
+                        {{ item.email }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="tw:flex tw:justify-center tw:text-nowrap!">
+                        {{ item.nationalId }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="tw:flex tw:justify-center tw:text-nowrap!">
+                        {{ item.birthDate }}
+                      </div>
+                    </td>
 
-                <td>
-                  <div
-                    class="tw:flex tw:items-center tw:justify-center tw:text-nowrap! tw:flex-wrap tw:gap-1"
-                  >
-                    <v-chip
-                      v-for="role in getRoleLabels(item.roles)"
-                      :key="role"
-                      size="x-small"
-                      variant="tonal"
-                      color="primary"
-                    >
-                      {{ role }}
-                    </v-chip>
-                  </div>
-                </td>
-                <td>
-                  <div class="tw:flex tw:justify-center tw:text-nowrap!">
-                    <v-chip
-                      size="x-small"
-                      variant="tonal"
-                      :color="getUserStatusLabel(item.status).color"
-                    >
-                      {{ getUserStatusLabel(item.status).label }}
-                    </v-chip>
-                  </div>
-                </td>
-                <td>
-                  <div class="tw:flex tw:justify-center tw:items-center">
-                    <v-tooltip location="top">
-                      <template #activator="{ props }">
-                        <v-btn
-                          v-bind="props"
-                          size="x-small"
-                          variant="plain"
-                          rounded="pill"
-                          @click="openEditDialog(item.id)"
-                        >
-                          <icon-edit-box
-                            class="tw:text-color-lighter tw:text-[21px]"
-                          />
-                        </v-btn>
-                      </template>
-                      <span class="tw:text-xs tw:p-2">ویرایش</span>
-                    </v-tooltip>
+                    <td>
+                      <div class="tw:flex tw:items-center tw:justify-center tw:text-nowrap! tw:flex-wrap tw:gap-1">
+                        <v-chip v-for="role in getRoleLabels(item.roles)" :key="role" size="x-small" variant="tonal"
+                          color="primary">
+                          {{ role }}
+                        </v-chip>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="tw:flex tw:justify-center tw:text-nowrap!">
+                        <v-chip size="x-small" variant="tonal" :color="getUserStatusLabel(item.status).color">
+                          {{ getUserStatusLabel(item.status).label }}
+                        </v-chip>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="tw:flex tw:justify-center tw:items-center">
+                        <!-- Admin Toggle (SUPER_ADMIN only) -->
+                        <v-tooltip v-if="isSuperAdmin" location="top">
+                          <template #activator="{ props }">
+                            <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
+                              @click="openToggleAdminDialog(item)">
+                              <icon-user-circle class="tw:text-color-lighter tw:text-[21px]" />
+                            </v-btn>
+                          </template>
+                          <span class="tw:text-xs tw:p-2">
+                            {{
+                              item.roles?.includes("ADMIN")
+                                ? "لغو دسترسی ادمین"
+                                : "تبدیل به ادمین"
+                            }}
+                          </span>
+                        </v-tooltip>
 
-                    <v-tooltip location="top">
-                      <template #activator="{ props }">
-                        <v-btn
-                          v-bind="props"
-                          size="x-small"
-                          variant="plain"
-                          rounded="pill"
-                          @click="openResetPasswordDialog(item)"
-                        >
-                          <icon-lock
-                            class="tw:text-color-lighter tw:text-[21px]"
-                          />
-                        </v-btn>
-                      </template>
-                      <span class="tw:text-xs tw:p-2">بازنشانی رمز عبور</span>
-                    </v-tooltip>
+                        <!-- Permissions (SUPER_ADMIN + ADMIN only) -->
+                        <v-tooltip v-if="
+                          isSuperAdmin && item.roles?.includes('ADMIN')
+                        " location="top">
+                          <template #activator="{ props }">
+                            <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
+                              @click="openPermissionsDrawer(item)">
+                              <icon-tag class="tw:text-color-lighter tw:text-[21px]" />
+                            </v-btn>
+                          </template>
+                          <span class="tw:text-xs tw:p-2">مدیریت دسترسی‌ها</span>
+                        </v-tooltip>
 
-                    <v-tooltip location="top">
-                      <template #activator="{ props }">
-                        <v-btn
-                          v-bind="props"
-                          size="x-small"
-                          variant="plain"
-                          rounded="pill"
-                          @click="confirmDelete(item)"
-                        >
-                          <icon-trash
-                            class="tw:text-color-lighter tw:text-[21px]"
-                          />
-                        </v-btn>
-                      </template>
-                      <span class="tw:text-xs tw:p-2">حذف</span>
-                    </v-tooltip>
+                        <v-tooltip location="top">
+                          <template #activator="{ props }">
+                            <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
+                              @click="openEditDialog(item.id)">
+                              <icon-edit-box class="tw:text-color-lighter tw:text-[21px]" />
+                            </v-btn>
+                          </template>
+                          <span class="tw:text-xs tw:p-2">ویرایش</span>
+                        </v-tooltip>
+
+                        <v-tooltip location="top">
+                          <template #activator="{ props }">
+                            <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
+                              @click="openResetPasswordDialog(item)">
+                              <icon-lock class="tw:text-color-lighter tw:text-[21px]" />
+                            </v-btn>
+                          </template>
+                          <span class="tw:text-xs tw:p-2">بازنشانی رمز عبور</span>
+                        </v-tooltip>
+
+                        <v-tooltip location="top">
+                          <template #activator="{ props }">
+                            <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
+                              @click="confirmDelete(item)">
+                              <icon-trash class="tw:text-color-lighter tw:text-[21px]" />
+                            </v-btn>
+                          </template>
+                          <span class="tw:text-xs tw:p-2">حذف</span>
+                        </v-tooltip>
+                      </div>
+                    </td>
+                  </tr>
+                </template>
+              </GeneralDataTable>
+            </v-card>
+          </v-col>
+          <v-col v-if="permissionsDrawerOpen && !isMobile" cols="3">
+            <v-card class="tw:rounded-lg!">
+              <div class="">
+                <div class="tw:flex tw:justify-between tw:items-center tw:mb-4! tw:p-4!">
+                  <div class="tw:flex tw:items-center tw:gap-1">
+                    <icon-user class="tw:text-[18px] tw:text-gray-700! tw:dark:text-gray-300!"/>
+                    <div class="tw:text-[14px] tw:text-gray-700! tw:dark:text-gray-300! tw:font-medium!">
+                      دسترسی‌های {{ activePermissionsUser?.fullName }}
+                    </div>
                   </div>
-                </td>
-              </tr>
-            </template>
-          </GeneralDataTable>
-        </v-card>
+
+                  <button @click="permissionsDrawerOpen = false">
+                    <icon-close class="tw:text-[22px] tw:text-gray-600! tw:dark:text-gray-300!" />
+                  </button>
+                </div>
+
+                <div v-if="permissionsLoading" class="tw:flex tw:justify-center tw:py-8">
+                  <v-progress-circular indeterminate color="primary" />
+                </div>
+
+                <div v-else class="tw:max-h-[70vh]! tw:overflow-y-auto!">
+                  <v-expansion-panels variant="accordion" multiple>
+                    <v-expansion-panel v-for="group in permissionCatalog" :key="group.title" :title="group.title">
+                      <v-expansion-panel-text>
+                        <div class="tw:flex tw:flex-col tw:gap-2">
+                          <v-checkbox v-for="perm in group.permissions" :key="perm.code"
+                            :model-value="checkedPermissions.includes(perm.code)" density="compact" hide-details
+                            @update:model-value="togglePermission(perm.code)">
+                            <template #label>
+                              <span class="tw:text-[13px]">{{ perm.label }}</span>
+                            </template>
+                          </v-checkbox>
+                        </div>
+                      </v-expansion-panel-text>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
+                </div>
+
+                <div v-if="!permissionsLoading" class="tw:mt-4! tw:p-4!">
+                  <v-btn block class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
+                    :loading="handlerStore.loadingBtn" :disabled="handlerStore.loadingBtn" @click="onPermissionsSubmit">
+                    <icon-check class="tw:text-[18px]" />
+                    <span class="tw:mr-1!">ذخیره</span>
+                  </v-btn>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+
       </v-col>
+
+      <!-- ─── Permissions Panel (desktop inline) ── -->
+
     </v-row>
 
     <!-- ─── Delete Confirm Dialog ── -->
-    <v-dialog
-      v-model="deleteDialogOpen"
-      max-width="400"
-      dir="rtl"
-      class="blur-dialog"
-    >
+    <v-dialog v-model="deleteDialogOpen" max-width="400" dir="rtl" class="blur-dialog">
       <v-card rounded="lg">
-        <v-card-title
-          class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!"
-        >
+        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
           <div class="tw:flex tw:justify-between tw:items-center">
             <div class="tw:invisible">
-              <v-btn
-                icon
-                variant="plain"
-                size="x-small"
-                @click="dialogOpen = false"
-              >
+              <v-btn icon variant="plain" size="x-small" @click="dialogOpen = false">
                 <icon-close class="tw:text-[18px] tw:text-white!" />
               </v-btn>
             </div>
             <div class="tw:text-[14px]! tw:text-white">حذف کاربر</div>
             <div>
-              <v-btn
-                icon
-                variant="plain"
-                size="x-small"
-                @click="dialogOpen = false"
-              >
+              <v-btn icon variant="plain" size="x-small" @click="dialogOpen = false">
                 <icon-close class="tw:text-[18px] tw:text-white!" />
               </v-btn>
             </div>
@@ -247,19 +251,11 @@
           آیا از حذف «{{ deleteTarget?.fullName }}» مطمئن هستید؟
         </v-card-text>
         <v-card-actions class="tw:justify-end!">
-          <v-btn
-            variant="text"
-            @click="deleteDialogOpen = false"
-            class="tw:text-[12px]!"
-          >
+          <v-btn variant="text" @click="deleteDialogOpen = false" class="tw:text-[12px]!">
             انصراف
           </v-btn>
-          <v-btn
-            class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
-            :loading="handlerStore.loadingBtn"
-            :disabled="handlerStore.loadingBtn"
-            @click="onDeleteConfirm"
-          >
+          <v-btn class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!" :loading="handlerStore.loadingBtn"
+            :disabled="handlerStore.loadingBtn" @click="onDeleteConfirm">
             <icon-trash class="tw:text-[18px]" />
             <span class="tw:mr-1! tw:text-[12px]! tw:px-2!">حذف</span>
           </v-btn>
@@ -268,35 +264,18 @@
     </v-dialog>
 
     <!-- ─── Reset Password Dialog ── -->
-    <v-dialog
-      v-model="resetPasswordDialogOpen"
-      max-width="400"
-      dir="rtl"
-      class="blur-dialog"
-    >
+    <v-dialog v-model="resetPasswordDialogOpen" max-width="400" dir="rtl" class="blur-dialog">
       <v-card rounded="lg">
-        <v-card-title
-          class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!"
-        >
+        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
           <div class="tw:flex tw:justify-between tw:items-center">
             <div class="tw:invisible">
-              <v-btn
-                icon
-                variant="plain"
-                size="x-small"
-                @click="resetPasswordDialogOpen = false"
-              >
+              <v-btn icon variant="plain" size="x-small" @click="resetPasswordDialogOpen = false">
                 <icon-close class="tw:text-[18px] tw:text-white!" />
               </v-btn>
             </div>
             <div class="tw:text-[14px]! tw:text-white">بازنشانی رمز عبور</div>
             <div>
-              <v-btn
-                icon
-                variant="plain"
-                size="x-small"
-                @click="resetPasswordDialogOpen = false"
-              >
+              <v-btn icon variant="plain" size="x-small" @click="resetPasswordDialogOpen = false">
                 <icon-close class="tw:text-[18px] tw:text-white!" />
               </v-btn>
             </div>
@@ -306,16 +285,10 @@
           <div class="tw:text-[14px]! tw:text-center! tw:mb-5!">
             بازنشانی رمز عبور برای «{{ resetPasswordTarget?.fullName }}»
           </div>
-          <v-text-field
-            v-model="newPassword"
-            variant="outlined"
-            density="compact"
+          <v-text-field v-model="newPassword" variant="outlined" density="compact"
             :type="showNewPassword ? 'text' : 'password'"
             :append-inner-icon="showNewPassword ? 'mdi-eye-off' : 'mdi-eye'"
-            @click:append-inner="showNewPassword = !showNewPassword"
-            hide-details
-            dir="rtl"
-          >
+            @click:append-inner="showNewPassword = !showNewPassword" hide-details dir="rtl">
             <template #label>
               <span class="tw:text-[12px]">رمز عبور جدید</span>
               <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]">
@@ -325,19 +298,11 @@
           </v-text-field>
         </v-card-text>
         <v-card-actions class="tw:justify-end!">
-          <v-btn
-            variant="text"
-            @click="resetPasswordDialogOpen = false"
-            class="tw:text-[12px]!"
-          >
+          <v-btn variant="text" @click="resetPasswordDialogOpen = false" class="tw:text-[12px]!">
             انصراف
           </v-btn>
-          <v-btn
-            class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
-            :loading="handlerStore.loadingBtn"
-            :disabled="handlerStore.loadingBtn || !newPassword"
-            @click="onResetPasswordConfirm"
-          >
+          <v-btn class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!" :loading="handlerStore.loadingBtn"
+            :disabled="handlerStore.loadingBtn || !newPassword" @click="onResetPasswordConfirm">
             <icon-lock class="tw:text-[18px]" />
             <span class="tw:mr-1! tw:text-[12px]! tw:px-2!">بازنشانی</span>
           </v-btn>
@@ -345,25 +310,58 @@
       </v-card>
     </v-dialog>
 
-    <!-- ─── Add / Edit Dialog ── -->
-    <v-dialog
-      v-model="dialogOpen"
-      max-width="1200"
-      dir="rtl"
-      class="blur-dialog"
-    >
+    <!-- ─── Admin Toggle Confirm Dialog ── -->
+    <v-dialog v-model="toggleAdminDialogOpen" max-width="400" dir="rtl" class="blur-dialog">
       <v-card rounded="lg">
-        <v-card-title
-          class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!"
-        >
+        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
           <div class="tw:flex tw:justify-between tw:items-center">
             <div class="tw:invisible">
-              <v-btn
-                icon
-                variant="plain"
-                size="x-small"
-                @click="dialogOpen = false"
-              >
+              <v-btn icon variant="plain" size="x-small" @click="toggleAdminDialogOpen = false">
+                <icon-close class="tw:text-[18px] tw:text-white!" />
+              </v-btn>
+            </div>
+            <div class="tw:text-[14px]! tw:text-white">
+              {{
+                toggleAdminTarget?.roles?.includes("ADMIN")
+                  ? "لغو دسترسی ادمین"
+                  : "تبدیل به ادمین"
+              }}
+            </div>
+            <div>
+              <v-btn icon variant="plain" size="x-small" @click="toggleAdminDialogOpen = false">
+                <icon-close class="tw:text-[18px] tw:text-white!" />
+              </v-btn>
+            </div>
+          </div>
+        </v-card-title>
+        <v-card-text class="tw:text-[16px]! tw:text-center!">
+          آیا مطمئنید می‌خواهید {{ toggleAdminTarget?.fullName }} را
+          {{
+            toggleAdminTarget?.roles?.includes("ADMIN")
+              ? "از حالت ادمین خارج کنید"
+              : "ادمین کنید"
+          }}؟
+        </v-card-text>
+        <v-card-actions class="tw:justify-end!">
+          <v-btn variant="text" @click="toggleAdminDialogOpen = false" class="tw:text-[12px]!">
+            انصراف
+          </v-btn>
+          <v-btn class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!" :loading="handlerStore.loadingBtn"
+            :disabled="handlerStore.loadingBtn" @click="onToggleAdminConfirm">
+            <icon-check class="tw:text-[18px]" />
+            <span class="tw:mr-1! tw:text-[12px]! tw:px-2!">تایید</span>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- ─── Add / Edit Dialog ── -->
+    <v-dialog v-model="dialogOpen" max-width="1200" dir="rtl" class="blur-dialog">
+      <v-card rounded="lg">
+        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
+          <div class="tw:flex tw:justify-between tw:items-center">
+            <div class="tw:invisible">
+              <v-btn icon variant="plain" size="x-small" @click="dialogOpen = false">
                 <icon-close class="tw:text-[18px] tw:text-white!" />
               </v-btn>
             </div>
@@ -371,12 +369,7 @@
               {{ dialogMode === "create" ? "افزودن کاربر" : "ویرایش کاربر" }}
             </div>
             <div>
-              <v-btn
-                icon
-                variant="plain"
-                size="x-small"
-                @click="dialogOpen = false"
-              >
+              <v-btn icon variant="plain" size="x-small" @click="dialogOpen = false">
                 <icon-close class="tw:text-[18px] tw:text-white!" />
               </v-btn>
             </div>
@@ -384,64 +377,40 @@
         </v-card-title>
 
         <v-card-text>
-          <div
-            v-if="dialogMode === 'edit' && userStore.loading"
-            class="tw:flex tw:justify-center tw:py-8"
-          >
+          <div v-if="dialogMode === 'edit' && userStore.loading" class="tw:flex tw:justify-center tw:py-8">
             <v-progress-circular indeterminate color="primary" />
           </div>
 
           <v-form v-else ref="formRef">
             <v-row>
               <v-col cols="12" md="6" lg="4" xl="3">
-                <v-text-field
-                  v-model="form.fullName"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  :rules="[(v: string) => !!v || '']"
-                >
+                <v-text-field v-model="form.fullName" variant="outlined" density="compact" hide-details
+                  :rules="[(v: string) => !!v || '']">
                   <template #label>
                     <span class="tw:text-[12px]">نام کامل</span>
-                    <span
-                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
-                    >
+                    <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]">
                       (الزامی)
                     </span>
                   </template>
                 </v-text-field>
               </v-col>
               <v-col cols="12" md="6" lg="4" xl="3">
-                <v-text-field
-                  v-model="form.phone"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  :rules="[(v: string) => !!v || '']"
-                >
+                <v-text-field v-model="form.phone" variant="outlined" density="compact" hide-details
+                  :rules="[(v: string) => !!v || '']">
                   <template #label>
                     <span class="tw:text-[12px]">موبایل</span>
-                    <span
-                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
-                    >
+                    <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]">
                       (الزامی)
                     </span>
                   </template>
                 </v-text-field>
               </v-col>
               <v-col cols="12" md="6" lg="4" xl="3">
-                <v-text-field
-                  v-model="form.email"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  :rules="[(v: string) => !!v || '']"
-                >
+                <v-text-field v-model="form.email" variant="outlined" density="compact" hide-details
+                  :rules="[(v: string) => !!v || '']">
                   <template #label>
                     <span class="tw:text-[12px]">ایمیل</span>
-                    <span
-                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
-                    >
+                    <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]">
                       (الزامی)
                     </span>
                   </template>
@@ -449,84 +418,41 @@
               </v-col>
               <v-col cols="12" md="6" lg="4" xl="3">
                 <div class="tw:relative!">
-                  <label
-                    v-if="form.birthDate"
-                    for="birthDate"
-                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw-text-color-reverse"
-                    >تاریخ تولد</label
-                  >
-                  <date-picker
-                    v-model="form.birthDate"
-                    id="birthDate"
-                    simple
-                    placeholder="تاریخ تولد"
-                    format="jYYYY/jMM/jDD"
-                    display-format="jYYYY/jMM/jDD"
-                    class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!"
-                    color="#1d202e"
-                  />
+                  <label v-if="form.birthDate" for="birthDate"
+                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw-text-color-reverse">تاریخ
+                    تولد</label>
+                  <date-picker v-model="form.birthDate" id="birthDate" simple placeholder="تاریخ تولد"
+                    format="jYYYY/jMM/jDD" display-format="jYYYY/jMM/jDD"
+                    class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!" color="#1d202e" />
                 </div>
               </v-col>
               <v-col cols="12" md="6" lg="4" xl="3">
-                <v-text-field
-                  v-model="form.nationalId"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                >
+                <v-text-field v-model="form.nationalId" variant="outlined" density="compact" hide-details>
                   <template #label>
                     <span class="tw:text-[12px]">کد ملی</span>
                   </template>
                 </v-text-field>
               </v-col>
-              <v-col
-                cols="12"
-                md="6"
-                lg="4"
-                xl="3"
-                v-if="dialogMode === 'create'"
-              >
-                <v-text-field
-                  v-model="form.password"
-                  variant="outlined"
-                  density="compact"
-                  :type="showCreatePassword ? 'text' : 'password'"
-                  :append-inner-icon="
-                    showCreatePassword ? 'mdi-eye-off' : 'mdi-eye'
-                  "
-                  @click:append-inner="showCreatePassword = !showCreatePassword"
-                  hide-details
-                  :rules="[(v: string) => !!v || '']"
-                >
+              <v-col cols="12" md="6" lg="4" xl="3" v-if="dialogMode === 'create'">
+                <v-text-field v-model="form.password" variant="outlined" density="compact"
+                  :type="showCreatePassword ? 'text' : 'password'" :append-inner-icon="showCreatePassword ? 'mdi-eye-off' : 'mdi-eye'
+                    " @click:append-inner="showCreatePassword = !showCreatePassword" hide-details
+                  :rules="[(v: string) => !!v || '']">
                   <template #label>
                     <span class="tw:text-[12px]">رمز عبور</span>
-                    <span
-                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
-                    >
+                    <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]">
                       (الزامی)
                     </span>
                   </template>
                 </v-text-field>
               </v-col>
               <v-col cols="12" md="6" lg="4" xl="3">
-                <v-autocomplete
-                  v-model="form.roles"
-                  :items="dropdownStore.roles"
-                  item-title="label"
-                  item-value="value"
-                  multiple
-                  chips
-                  closable-chips
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  :rules="[(v: string[]) => (v && v.length > 0) || '']"
-                >
+                <v-autocomplete v-model="form.roles" :items="dropdownStore.roles" item-title="label" item-value="value"
+                  multiple chips closable-chips variant="outlined" density="compact" hide-details
+                  :rules="[(v: string[]) => (v && v.length > 0) || '']">
                   <template #label>
                     <span class="tw:text-[12px]">نقش‌ها</span>
-                    <span
-                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
-                    >
+                    <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]">
                       (الزامی)
                     </span>
                   </template>
@@ -537,23 +463,71 @@
         </v-card-text>
 
         <v-card-actions class="tw:justify-end! tw:px-4! tw:pb-4!">
-          <v-btn
-            variant="text"
-            @click="dialogOpen = false"
-            class="tw:text-[12px]!"
-          >
+          <v-btn variant="text" @click="dialogOpen = false" class="tw:text-[12px]!">
             انصراف
           </v-btn>
-          <v-btn
-            class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md! tw:px-4!"
-            :loading="handlerStore.loadingBtn"
-            :disabled="handlerStore.loadingBtn"
-            @click="onDialogSubmit"
-          >
+          <v-btn class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md! tw:px-4!" :loading="handlerStore.loadingBtn"
+            :disabled="handlerStore.loadingBtn" @click="onDialogSubmit">
             <icon-check class="tw:text-[18px]" />
             <span class="tw:mr-1! tw:text-[12px]! tw:px-2!">{{
               dialogMode === "create" ? "افزودن" : "ذخیره"
             }}</span>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- ─── Permissions Dialog (mobile) ── -->
+    <v-dialog v-if="isMobile" v-model="permissionsDrawerOpen" max-width="400" dir="rtl" class="blur-dialog" scrollable>
+      <v-card rounded="lg">
+        <v-card-title class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!">
+          <div class="tw:flex tw:justify-between tw:items-center">
+            <div class="tw:invisible">
+              <v-btn icon variant="plain" size="x-small" @click="permissionsDrawerOpen = false">
+                <icon-close class="tw:text-[18px] tw:text-white!" />
+              </v-btn>
+            </div>
+            <div class="tw:text-[14px]! tw:text-white">
+              دسترسی‌های {{ activePermissionsUser?.fullName }}
+            </div>
+            <div>
+              <v-btn icon variant="plain" size="x-small" @click="permissionsDrawerOpen = false">
+                <icon-close class="tw:text-[18px] tw:text-white!" />
+              </v-btn>
+            </div>
+          </div>
+        </v-card-title>
+
+        <v-card-text>
+          <div v-if="permissionsLoading" class="tw:flex tw:justify-center tw:py-8">
+            <v-progress-circular indeterminate color="primary" />
+          </div>
+
+          <v-expansion-panels v-else variant="accordion" multiple>
+            <v-expansion-panel v-for="group in permissionCatalog" :key="group.title" :title="group.title">
+              <v-expansion-panel-text>
+                <div class="tw:flex tw:flex-col tw:gap-2">
+                  <v-checkbox v-for="perm in group.permissions" :key="perm.code"
+                    :model-value="checkedPermissions.includes(perm.code)" density="compact" hide-details
+                    @update:model-value="togglePermission(perm.code)">
+                    <template #label>
+                      <span class="tw:text-[13px]">{{ perm.label }}</span>
+                    </template>
+                  </v-checkbox>
+                </div>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-card-text>
+
+        <v-card-actions class="tw:justify-end!">
+          <v-btn variant="text" @click="permissionsDrawerOpen = false" class="tw:text-[12px]!">
+            انصراف
+          </v-btn>
+          <v-btn class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!" :loading="handlerStore.loadingBtn"
+            :disabled="handlerStore.loadingBtn" @click="onPermissionsSubmit">
+            <icon-check class="tw:text-[18px]" />
+            <span class="tw:mr-1! tw:text-[12px]! tw:px-2!">ذخیره</span>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -563,17 +537,25 @@
 
 <script setup lang="ts">
 import { useUserStore } from "~/store/user";
+import { useAuthStore } from "~/store/auth";
 import { useDeopdownStore } from "~/store/dropdown";
 import { useHandlerStore } from "~/store/handler";
+import { useDisplay } from "vuetify";
 
 const userStore = useUserStore();
+const authStore = useAuthStore();
 const dropdownStore = useDeopdownStore();
 const handlerStore = useHandlerStore();
+const { mobile } = useDisplay();
+const isMobile = computed(() => mobile.value);
 
 const { setPageTitle } = usePageTitle();
 watchEffect(() => {
   setPageTitle("مدیریت کاربران");
 });
+
+// ─── Super admin ──
+const isSuperAdmin = ref(false)
 
 // ─── Pagination ──
 const page = ref<number>(1);
@@ -641,10 +623,15 @@ const tableHeaders = [
 // ─── Helpers ──
 const getRoleLabels = (roleValues: string[]): string[] => {
   if (!roleValues || !Array.isArray(roleValues)) return [];
-  return roleValues.map((val) => {
-    const found = dropdownStore.roles.find((r) => r.value === val);
-    return found ? found.label : val;
-  });
+  const map: Record<string, string> = {
+    SUPER_ADMIN: "مدیر کل",
+    ADMIN: "ادمین",
+    PLAYER: "بازیکن",
+    COACH: "مربی",
+    REFEREE: "داور",
+    ORG_MANAGER: "مدیر سازمان",
+  };
+  return roleValues.map((val) => map[val] ?? val);
 };
 
 const getUserStatusLabel = (
@@ -730,6 +717,76 @@ const onResetPasswordConfirm = () => {
     });
 };
 
+// ─── Admin Toggle ──
+const toggleAdminDialogOpen = ref<boolean>(false);
+const toggleAdminTarget = ref<any>(null);
+
+const openToggleAdminDialog = (item: any) => {
+  toggleAdminTarget.value = item;
+  toggleAdminDialogOpen.value = true;
+};
+
+const onToggleAdminConfirm = () => {
+  if (!toggleAdminTarget.value) return;
+  const nextIsAdmin = !toggleAdminTarget.value.roles?.includes("ADMIN");
+
+  userStore.setAdminStatus(toggleAdminTarget.value.id, nextIsAdmin).then(() => {
+    loadUsers();
+    toggleAdminDialogOpen.value = false;
+  });
+};
+
+// ─── Permissions Drawer ──
+const permissionsDrawerOpen = ref<boolean>(false);
+const permissionsLoading = ref<boolean>(false);
+const activePermissionsUser = ref<{
+  id: number | string;
+  fullName: string;
+} | null>(null);
+const permissionCatalog = ref<
+  { title: string; permissions: { code: string; label: string }[] }[]
+>([]);
+const checkedPermissions = ref<string[]>([]);
+
+const openPermissionsDrawer = (user: any) => {
+  activePermissionsUser.value = { id: user.id, fullName: user.fullName };
+  permissionsDrawerOpen.value = true;
+  permissionsLoading.value = true;
+
+  Promise.all([
+    userStore.getPermissionCatalog(),
+    userStore.getUserPermissions(user.id),
+  ])
+    .then(([catalogRes, userPermissions]) => {
+      permissionCatalog.value = catalogRes;
+      checkedPermissions.value = userPermissions;
+    })
+    .finally(() => {
+      permissionsLoading.value = false;
+    });
+};
+
+const togglePermission = (code: string) => {
+  const idx = checkedPermissions.value.indexOf(code);
+  if (idx === -1) {
+    checkedPermissions.value.push(code);
+  } else {
+    checkedPermissions.value.splice(idx, 1);
+  }
+};
+
+const onPermissionsSubmit = () => {
+  if (!activePermissionsUser.value) return;
+  userStore
+    .replaceUserPermissions(activePermissionsUser.value.id, [
+      ...checkedPermissions.value,
+    ])
+    .then(() => {
+      permissionsDrawerOpen.value = false;
+      activePermissionsUser.value = null;
+    });
+};
+
 // ─── Add / Edit Dialog ──
 const dialogOpen = ref<boolean>(false);
 const dialogMode = ref<"create" | "edit">("create");
@@ -808,6 +865,10 @@ const onDialogSubmit = () => {
 // ─── Init ──
 onMounted(() => {
   loadUsers();
+  const superAdminCheck = localStorage.getItem("super_admin")
+  if(superAdminCheck == "true"){
+    isSuperAdmin.value = true
+  }
   if (dropdownStore.roles.length === 0) {
     dropdownStore.getRoles();
   }

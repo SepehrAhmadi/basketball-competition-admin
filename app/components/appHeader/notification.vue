@@ -13,7 +13,7 @@
         class="tw:bg-white tw:dark:bg-primary-dark tw:rounded-lg tw:min-w-60 tw:max-w-80 tw:overflow-hidden tw:mt-3! tw:border tw:border-gray-200 tw:dark:border-gray-700"
       >
         <div class="tw:flex tw:flex-col tw:gap-2 tw:text-sm tw:p-2! ">
-          <div class="tw:px-2">در آینده در این قسمت اعلان ها نمایش داده می‌شوند</div>
+          <div class="tw:px-2 tw:text-[12px]">در آینده در این قسمت اعلان ها نمایش داده می‌شوند</div>
         </div>
       </div>
     </v-menu>

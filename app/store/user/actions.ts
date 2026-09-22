@@ -130,6 +130,74 @@ export function useUserActions(state: StateType) {
       });
   };
 
+  // ─── Admin Status Toggle ──
+  const setAdminStatus = (userId: number | string, isAdmin: boolean) => {
+    const axios = useApi();
+    handlerStore.loadingBtn = true;
+
+    return axios
+      .put(`/admin/users/${userId}/admin-status`, { isAdmin })
+      .then((res) => {
+        handlerStore.setSuccess(res.data.message);
+        return res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      })
+      .finally(() => {
+        handlerStore.loadingBtn = false;
+      });
+  };
+
+  // ─── Permissions ──
+  const getPermissionCatalog = () => {
+    const axios = useApi();
+    return axios
+      .get("/admin/users/permissions")
+      .then((res) => res.data.data ?? [])
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+        return [];
+      });
+  };
+
+  const getUserPermissions = (userId: number | string) => {
+    const axios = useApi();
+    return axios
+      .get(`/admin/users/${userId}/permissions`)
+      .then((res) => res.data.data?.permissions ?? [])
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+        return [];
+      });
+  };
+
+  const replaceUserPermissions = (userId: number | string, permissions: string[]) => {
+    const axios = useApi();
+    handlerStore.loadingBtn = true;
+
+    return axios
+      .put(`/admin/users/${userId}/permissions`, { permissions })
+      .then((res) => {
+        handlerStore.setSuccess(res.data.message);
+        return res.data.data?.permissions ?? [];
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      })
+      .finally(() => {
+        handlerStore.loadingBtn = false;
+      });
+  };
+
   return {
     getUsers,
     getUserById,
@@ -137,5 +205,9 @@ export function useUserActions(state: StateType) {
     updateUser,
     deleteUser,
     resetPassword,
+    setAdminStatus,
+    getPermissionCatalog,
+    getUserPermissions,
+    replaceUserPermissions,
   };
 }

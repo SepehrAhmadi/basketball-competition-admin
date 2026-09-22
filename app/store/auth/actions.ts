@@ -16,6 +16,10 @@ export function useAuthActions(state: StateType) {
       .then((res) => {
         state.loginResult.value = res.data;
         state.adminUser.value = res.data.data?.user ?? null;
+        console.log("roles" , res.data.data.user.roles)
+        if (res.data.data.user.roles.includes("SUPER_ADMIN")) {
+          localStorage.setItem("super_admin", "true");
+        }
         if (res.data.data?.accessToken) {
           useCookie("token").value = res.data.data.accessToken;
         }
@@ -58,6 +62,7 @@ export function useAuthActions(state: StateType) {
       .then(() => {
         useCookie("token").value = null;
         state.adminUser.value = null;
+        localStorage.setItem("super_admin", "false");
         navigateTo("/auth");
       })
       .catch((err) => {

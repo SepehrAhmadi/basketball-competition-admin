@@ -1,3 +1,4 @@
+import { computed } from "vue";
 import { defineStore } from "pinia";
 import { useAuthState } from "./state";
 import { useAuthActions } from "./actions";
