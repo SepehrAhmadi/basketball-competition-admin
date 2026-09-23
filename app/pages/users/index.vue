@@ -107,8 +107,10 @@
                     </td>
                     <td>
                       <div class="tw:flex tw:justify-center tw:items-center">
-                        <!-- Admin Toggle (SUPER_ADMIN only) -->
-                        <v-tooltip v-if="authStore.roles.includes('SUPER_ADMIN')" location="top">
+                        <!-- Admin Toggle (SUPER_ADMIN only, hidden for SUPER_ADMIN targets) -->
+                        <v-tooltip v-if="
+                          authStore.roles.includes('SUPER_ADMIN') && !item.roles?.includes('SUPER_ADMIN')
+                        " location="top">
                           <template #activator="{ props }">
                             <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
                               @click="openToggleAdminDialog(item)">
@@ -124,9 +126,9 @@
                           </span>
                         </v-tooltip>
 
-                        <!-- Permissions (SUPER_ADMIN + ADMIN only) -->
+                        <!-- Permissions (SUPER_ADMIN only, hidden for SUPER_ADMIN targets) -->
                         <v-tooltip v-if="
-                          authStore.roles.includes('SUPER_ADMIN') && item.roles?.includes('ADMIN')
+                          authStore.roles.includes('SUPER_ADMIN') && !item.roles?.includes('SUPER_ADMIN') && item.roles?.includes('ADMIN')
                         " location="top">
                           <template #activator="{ props }">
                             <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"

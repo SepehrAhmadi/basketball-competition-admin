@@ -139,6 +139,9 @@ const openGroup = ref<string | null>(null);
 const route = useRoute();
 const router = useRouter();
 
+// ─── Permissions ──
+const { hasPermission } = usePermission();
+
 interface SubItem {
   id: string;
   title: string;
@@ -152,42 +155,50 @@ interface MainItem {
   routeName?: string;
   subItems?: SubItem[];
 }
-const menuItems = computed(() => [
-  {
-    id: "dashboard",
-    title: "داشبورد",
-    icon: dashboardIcon,
-    routeName: "index",
-    subItems: null,
-  },
-  {
-    id: "users",
-    title: "مدیریت کاربران",
-    icon: userIcon,
-    routeName: "users",
-    subItems: null,
-  },
-  {
-    id: "seasons",
-    title: "مدیریت فصل ها",
-    icon: dateIcon,
-    routeName: "seasons",
-    subItems: null,
-  },
-  {
-    id: "operations",
-    title: "عملیات",
-    icon: operationIcon,
-    routeName: "operations",
-    subItems: [
-      {
-        id: "invoices",
-        title: "Invoices",
-        routeName: "operations-invoice",
-      },
-    ],
-  },
-]);
+const menuItems = computed(() => {
+  const items: MainItem[] = [
+    {
+      id: "dashboard",
+      title: "داشبورد",
+      icon: dashboardIcon,
+      routeName: "index",
+      subItems: null,
+    },
+    {
+      id: "users",
+      title: "مدیریت کاربران",
+      icon: userIcon,
+      routeName: "users",
+      subItems: null,
+    },
+    {
+      id: "seasons",
+      title: "مدیریت فصل ها",
+      icon: dateIcon,
+      routeName: "seasons",
+      subItems: null,
+    },
+    {
+      id: "operations",
+      title: "عملیات",
+      icon: operationIcon,
+      routeName: "operations",
+      subItems: [
+        {
+          id: "invoices",
+          title: "Invoices",
+          routeName: "operations-invoice",
+        },
+      ],
+    },
+  ];
+
+  return items.filter((item) => {
+    if (item.id === "users") return hasPermission("users.view");
+    if (item.id === "seasons") return hasPermission("seasons.view");
+    return true;
+  });
+});
 
 function updateIsDesktop() {
   isDesktop.value = window.innerWidth >= 1024;
