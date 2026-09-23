@@ -2,7 +2,14 @@
   <div>
     <v-row>
       <!-- ── Cards side (8 cols) ── -->
-      <v-col cols="12" md="8">
+      <v-col
+        cols="12"
+        :md="
+          !hasPermission('seasons.create') && !hasPermission('seasons.update')
+            ? 12
+            : 8
+        "
+      >
         <!-- ── Toolbar card ── -->
         <v-card class="tw:rounded-xl! tw:mb-4!">
           <v-card-text>
@@ -55,6 +62,7 @@
               </v-col>
               <v-col cols="12" sm="2">
                 <v-btn
+                  v-if="hasPermission('seasons.create')"
                   class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
                   @click="openCreateMode"
                 >
@@ -125,6 +133,7 @@
 
               <div class="tw:flex tw:justify-end tw:gap-2 tw:mt-4!">
                 <v-btn
+                  v-if="hasPermission('seasons.update')"
                   size="x-small"
                   variant="outlined"
                   @click="openEdit(item.id)"
@@ -133,6 +142,7 @@
                   <span class="tw:mr-1!">ویرایش</span>
                 </v-btn>
                 <v-btn
+                  v-if="hasPermission('seasons.delete')"
                   size="x-small"
                   variant="outlined"
                   @click="confirmDelete(item)"
@@ -161,7 +171,13 @@
       </v-col>
 
       <!-- ── Form side (3 cols) ── -->
-      <v-col cols="12" md="4">
+      <v-col
+        cols="12"
+        md="4"
+        v-if="
+          hasPermission('seasons.create') || hasPermission('seasons.update')
+        "
+      >
         <v-card class="tw:rounded-xl!">
           <v-card-title
             class="tw:flex! tw:items-center! tw:gap-1! tw:text-[14px]! tw:font-bold! tw:mb-2!"
@@ -352,6 +368,9 @@ import { useHandlerStore } from "~/store/handler";
 const seasonStore = useSeasonStore();
 const handlerStore = useHandlerStore();
 
+// ─── Permissions (in-memory session, SUPER_ADMIN bypasses) ──
+const { hasPermission } = usePermission();
+
 const { setPageTitle } = usePageTitle();
 watchEffect(() => {
   setPageTitle("مدیریت فصل‌ها");
@@ -431,10 +450,10 @@ const openEdit = (id: number) => {
 };
 
 const onFormSubmit = () => {
-    if(!form.name || !form.startDate || !form.endDate) {
-        handlerStore.setError("لطفا تمام فیلدهای الزامی را پر کنید.");
-        return;
-    }
+  if (!form.name || !form.startDate || !form.endDate) {
+    handlerStore.setError("لطفا تمام فیلدهای الزامی را پر کنید.");
+    return;
+  }
 
   formRef.value!.validate().then(({ valid }: { valid: boolean }) => {
     if (!valid) return;

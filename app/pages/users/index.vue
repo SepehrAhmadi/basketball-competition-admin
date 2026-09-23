@@ -38,7 +38,7 @@
                 </v-select>
               </v-col>
               <v-col cols="12" md="2">
-                <v-btn class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!" @click="openCreateDialog">
+                <v-btn v-if="hasPermission('users.create')" class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!" @click="openCreateDialog">
                   <icon-plus class="tw:text-[20px]" />
                   <span class="tw:mr-1!">افزودن کاربر</span>
                 </v-btn>
@@ -108,7 +108,7 @@
                     <td>
                       <div class="tw:flex tw:justify-center tw:items-center">
                         <!-- Admin Toggle (SUPER_ADMIN only) -->
-                        <v-tooltip v-if="isSuperAdmin" location="top">
+                        <v-tooltip v-if="authStore.roles.includes('SUPER_ADMIN')" location="top">
                           <template #activator="{ props }">
                             <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
                               @click="openToggleAdminDialog(item)">
@@ -126,18 +126,18 @@
 
                         <!-- Permissions (SUPER_ADMIN + ADMIN only) -->
                         <v-tooltip v-if="
-                          isSuperAdmin && item.roles?.includes('ADMIN')
+                          authStore.roles.includes('SUPER_ADMIN') && item.roles?.includes('ADMIN')
                         " location="top">
                           <template #activator="{ props }">
                             <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
                               @click="openPermissionsDrawer(item)">
-                              <icon-tag class="tw:text-color-lighter tw:text-[21px]" />
+                              <icon-key class="tw:text-color-lighter tw:text-[21px]" />
                             </v-btn>
                           </template>
                           <span class="tw:text-xs tw:p-2">مدیریت دسترسی‌ها</span>
                         </v-tooltip>
 
-                        <v-tooltip location="top">
+                        <v-tooltip v-if="hasPermission('users.update')" location="top">
                           <template #activator="{ props }">
                             <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
                               @click="openEditDialog(item.id)">
@@ -147,7 +147,7 @@
                           <span class="tw:text-xs tw:p-2">ویرایش</span>
                         </v-tooltip>
 
-                        <v-tooltip location="top">
+                        <v-tooltip v-if="hasPermission('users.reset_password')" location="top">
                           <template #activator="{ props }">
                             <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
                               @click="openResetPasswordDialog(item)">
@@ -157,7 +157,7 @@
                           <span class="tw:text-xs tw:p-2">بازنشانی رمز عبور</span>
                         </v-tooltip>
 
-                        <v-tooltip location="top">
+                        <v-tooltip v-if="hasPermission('users.delete')" location="top">
                           <template #activator="{ props }">
                             <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
                               @click="confirmDelete(item)">
@@ -554,8 +554,8 @@ watchEffect(() => {
   setPageTitle("مدیریت کاربران");
 });
 
-// ─── Super admin ──
-const isSuperAdmin = ref(false)
+// ─── Permissions (in-memory session, SUPER_ADMIN bypasses) ──
+const { hasPermission } = usePermission();
 
 // ─── Pagination ──
 const page = ref<number>(1);
@@ -865,10 +865,6 @@ const onDialogSubmit = () => {
 // ─── Init ──
 onMounted(() => {
   loadUsers();
-  const superAdminCheck = localStorage.getItem("super_admin")
-  if(superAdminCheck == "true"){
-    isSuperAdmin.value = true
-  }
   if (dropdownStore.roles.length === 0) {
     dropdownStore.getRoles();
   }

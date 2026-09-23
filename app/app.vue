@@ -10,6 +10,17 @@
   </v-app>
 </template>
 
+<script setup lang="ts">
+import { useAuthStore } from "~/store/auth";
+
+const authStore = useAuthStore();
+
+// Bootstrap the in-memory session from the httpOnly refresh cookie.
+// Runs in setup where Pinia + axios plugins are already registered.
+// The route guard checks isReady and returns early until this resolves.
+await authStore.bootstrapSession();
+</script>
+
 <style>
 /* page transition */
 .page-enter-active,

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuthStore } from "~/store/auth";
 import { useHandlerStore } from "~/store/handler";
 
 export default defineNuxtPlugin(() => {
@@ -7,16 +8,26 @@ export default defineNuxtPlugin(() => {
 
   const api = axios.create({
     baseURL: config.public.API_URL,
+    withCredentials: true,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
   });
 
-  // change Accept-Language value depend site language
-  api.interceptors.request.use((config) => {
-    config.headers["Authorization"] = "Bearer " + useCookie("token").value;
-    return config;
+  // Attach the in-memory access token. The httpOnly refresh cookie is sent
+  // automatically by the browser (withCredentials above).
+  api.interceptors.request.use((requestConfig) => {
+    try {
+      const authStore = useAuthStore();
+      if (authStore.accessToken) {
+        requestConfig.headers["Authorization"] =
+          `Bearer ${authStore.accessToken}`;
+      }
+    } catch {
+      // Store may not be ready in some edge contexts — send without token.
+    }
+    return requestConfig;
   });
 
   // get access token and handle redirects , difrrent status codes
@@ -43,14 +54,15 @@ export default defineNuxtPlugin(() => {
     async (error) => {
       const originalRequest = error.config;
       const status = error.response?.status;
+      const url: string = originalRequest?.url ?? "";
 
-      if (
-        status === 401 &&
-        !originalRequest._retry &&
-        !originalRequest.url.includes("/auth") &&
-        !originalRequest.url.includes("/logout") &&
-        !originalRequest.url.includes("/refresh")
-      ) {
+      // Never retry the auth endpoints themselves (avoids boot/refresh loops).
+      const isAuthEndpoint =
+        url.includes("/auth/admin/login") ||
+        url.includes("/auth/refresh-token") ||
+        url.includes("/auth/logout");
+
+      if (status === 401 && !originalRequest._retry && !isAuthEndpoint) {
         if (isRefreshing) {
           return new Promise((resolve, reject) => {
             failedQueue.push({ resolve, reject });
@@ -76,9 +88,10 @@ export default defineNuxtPlugin(() => {
             );
 
             const newToken = data.data.accessToken;
-
-            useCookie("token").value = newToken;
-            api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+            const authStore = useAuthStore();
+            authStore.setSession(newToken);
+            api.defaults.headers.common["Authorization"] =
+              `Bearer ${newToken}`;
 
             processQueue(null, newToken);
 
@@ -86,7 +99,13 @@ export default defineNuxtPlugin(() => {
             resolve(api(originalRequest));
           } catch (err) {
             processQueue(err, null);
-            useCookie("token").value = null;
+            try {
+              const authStore = useAuthStore();
+              authStore.clearSession();
+            } catch {
+              // store unavailable — still flag unauthorized below
+            }
+            delete api.defaults.headers.common["Authorization"];
             handlerStore.setUnauthorized();
             reject(err);
           } finally {

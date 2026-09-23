@@ -1,11 +1,74 @@
+import { jwtDecode } from "jwt-decode";
 import { useApi } from "~/composables/useApi";
-import type { useAuthState } from "./state";
+import type { AccessTokenPayload, useAuthState } from "./state";
 import { useHandlerStore } from "../handler";
 
 type StateType = ReturnType<typeof useAuthState>;
 
 export function useAuthActions(state: StateType) {
   const handlerStore = useHandlerStore();
+
+  const setSession = (token: string) => {
+    state.accessToken.value = token;
+    try {
+      const decoded = jwtDecode<AccessTokenPayload & Record<string, any>>(token);
+      const raw: Record<string, any> = decoded as Record<string, any>;
+      state.userId.value =
+        (decoded.userId as number) ??
+        (raw.sub as number) ??
+        (raw.id as number) ??
+        (raw.userId as number) ??
+        null;
+      state.roles.value = Array.isArray(decoded.roles)
+        ? decoded.roles
+        : Array.isArray(raw.role)
+          ? raw.role
+          : [];
+      state.permissions.value = Array.isArray(decoded.permissions)
+        ? decoded.permissions
+        : Array.isArray(raw.perms)
+          ? raw.perms
+          : [];
+    } catch {
+      // Decode-only for UI claims; server remains the enforcer.
+      state.userId.value = null;
+      state.roles.value = [];
+      state.permissions.value = [];
+    }
+  };
+
+  const clearSession = () => {
+    state.accessToken.value = null;
+    state.userId.value = null;
+    state.roles.value = [];
+    state.permissions.value = [];
+    state.adminUser.value = null;
+    state.loginResult.value = null;
+  };
+
+  // Called once at app boot — silently resumes a session from the httpOnly cookie.
+  const bootstrapSession = () => {
+    const axios = useApi();
+
+    return axios
+      .post("/auth/refresh-token", {}, { withCredentials: true })
+      .then((res) => {
+        const token = res.data?.data?.accessToken;
+        if (token) {
+          setSession(token);
+          state.adminUser.value = res.data.data?.user ?? null;
+        } else {
+          clearSession();
+        }
+      })
+      .catch(() => {
+        // No valid cookie — just means "not logged in", not an error to show.
+        clearSession();
+      })
+      .finally(() => {
+        state.isReady.value = true;
+      });
+  };
 
   const adminLogin = (value: any) => {
     const axios = useApi();
@@ -16,12 +79,8 @@ export function useAuthActions(state: StateType) {
       .then((res) => {
         state.loginResult.value = res.data;
         state.adminUser.value = res.data.data?.user ?? null;
-        console.log("roles" , res.data.data.user.roles)
-        if (res.data.data.user.roles.includes("SUPER_ADMIN")) {
-          localStorage.setItem("super_admin", "true");
-        }
         if (res.data.data?.accessToken) {
-          useCookie("token").value = res.data.data.accessToken;
+          setSession(res.data.data.accessToken);
         }
         navigateTo("/");
         handlerStore.setSuccess(res.data.message);
@@ -43,12 +102,12 @@ export function useAuthActions(state: StateType) {
       .post("/auth/refresh-token", {}, { withCredentials: true })
       .then((res) => {
         if (res.data.data?.accessToken) {
-          useCookie("token").value = res.data.data.accessToken;
+          setSession(res.data.data.accessToken);
         }
       })
       .catch((err) => {
         console.log(err);
-        useCookie("token").value = null;
+        clearSession();
         handlerStore.setUnauthorized();
       });
   };
@@ -58,11 +117,9 @@ export function useAuthActions(state: StateType) {
     handlerStore.loadingBtn = true;
 
     return axios
-      .post("/auth/logout", { withCredentials: true })
+      .post("/auth/logout", {}, { withCredentials: true })
       .then(() => {
-        useCookie("token").value = null;
-        state.adminUser.value = null;
-        localStorage.setItem("super_admin", "false");
+        clearSession();
         navigateTo("/auth");
       })
       .catch((err) => {
@@ -75,5 +132,5 @@ export function useAuthActions(state: StateType) {
       });
   };
 
-  return { adminLogin, refreshToken, logout };
+  return { setSession, clearSession, bootstrapSession, adminLogin, refreshToken, logout };
 }

@@ -1,8 +1,13 @@
+import { useAuthStore } from "~/store/auth";
 import { useHandlerStore } from "~/store/handler";
 
 export default defineNuxtRouteMiddleware((to) => {
-  const token = useCookie("token").value;
+  const authStore = useAuthStore();
   const handlerStore = useHandlerStore();
+
+  // Boot plugin hasn't finished the silent resume attempt yet.
+  // Shouldn't normally happen (Nuxt awaits it), but safe to bail out.
+  if (!authStore.isReady) return;
 
   // unauthorized (from axios plugin interceptor)
   if (handlerStore.unauthorized) {
@@ -18,18 +23,20 @@ export default defineNuxtRouteMiddleware((to) => {
 
   // if have redirect path from backend
   if (handlerStore.redirectTo) {
-    const to = handlerStore.redirectTo;
+    const target = handlerStore.redirectTo;
     handlerStore.clearFlags();
-    return navigateTo(to);
+    return navigateTo(target);
   }
 
+  const hasSession = !!authStore.accessToken;
+
   // guest guard
-  if (!token && to.path !== "/auth") {
+  if (!hasSession && to.path !== "/auth") {
     return navigateTo("/auth");
   }
 
   // logged-in user shouldn't see auth page
-  if (token && to.path === "/auth") {
+  if (hasSession && to.path === "/auth") {
     return navigateTo("/");
   }
 });
