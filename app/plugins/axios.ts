@@ -19,10 +19,10 @@ export default defineNuxtPlugin(() => {
   // automatically by the browser (withCredentials above).
   api.interceptors.request.use((requestConfig) => {
     try {
-      const authStore = useAuthStore();
-      if (authStore.accessToken) {
+      const token = useCookie<string | null>("token").value;
+      if (token) {
         requestConfig.headers["Authorization"] =
-          `Bearer ${authStore.accessToken}`;
+          `Bearer ${token}`;
       }
     } catch {
       // Store may not be ready in some edge contexts — send without token.
@@ -88,6 +88,9 @@ export default defineNuxtPlugin(() => {
             );
 
             const newToken = data.data.accessToken;
+            // Old tokens without adminLevel get 401 — refresh either yields a
+            // new split-claim token or fails and forces re-login below.
+            if (!newToken) throw new Error("Missing accessToken in refresh response");
             const authStore = useAuthStore();
             authStore.setSession(newToken);
             api.defaults.headers.common["Authorization"] =

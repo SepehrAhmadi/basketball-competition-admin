@@ -27,7 +27,7 @@
           نام کاربری :
         </div>
         <div class="tw:text-[12px] tw:text-gray-700 tw:dark:text-gray-300">
-          <span>نام کاربری</span>
+          <span>{{ authStore.adminUser?.fullName ?? "نام کاربری" }}</span>
         </div>
       </div>
       <div

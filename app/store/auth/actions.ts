@@ -7,11 +7,14 @@ type StateType = ReturnType<typeof useAuthState>;
 
 export function useAuthActions(state: StateType) {
   const handlerStore = useHandlerStore();
+  const tokenCookie = useCookie<string | null>("token");
 
   const setSession = (token: string) => {
-    state.accessToken.value = token;
+    tokenCookie.value = token;
     try {
-      const decoded = jwtDecode<AccessTokenPayload & Record<string, any>>(token);
+      const decoded = jwtDecode<AccessTokenPayload & Record<string, any>>(
+        token,
+      );
       const raw: Record<string, any> = decoded as Record<string, any>;
       state.userId.value =
         (decoded.userId as number) ??
@@ -19,6 +22,8 @@ export function useAuthActions(state: StateType) {
         (raw.id as number) ??
         (raw.userId as number) ??
         null;
+      state.adminLevel.value = (decoded.adminLevel ??
+        null) as StateType["adminLevel"]["value"];
       state.roles.value = Array.isArray(decoded.roles)
         ? decoded.roles
         : Array.isArray(raw.role)
@@ -38,7 +43,7 @@ export function useAuthActions(state: StateType) {
   };
 
   const clearSession = () => {
-    state.accessToken.value = null;
+    tokenCookie.value = null;
     state.userId.value = null;
     state.roles.value = [];
     state.permissions.value = [];
@@ -132,5 +137,12 @@ export function useAuthActions(state: StateType) {
       });
   };
 
-  return { setSession, clearSession, bootstrapSession, adminLogin, refreshToken, logout };
+  return {
+    setSession,
+    clearSession,
+    bootstrapSession,
+    adminLogin,
+    refreshToken,
+    logout,
+  };
 }

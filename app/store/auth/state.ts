@@ -1,8 +1,11 @@
 import { ref } from "vue";
 
+export type DomainRole = "ORG_MANAGER" | "COACH" | "PLAYER" | "REFEREE";
+export type AdminLevel = "ADMIN" | "SUPER_ADMIN" | null;
 export interface AccessTokenPayload {
   userId: number;
-  roles: string[];
+  roles: DomainRole[];
+  adminLevel: AdminLevel;
   permissions: string[];
 }
 
@@ -12,9 +15,10 @@ export function useAuthState() {
   const adminUser = ref<any>(null);
 
   // ─── In-memory session (never persisted client-side) ──
-  const accessToken = ref<string | null>(null);
+  // Note: accessToken is now stored in a "token" cookie (useCookie).
   const userId = ref<number | null>(null);
-  const roles = ref<string[]>([]);
+  const roles = ref<DomainRole[]>([]);
+  const adminLevel = ref<AdminLevel>(null);
   const permissions = ref<string[]>([]);
   // true once the boot-time refresh attempt has finished, success or fail
   const isReady = ref<boolean>(false);
@@ -23,9 +27,9 @@ export function useAuthState() {
     loading,
     loginResult,
     adminUser,
-    accessToken,
     userId,
     roles,
+    adminLevel,
     permissions,
     isReady,
   };

@@ -368,7 +368,7 @@ import { useHandlerStore } from "~/store/handler";
 const seasonStore = useSeasonStore();
 const handlerStore = useHandlerStore();
 
-// ─── Permissions (in-memory session, SUPER_ADMIN bypasses) ──
+// ─── Permissions (in-memory session, SUPER_ADMIN bypasses via adminLevel) ──
 const { hasPermission } = usePermission();
 
 const { setPageTitle } = usePageTitle();

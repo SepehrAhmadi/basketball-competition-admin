@@ -198,6 +198,22 @@ export function useUserActions(state: StateType) {
       });
   };
 
+  const getCurrentUser = () => {
+    const axios = useApi();
+
+    return axios
+      .get("/users/me")
+      .then((res) => {
+        state.currentUser.value = res.data?.data ?? res.data ?? null;
+        return state.currentUser.value;
+      })
+      .catch((err) => {
+        console.log(err);
+        state.currentUser.value = null;
+        return null;
+      });
+  };
+
   return {
     getUsers,
     getUserById,
@@ -209,5 +225,6 @@ export function useUserActions(state: StateType) {
     getPermissionCatalog,
     getUserPermissions,
     replaceUserPermissions,
+    getCurrentUser,
   };
 }

@@ -2,6 +2,8 @@ import { useAuthStore } from "~/store/auth";
 import { useHandlerStore } from "~/store/handler";
 
 export default defineNuxtRouteMiddleware((to) => {
+  const token = useCookie("token").value;
+
   const authStore = useAuthStore();
   const handlerStore = useHandlerStore();
 
@@ -28,15 +30,13 @@ export default defineNuxtRouteMiddleware((to) => {
     return navigateTo(target);
   }
 
-  const hasSession = !!authStore.accessToken;
-
   // guest guard
-  if (!hasSession && to.path !== "/auth") {
+  if (!token && to.path !== "/auth") {
     return navigateTo("/auth");
   }
 
   // logged-in user shouldn't see auth page
-  if (hasSession && to.path === "/auth") {
+  if (token && to.path === "/auth") {
     return navigateTo("/");
   }
 });

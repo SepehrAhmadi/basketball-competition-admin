@@ -198,7 +198,12 @@ export function useDropdownActions(state: StateType) {
     return axios
       .get("/roles")
       .then((res) => {
-        state.roles.value = res.data.data.roles;
+        // Domain roles only — ADMIN / SUPER_ADMIN live in `adminLevel`.
+        const allowed = ["ORG_MANAGER", "COACH", "PLAYER", "REFEREE"];
+        const list = res.data.data.roles ?? res.data.data ?? [];
+        state.roles.value = Array.isArray(list)
+          ? list.filter((r: any) => allowed.includes(r?.value ?? r))
+          : [];
       })
       .catch((err) => {
         console.log(err);

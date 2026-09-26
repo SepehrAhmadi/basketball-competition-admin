@@ -96,6 +96,9 @@
                           color="primary">
                           {{ role }}
                         </v-chip>
+                        <v-chip v-if="getAdminLevelLabel(item)" size="x-small" variant="tonal" color="info">
+                          {{ getAdminLevelLabel(item) }}
+                        </v-chip>
                       </div>
                     </td>
                     <td>
@@ -108,9 +111,7 @@
                     <td>
                       <div class="tw:flex tw:justify-center tw:items-center">
                         <!-- Admin Toggle (SUPER_ADMIN only, hidden for SUPER_ADMIN targets) -->
-                        <v-tooltip v-if="
-                          authStore.roles.includes('SUPER_ADMIN') && !item.roles?.includes('SUPER_ADMIN')
-                        " location="top">
+                        <v-tooltip v-if="isSuperAdmin && item.adminLevel !== 'SUPER_ADMIN'" location="top">
                           <template #activator="{ props }">
                             <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
                               @click="openToggleAdminDialog(item)">
@@ -119,7 +120,7 @@
                           </template>
                           <span class="tw:text-xs tw:p-2">
                             {{
-                              item.roles?.includes("ADMIN")
+                              item.adminLevel
                                 ? "لغو دسترسی ادمین"
                                 : "تبدیل به ادمین"
                             }}
@@ -127,9 +128,7 @@
                         </v-tooltip>
 
                         <!-- Permissions (SUPER_ADMIN only, hidden for SUPER_ADMIN targets) -->
-                        <v-tooltip v-if="
-                          authStore.roles.includes('SUPER_ADMIN') && !item.roles?.includes('SUPER_ADMIN') && item.roles?.includes('ADMIN')
-                        " location="top">
+                        <v-tooltip v-if="isSuperAdmin && item.adminLevel === 'ADMIN'" location="top">
                           <template #activator="{ props }">
                             <v-btn v-bind="props" size="x-small" variant="plain" rounded="pill"
                               @click="openPermissionsDrawer(item)">
@@ -324,7 +323,7 @@
             </div>
             <div class="tw:text-[14px]! tw:text-white">
               {{
-                toggleAdminTarget?.roles?.includes("ADMIN")
+                toggleAdminTarget?.adminLevel
                   ? "لغو دسترسی ادمین"
                   : "تبدیل به ادمین"
               }}
@@ -339,7 +338,7 @@
         <v-card-text class="tw:text-[16px]! tw:text-center!">
           آیا مطمئنید می‌خواهید {{ toggleAdminTarget?.fullName }} را
           {{
-            toggleAdminTarget?.roles?.includes("ADMIN")
+            toggleAdminTarget?.adminLevel
               ? "از حالت ادمین خارج کنید"
               : "ادمین کنید"
           }}؟
@@ -539,13 +538,11 @@
 
 <script setup lang="ts">
 import { useUserStore } from "~/store/user";
-import { useAuthStore } from "~/store/auth";
 import { useDeopdownStore } from "~/store/dropdown";
 import { useHandlerStore } from "~/store/handler";
 import { useDisplay } from "vuetify";
 
 const userStore = useUserStore();
-const authStore = useAuthStore();
 const dropdownStore = useDeopdownStore();
 const handlerStore = useHandlerStore();
 const { mobile } = useDisplay();
@@ -556,8 +553,8 @@ watchEffect(() => {
   setPageTitle("مدیریت کاربران");
 });
 
-// ─── Permissions (in-memory session, SUPER_ADMIN bypasses) ──
-const { hasPermission } = usePermission();
+// ─── Permissions (in-memory session, SUPER_ADMIN bypasses via adminLevel) ──
+const { hasPermission, isSuperAdmin } = usePermission();
 
 // ─── Pagination ──
 const page = ref<number>(1);
@@ -623,17 +620,22 @@ const tableHeaders = [
 ];
 
 // ─── Helpers ──
+// Domain roles only — ADMIN / SUPER_ADMIN live in `adminLevel`, not `roles`.
 const getRoleLabels = (roleValues: string[]): string[] => {
   if (!roleValues || !Array.isArray(roleValues)) return [];
   const map: Record<string, string> = {
-    SUPER_ADMIN: "مدیر کل",
-    ADMIN: "ادمین",
     PLAYER: "بازیکن",
     COACH: "مربی",
     REFEREE: "داور",
     ORG_MANAGER: "مدیر سازمان",
   };
   return roleValues.map((val) => map[val] ?? val);
+};
+
+const getAdminLevelLabel = (item: any): string => {
+  if (item?.adminLevel === "SUPER_ADMIN") return "مدیر کل";
+  if (item?.adminLevel === "ADMIN") return "ادمین";
+  return "";
 };
 
 const getUserStatusLabel = (
@@ -730,7 +732,7 @@ const openToggleAdminDialog = (item: any) => {
 
 const onToggleAdminConfirm = () => {
   if (!toggleAdminTarget.value) return;
-  const nextIsAdmin = !toggleAdminTarget.value.roles?.includes("ADMIN");
+  const nextIsAdmin = !toggleAdminTarget.value.adminLevel;
 
   userStore.setAdminStatus(toggleAdminTarget.value.id, nextIsAdmin).then(() => {
     loadUsers();
