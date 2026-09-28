@@ -357,6 +357,7 @@
                         size="x-small"
                         block
                         class="tw:bg-secondary-dark! tw:text-white! tw:text-[11px]! tw:rounded-md!"
+                        @click="goToRoster(team)"
                       >
                         مشاهده تیم
                       </v-btn>
@@ -792,7 +793,7 @@
                   variant="tonal"
                   block
                   class="tw:text-[11px]! tw:rounded-md!"
-                  v-tooltip="'به‌زودی'"
+                  @click="goToRoster(team)"
                 >
                   مشاهده تیم
                 </v-btn>
@@ -985,6 +986,10 @@ const openTeamsDrawer = (org: any) => {
 const closeTeamsDrawer = () => {
   teamsDrawerOpen.value = false;
   activeOrganization.value = null;
+};
+
+const goToRoster = (team: any) => {
+  navigateTo(`/organizations/roster/${team.id}`);
 };
 
 const onTeamsOptionsChange = (options: { page: number }) => {

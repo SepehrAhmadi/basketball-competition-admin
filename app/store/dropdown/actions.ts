@@ -239,6 +239,24 @@ export function useDropdownActions(state: StateType) {
       });
   };
 
+  // Static options — no global loading flag so it doesn't compete with
+  // the page's own list spinner on mount.
+  const getSeasons = () => {
+    const axios = useApi();
+
+    return axios
+      .get("/dropdowns/seasons")
+      .then((res) => {
+        const list = res.data.data.items ?? res.data.data ?? [];
+        state.seasonsResult.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      });
+  };
+
   // Static filter options — no global loading flag so it doesn't compete
   // with the page's own list spinner on mount.
   const getOrganizationStatuses = () => {
@@ -269,5 +287,6 @@ export function useDropdownActions(state: StateType) {
     getRoles,
     getDropdownUsers,
     getOrganizationStatuses,
+    getSeasons,
   };
 }
