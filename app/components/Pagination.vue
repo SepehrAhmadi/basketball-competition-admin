@@ -1,9 +1,12 @@
 <script setup lang="ts">
 interface Props {
   itemsLength: number;
+  showMeta?: boolean;
 }
 
-defineProps<Props>();
+withDefaults(defineProps<Props>(), {
+  showMeta: true,
+});
 
 const page = defineModel<number>("page", {
   default: 1,
@@ -44,9 +47,10 @@ watch([page, itemsPerPage], ([newPage, newItemsPerPage]) => {
     <v-divider />
 
     <div
-      class="tw:px-3! tw:my-3! tw:flex tw:justify-between tw:items-center"
+      class="tw:px-3! tw:my-3! tw:flex tw:items-center"
+      :class="showMeta ? 'tw:justify-between' : 'tw:justify-center'"
     >
-      <div class="tw:text-[12px]">
+      <div v-if="showMeta" class="tw:text-[12px]">
         <slot
           name="pagination-info"
           :page="page"
