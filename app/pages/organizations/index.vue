@@ -1,6 +1,22 @@
 <template>
   <div dir="rtl">
-    <v-row>
+    <!-- ── organizations.view guard ── -->
+    <v-row v-if="!hasPermission('organizations.view')">
+      <v-col cols="12">
+        <v-card class="tw:rounded-xl!">
+          <v-card-text
+            class="tw:flex tw:flex-col tw:items-center tw:justify-center tw:gap-2 tw:py-16!"
+          >
+            <icon-lock class="tw:text-[35px] tw:text-color-lighter" />
+            <div class="tw:text-color-lighter tw:text-[14px]">
+              شما دسترسی لازم برای مشاهده این بخش را ندارید.
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row v-else>
       <v-col>
         <!-- ── toolbar ── -->
         <v-row class="tw:mb-2!">
@@ -51,6 +67,7 @@
 
               <v-col cols="6" md="2">
                 <v-btn
+                  v-if="hasPermission('organizations.create')"
                   class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
                   @click="openCreateDialog"
                 >
@@ -167,7 +184,10 @@
                   <!-- عملیات -->
                   <td>
                     <div class="tw:flex tw:justify-center tw:items-center">
-                      <v-tooltip location="top">
+                      <v-tooltip
+                        v-if="hasPermission('organizations.update')"
+                        location="top"
+                      >
                         <template #activator="{ props }">
                           <v-btn
                             v-bind="props"
@@ -184,7 +204,13 @@
                         <span class="tw:text-xs tw:p-2">ویرایش</span>
                       </v-tooltip>
 
-                      <v-tooltip v-if="canRestore(item.status)" location="top">
+                      <v-tooltip
+                        v-if="
+                          canRestore(item.status) &&
+                          hasPermission('organizations.restore')
+                        "
+                        location="top"
+                      >
                         <template #activator="{ props }">
                           <v-btn
                             v-bind="props"
@@ -201,7 +227,10 @@
                         <span class="tw:text-xs tw:p-2">بازیابی</span>
                       </v-tooltip>
 
-                      <v-tooltip location="top">
+                      <v-tooltip
+                        v-if="hasPermission('organizations.delete')"
+                        location="top"
+                      >
                         <template #activator="{ props }">
                           <v-btn
                             v-bind="props"
@@ -557,6 +586,9 @@ import { useHandlerStore } from "~/store/handler";
 const organizationStore = useOrganizationStore();
 const dropdownStore = useDeopdownStore();
 const handlerStore = useHandlerStore();
+
+// ─── Permissions ──
+const { hasPermission } = usePermission();
 
 const { setPageTitle } = usePageTitle();
 watchEffect(() => {

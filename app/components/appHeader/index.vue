@@ -127,6 +127,7 @@ import dashboardIcon from "~/components/icon/dashboard.vue";
 import operationIcon from "~/components/icon/layer.vue";
 import userIcon from "../icon/user.vue";
 import dateIcon from "../icon/date.vue";
+import buildingIcon from "../icon/building.vue";
 import ThemeSwitcher from "./themeSwitcher.vue";
 
 const isDesktop = ref(false);
@@ -172,6 +173,13 @@ const menuItems = computed(() => {
       subItems: null,
     },
     {
+      id: "organizations",
+      title: "مدیریت سازمان و باشگاه ها",
+      icon: buildingIcon,
+      routeName: "organizations",
+      subItems: null,
+    },
+    {
       id: "seasons",
       title: "مدیریت فصل ها",
       icon: dateIcon,
@@ -195,6 +203,7 @@ const menuItems = computed(() => {
 
   return items.filter((item) => {
     if (item.id === "users") return hasPermission("users.view");
+    if (item.id === "organizations") return hasPermission("organizations.view");
     if (item.id === "seasons") return hasPermission("seasons.view");
     return true;
   });
