@@ -352,7 +352,7 @@
                       </div>
                     </div>
 
-                    <div class="tw:mt-2!">
+                    <div v-if="hasPermission('roster.view')" class="tw:mt-2!">
                       <v-btn
                         size="x-small"
                         block
@@ -787,7 +787,7 @@
                 </div>
               </div>
 
-              <div class="tw:mt-2!">
+              <div v-if="hasPermission('roster.view')" class="tw:mt-2!">
                 <v-btn
                   size="x-small"
                   variant="tonal"
