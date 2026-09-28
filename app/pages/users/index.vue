@@ -798,12 +798,12 @@ const editingId = ref<number | null>(null);
 const formRef = ref<any>(null);
 
 const defaultForm = () => ({
-  fullName: "",
-  phone: "",
-  email: "",
-  birthDate: "",
-  nationalId: "",
-  password: "",
+  fullName: null,
+  phone: null,
+  email: null,
+  birthDate: null,
+  nationalId: null,
+  password: null,
   roles: [] as string[],
 });
 
@@ -823,11 +823,11 @@ const openEditDialog = (id: number) => {
   editingId.value = id;
   userStore.getUserById(id).then(() => {
     if (userStore.userDetail) {
-      form.fullName = userStore.userDetail.fullName || "";
-      form.phone = userStore.userDetail.phone || "";
-      form.email = userStore.userDetail.email || "";
-      form.birthDate = userStore.userDetail.birthDate || "";
-      form.nationalId = userStore.userDetail.nationalId || "";
+      form.fullName = userStore.userDetail.fullName || null;
+      form.phone = userStore.userDetail.phone || null;
+      form.email = userStore.userDetail.email || null;
+      form.birthDate = userStore.userDetail.birthDate || null;
+      form.nationalId = userStore.userDetail.nationalId || null;
       form.roles = userStore.userDetail.roles || [];
     }
     dialogOpen.value = true;
