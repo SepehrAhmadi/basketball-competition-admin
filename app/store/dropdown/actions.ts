@@ -217,6 +217,46 @@ export function useDropdownActions(state: StateType) {
       });
   };
 
+  const getDropdownUsers = (role?: string) => {
+    const axios = useApi();
+    handlerStore.loading = true;
+
+    return axios
+      .get("/dropdowns/users", { params: role ? { role } : {} })
+      .then((res) => {
+        const list = res.data.data.items ?? res.data.data.users ?? res.data.data ?? [];
+        state.usersResult.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          handlerStore.loading = false;
+        }, 500);
+      });
+  };
+
+  // Static filter options — no global loading flag so it doesn't compete
+  // with the page's own list spinner on mount.
+  const getOrganizationStatuses = () => {
+    const axios = useApi();
+
+    return axios
+      .get("/dropdowns/organization-statuses")
+      .then((res) => {
+        const list = res.data.data.items ?? res.data.data ?? [];
+        state.organizationStatuses.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      });
+  };
+
   return {
     getUnits,
     getPackagings,
@@ -227,5 +267,7 @@ export function useDropdownActions(state: StateType) {
     getCompanyType,
     getPaymentStatus,
     getRoles,
+    getDropdownUsers,
+    getOrganizationStatuses,
   };
 }

@@ -54,14 +54,11 @@ export function useOrganizationActions(state: StateType) {
       });
   };
 
-  const createOrganization = (value: FormData) => {
+  const createOrganization = (value: any) => {
     const axios = useApi();
     handlerStore.loadingBtn = true;
 
-    return axios
-      .post("/admin/organizations", value, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+    return axios.post("/admin/organizations", value)
       .then((res) => {
         handlerStore.setSuccess(res.data.message);
       })
@@ -75,14 +72,11 @@ export function useOrganizationActions(state: StateType) {
       });
   };
 
-  const updateOrganization = (id: number, value: FormData) => {
+  const updateOrganization = (id: number, value: any) => {
     const axios = useApi();
     handlerStore.loadingBtn = true;
 
-    return axios
-      .put(`/admin/organizations/${id}`, value, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+    return axios.put(`/admin/organizations/${id}`, value)
       .then((res) => {
         handlerStore.setSuccess(res.data.message);
       })

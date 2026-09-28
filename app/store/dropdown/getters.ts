@@ -64,6 +64,15 @@ export function useDropdownGetters(state: ReturnType<typeof useDropdownState>) {
       text: item.name,
     })),
   )
+  // dropdown users (value/label shape from API)
+  const usersOptions = computed(() =>
+    state.usersResult.value.map((item: any) => ({
+      value: item.value,
+      text: item.label,
+      label: item.label,
+      roles: item.roles,
+    })),
+  )
 
   return {
     unitsOptions,
@@ -74,5 +83,6 @@ export function useDropdownGetters(state: ReturnType<typeof useDropdownState>) {
     categoriesOptions,
     companyTypeOptions,
     paymentStatusOptions,
+    usersOptions,
   };
 }
