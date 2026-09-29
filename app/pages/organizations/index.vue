@@ -20,9 +20,9 @@
       <v-col>
         <!-- ── toolbar ── -->
         <v-row>
-          <v-col cols="12" lg="11">
+          <v-col cols="12" lg="10" xl="11">
             <v-row>
-              <v-col cols="12" md="4" xl="1">
+              <v-col cols="12" md="2" xl="1">
                 <TablePageSize v-model="pageSize" />
               </v-col>
 
@@ -78,14 +78,14 @@
             </v-row>
           </v-col>
 
-          <v-col cols="12" lg="1" class="tw:justify-end! tw:hidden tw:md:flex">
+          <v-col cols="12" lg="2" class="tw:justify-end! tw:hidden tw:md:flex">
             <BackBtn />
           </v-col>
         </v-row>
 
         <!-- ── Table ── -->
         <v-row>
-          <v-col :cols="teamsDrawerOpen && !isMobile ? 9 : 12">
+          <v-col cols="12" :lg="teamsDrawerOpen && !isMobile ? 8 : 12" :xl="teamsDrawerOpen && !isMobile ? 9 : 12">
             <GeneralDataTable
               v-model:page="page"
               v-model:items-per-page="pageSize"
@@ -274,7 +274,7 @@
           </v-col>
 
           <!-- ── Teams Panel (desktop inline) ── -->
-          <v-col v-if="teamsDrawerOpen && !isMobile" cols="3">
+          <v-col v-if="teamsDrawerOpen && !isMobile" cols="12" lg="4" xl="3">
             <v-card class="tw:rounded-lg!">
               <div
                 class="tw:flex tw:justify-between tw:items-center tw:mb-4! tw:p-4!"
@@ -989,7 +989,7 @@ const closeTeamsDrawer = () => {
 };
 
 const goToRoster = (team: any) => {
-  navigateTo(`/organizations/roster/${team.id}`);
+  navigateTo(`/teams/roster/${team.id}`);
 };
 
 const onTeamsOptionsChange = (options: { page: number }) => {

@@ -161,7 +161,7 @@ interface SubItem {
 interface MainItem {
   id: string;
   title: string;
-  icon: string;
+  icon: Component;
   routeName?: string;
   subItems?: SubItem[] | null;
 }

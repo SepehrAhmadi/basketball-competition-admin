@@ -48,11 +48,11 @@
         <v-row>
           <v-col cols="12">
             <v-row>
-              <v-col cols="12" md="4" xl="1">
+              <v-col cols="12" md="1" xl="1">
                 <TablePageSize v-model="pageSize" />
               </v-col>
 
-              <v-col cols="12" md="4" xl="3">
+              <v-col cols="12" md="3" xl="3">
                 <v-text-field
                   v-model="query"
                   variant="outlined"
@@ -251,7 +251,7 @@
     <v-dialog
       v-model="seasonDialogOpen"
       persistent
-      max-width="400"
+      max-width="430"
       dir="rtl"
       class="blur-dialog"
     >
@@ -259,23 +259,13 @@
         <v-card-title
           class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!"
         >
-          <div class="tw:flex tw:justify-between tw:items-center">
-            <div class="tw:invisible">
-              <v-btn icon variant="plain" size="x-small" disabled>
-                <icon-close class="tw:text-[18px] tw:text-white!" />
-              </v-btn>
-            </div>
+          <div class="tw:flex tw:justify-center tw:items-center tw:pt-1!">
             <div class="tw:text-[14px]! tw:text-white">انتخاب فصل</div>
-            <div>
-              <v-btn icon variant="plain" size="x-small" disabled>
-                <icon-close class="tw:text-[18px] tw:text-white!" />
-              </v-btn>
-            </div>
           </div>
         </v-card-title>
 
         <v-card-text>
-          <div class="tw:text-[13px] tw:text-color-lighter tw:mb-3!">
+          <div class="tw:text-[13px] tw:text-color-lighter tw:mb-5! text-center">
             برای مشاهده لیست اعضای تیم، ابتدا فصل مورد نظر را انتخاب کنید.
           </div>
           <v-select

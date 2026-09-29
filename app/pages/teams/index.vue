@@ -20,32 +20,13 @@
       <v-col>
         <!-- ── toolbar ── -->
         <v-row>
-          <v-col cols="12" lg="11">
+          <v-col cols="12" lg="10" xl="11">
             <v-row>
-              <v-col cols="12" md="4" xl="1">
+              <v-col cols="12" md="1" xl="1">
                 <TablePageSize v-model="pageSize" />
               </v-col>
 
-              <v-col cols="12" md="4" xl="3">
-                <v-select
-                  v-model="selectedOrgId"
-                  :items="dropdownStore.organizationsResult"
-                  item-title="label"
-                  item-value="value"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  clearable
-                  dir="rtl"
-                  @update:model-value="onOrgChange"
-                >
-                  <template #label>
-                    <span class="tw:text-[12px]">باشگاه / سازمان</span>
-                  </template>
-                </v-select>
-              </v-col>
-
-              <v-col cols="12" md="4" xl="3">
+              <v-col cols="12" md="3" xl="3">
                 <v-text-field
                   v-model="query"
                   variant="outlined"
@@ -64,6 +45,25 @@
                     />
                   </template>
                 </v-text-field>
+              </v-col>
+
+              <v-col cols="12" md="3" xl="2">
+                <v-select
+                  v-model="selectedOrgId"
+                  :items="dropdownStore.organizationsResult"
+                  item-title="label"
+                  item-value="value"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                  clearable
+                  dir="rtl"
+                  @update:model-value="onOrgChange"
+                >
+                  <template #label>
+                    <span class="tw:text-[12px]">باشگاه / سازمان</span>
+                  </template>
+                </v-select>
               </v-col>
 
               <v-col cols="6" md="3" xl="2">
@@ -99,7 +99,7 @@
             </v-row>
           </v-col>
 
-          <v-col cols="12" lg="1" class="tw:justify-end! tw:hidden tw:md:flex">
+          <v-col cols="12" lg="2" xl="1" class="tw:justify-end! tw:hidden tw:md:flex">
             <BackBtn />
           </v-col>
         </v-row>
@@ -282,7 +282,7 @@
     <v-dialog
       v-model="orgDialogOpen"
       persistent
-      max-width="400"
+      max-width="430"
       dir="rtl"
       class="blur-dialog"
     >
@@ -290,23 +290,13 @@
         <v-card-title
           class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!"
         >
-          <div class="tw:flex tw:justify-between tw:items-center">
-            <div class="tw:invisible">
-              <v-btn icon variant="plain" size="x-small" disabled>
-                <icon-close class="tw:text-[18px] tw:text-white!" />
-              </v-btn>
-            </div>
-            <div class="tw:text-[14px]! tw:text-white">انتخاب باشگاه</div>
-            <div>
-              <v-btn icon variant="plain" size="x-small" disabled>
-                <icon-close class="tw:text-[18px] tw:text-white!" />
-              </v-btn>
-            </div>
+          <div class="tw:flex tw:justify-center tw:items-center tw:pt-1!">
+            <div class="tw:text-[14px]! tw:text-white">انتخاب سازمان</div>
           </div>
         </v-card-title>
 
         <v-card-text>
-          <div class="tw:text-[13px] tw:text-color-lighter tw:mb-3!">
+          <div class="tw:text-[13px] tw:text-color-lighter tw:mb-5! text-center">
             برای مشاهده لیست تیم‌ها، ابتدا باشگاه مورد نظر را انتخاب کنید.
           </div>
           <v-select
@@ -743,7 +733,7 @@ const onOptionsChange = (options: { page: number; itemsPerPage: number }) => {
 
 // ─── Roster navigation ──
 const goToRoster = (team: any) => {
-  navigateTo(`/organizations/roster/${team.id}`);
+  navigateTo(`/teams/roster/${team.id}`);
 };
 
 // ─── Delete ──
