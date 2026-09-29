@@ -1,6 +1,10 @@
 <template>
   <div class="header-sidebar">
-    <v-app-bar app color="transparetn" class="tw:px-4.5! tw:bg-white! tw:dark:bg-primary-dark!">
+    <v-app-bar
+      app
+      color="transparetn"
+      class="tw:px-4.5! tw:bg-white! tw:dark:bg-primary-dark!"
+    >
       <div class="tw:flex tw:justify-between tw:items-center tw:w-full">
         <div>
           <button
@@ -11,13 +15,17 @@
           >
             <icon-more-vertical
               v-if="rail"
-              class="tw:text-[23px] tw:text-secondary-dark tw:dark:text-white"!
+              class="tw:text-[23px] tw:text-secondary-dark tw:dark:text-white"
+              !
             />
-            <icon-menu v-else class="tw:text-[23px] tw:text-secondary-dark tw:dark:text-white!" />
+            <icon-menu
+              v-else
+              class="tw:text-[23px] tw:text-secondary-dark tw:dark:text-white!"
+            />
           </button>
         </div>
         <div class="tw:flex tw:justify-start tw:items-center tw:gap-4">
-          <app-header-theme-switcher/>
+          <app-header-theme-switcher />
           <app-header-notification />
           <app-header-account-center />
         </div>
@@ -128,6 +136,7 @@ import operationIcon from "~/components/icon/layer.vue";
 import userIcon from "../icon/user.vue";
 import dateIcon from "../icon/date.vue";
 import buildingIcon from "../icon/building.vue";
+import teamIcon from "../icon/box.vue";
 import ThemeSwitcher from "./themeSwitcher.vue";
 
 const isDesktop = ref(false);
@@ -154,7 +163,7 @@ interface MainItem {
   title: string;
   icon: string;
   routeName?: string;
-  subItems?: SubItem[];
+  subItems?: SubItem[] | null;
 }
 const menuItems = computed(() => {
   const items: MainItem[] = [
@@ -166,45 +175,42 @@ const menuItems = computed(() => {
       subItems: null,
     },
     {
-      id: "users",
-      title: "مدیریت کاربران",
-      icon: userIcon,
-      routeName: "users",
-      subItems: null,
-    },
-    {
-      id: "organizations",
-      title: "مدیریت سازمان و باشگاه ها",
-      icon: buildingIcon,
-      routeName: "organizations",
-      subItems: null,
-    },
-    {
       id: "seasons",
       title: "مدیریت فصل ها",
       icon: dateIcon,
       routeName: "seasons",
       subItems: null,
     },
+
     {
-      id: "operations",
-      title: "عملیات",
-      icon: operationIcon,
-      routeName: "operations",
-      subItems: [
-        {
-          id: "invoices",
-          title: "Invoices",
-          routeName: "operations-invoice",
-        },
-      ],
+      id: "organizations",
+      title: "مدیریت سازمان ها",
+      icon: buildingIcon,
+      routeName: "organizations",
+      subItems: null,
     },
+
+    {
+      id: "teams",
+      title: "مدیریت تیم‌ها",
+      icon: teamIcon,
+      routeName: "teams",
+      subItems: null,
+    },
+    {
+      id: "users",
+      title: "مدیریت کاربران",
+      icon: userIcon,
+      routeName: "users",
+      subItems: null,
+    }
   ];
 
   return items.filter((item) => {
     if (item.id === "users") return hasPermission("users.view");
     if (item.id === "organizations") return hasPermission("organizations.view");
     if (item.id === "seasons") return hasPermission("seasons.view");
+    if (item.id === "teams") return hasPermission("teams.view");
     return true;
   });
 });

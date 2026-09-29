@@ -13,6 +13,10 @@ export function useDropdownState() {
   const roles = ref<{ value: string; label: string }[]>([]);
   const organizationStatuses = ref<{ value: string; label: string }[]>([]);
   const seasonsResult = ref<{ value: string; label: string }[]>([]);
+  const organizationsResult = ref<
+    { value: number; label: string; status?: string }[]
+  >([]);
+  const teamStatuses = ref<{ value: string; label: string }[]>([]);
 
   return {
     unitsResult,
@@ -27,5 +31,7 @@ export function useDropdownState() {
     roles,
     organizationStatuses,
     seasonsResult,
+    organizationsResult,
+    teamStatuses,
   };
 }

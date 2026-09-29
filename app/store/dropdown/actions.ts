@@ -275,6 +275,42 @@ export function useDropdownActions(state: StateType) {
       });
   };
 
+  // Organizations for the teams page toolbar — fetched without any
+  // page/pageSize params, no global loading flag (same as other static
+  // dropdowns) so it doesn't compete with the page's own list spinner.
+  const getOrganizationDropdown = () => {
+    const axios = useApi();
+
+    return axios
+      .get("/dropdowns/organizations")
+      .then((res) => {
+        const list = res.data.data.items ?? res.data.data ?? [];
+        state.organizationsResult.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      });
+  };
+
+  // Team status filter options for the teams page.
+  const getTeamStatuses = () => {
+    const axios = useApi();
+
+    return axios
+      .get("/dropdowns/team-statuses")
+      .then((res) => {
+        const list = res.data.data.items ?? res.data.data ?? [];
+        state.teamStatuses.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      });
+  };
+
   return {
     getUnits,
     getPackagings,
@@ -288,5 +324,7 @@ export function useDropdownActions(state: StateType) {
     getDropdownUsers,
     getOrganizationStatuses,
     getSeasons,
+    getOrganizationDropdown,
+    getTeamStatuses,
   };
 }
