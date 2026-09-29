@@ -109,8 +109,8 @@
                     <div class="tw:flex tw:justify-center">
                       <v-avatar
                         size="34"
-                        rounded="sm"
-                        class="tw:bg-gray-100! tw:dark:bg-gray-700!"
+                        
+                        class="tw:bg-gray-100! tw:dark:bg-gray-700! tw:rounded-sm!"
                       >
                         <v-img
                           v-if="item.logoUrl"
@@ -325,8 +325,7 @@
                     <div class="tw:flex tw:items-center tw:gap-3">
                       <v-avatar
                         size="40"
-                        rounded="sm"
-                        class="tw:bg-gray-100!  tw:dark:bg-gray-700!"
+                        class="tw:bg-gray-100!  tw:dark:bg-gray-700! tw:rounded-sm!"
                       >
                         <v-img
                           v-if="team.logoUrl"
@@ -762,8 +761,8 @@
               <div class="tw:flex tw:items-center tw:gap-3">
                 <v-avatar
                   size="40"
-                  rounded="sm"
-                  class="tw:bg-gray-100! tw:dark:bg-gray-700!"
+                  
+                  class="tw:bg-gray-100! tw:dark:bg-gray-700! tw:rounded-sm!"
                 >
                   <v-img
                     v-if="team.logoUrl"
