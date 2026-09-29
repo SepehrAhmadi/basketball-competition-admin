@@ -451,7 +451,7 @@
     </v-dialog>
 
     <!-- ─── Add / Edit Dialog ─── -->
-    <v-dialog v-model="dialogOpen" max-width="600" dir="rtl" class="blur-dialog">
+    <v-dialog v-model="dialogOpen" max-width="400" dir="rtl" class="blur-dialog">
       <v-card rounded="lg">
         <v-card-title
           class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!"
@@ -512,7 +512,7 @@
                 </v-text-field>
               </v-col>
 
-              <v-col cols="12" md="6">
+              <v-col cols="12">
                 <div class="tw:relative!">
                   <label
                     v-if="form.foundedDate"
@@ -534,12 +534,11 @@
                 </div>
               </v-col>
 
-              <v-col cols="12" md="6" class="tw:mt-2!">
+              <v-col cols="12">
                 <v-switch
                   v-model="form.isActive"
                   color="secondary"
                   hide-details
-                  class="tw:mt-1!"
                   density="compact"
                 >
                   <template #label>

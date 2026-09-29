@@ -78,7 +78,7 @@
             </v-row>
           </v-col>
 
-          <v-col cols="12" lg="2" class="tw:justify-end! tw:hidden tw:md:flex">
+          <v-col cols="12" lg="2" xl="1" class="tw:justify-end! tw:hidden tw:md:flex">
             <BackBtn />
           </v-col>
         </v-row>
