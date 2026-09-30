@@ -404,30 +404,6 @@
           <v-form ref="formRef">
             <v-row>
               <v-col cols="12">
-                <v-autocomplete
-                  v-model="form.userId"
-                  :items="dropdownStore.usersResult"
-                  item-title="label"
-                  item-value="value"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  clearable
-                  no-data-text="موردی یافت نشد"
-                  :rules="[(v: any) => !!v || '']"
-                >
-                  <template #label>
-                    <span class="tw:text-[12px]">کاربر</span>
-                    <span
-                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
-                    >
-                      (الزامی)
-                    </span>
-                  </template>
-                </v-autocomplete>
-              </v-col>
-
-              <v-col cols="12">
                 <v-select
                   v-model="form.role"
                   :items="roleOptions"
@@ -438,6 +414,7 @@
                   hide-details
                   dir="rtl"
                   :rules="[(v: any) => !!v || '']"
+                  @update:model-value="onFormRoleChange"
                 >
                   <template #label>
                     <span class="tw:text-[12px]">نقش</span>
@@ -448,6 +425,33 @@
                     </span>
                   </template>
                 </v-select>
+              </v-col>
+
+              <v-col v-if="dialogMode === 'create'" cols="12">
+                <v-autocomplete
+                  v-model="form.userId"
+                  :items="dropdownStore.usersResult"
+                  item-title="label"
+                  item-value="value"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                  clearable
+                  no-data-text="موردی یافت نشد"
+                  :disabled="!form.role"
+                  :loading="usersLoading"
+                  :placeholder="!form.role ? 'ابتدا نقش را انتخاب کنید' : ''"
+                  :rules="[(v: any) => !!v || '']"
+               >
+                  <template #label>
+                    <span class="tw:text-[12px]">کاربر</span>
+                    <span
+                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                    >
+                      (الزامی)
+                    </span>
+                  </template>
+                </v-autocomplete>
               </v-col>
 
               <v-col
@@ -711,8 +715,14 @@ const confirmDelete = (item: any) => {
 };
 
 const onDeleteConfirm = () => {
+  if (selectedSeasonId.value === null) {
+    handlerStore.setError("ابتدا فصل مورد نظر را انتخاب کنید.");
+    return;
+  }
   teamStore
-    .removeRosterMember(teamId.value, deleteTarget.value.id)
+    .removeRosterMember(teamId.value, deleteTarget.value.id, {
+      seasonId: selectedSeasonId.value,
+    })
     .then(() => {
       deleteDialogOpen.value = false;
       deleteTarget.value = null;
@@ -739,6 +749,30 @@ const resetForm = () => {
   Object.assign(form, defaultForm());
 };
 
+// ─── Role-first user dropdown ──
+// Users are filtered by the selected role: COACH → ?role=COACH, PLAYER → ?role=PLAYER.
+const usersLoading = ref<boolean>(false);
+
+const loadUsersByRole = (role: string | null | undefined) => {
+  if (!role) {
+    dropdownStore.usersResult = [];
+    return Promise.resolve();
+  }
+  usersLoading.value = true;
+  return dropdownStore.getDropdownUsers(role).finally(() => {
+    usersLoading.value = false;
+  });
+};
+
+const onFormRoleChange = (role: string | null) => {
+  // Changing role invalidates the selected user + role-specific fields.
+  form.userId = null;
+  if (role !== "PLAYER") form.jerseyNumber = "";
+  if (role !== "COACH") form.isHeadCoach = false;
+  // User list is only needed in create mode (update never sends userId).
+  if (dialogMode.value === "create") loadUsersByRole(role);
+};
+
 const openCreateDialog = () => {
   if (selectedSeasonId.value === null) {
     handlerStore.setError("ابتدا فصل مورد نظر را انتخاب کنید.");
@@ -748,6 +782,7 @@ const openCreateDialog = () => {
   dialogMode.value = "create";
   editingId.value = null;
   resetForm();
+  dropdownStore.usersResult = [];
   dialogOpen.value = true;
 };
 
@@ -756,7 +791,6 @@ const openEditDialog = (item: any) => {
   editingId.value = item.id ?? item.memberId ?? item.rosterId ?? null;
   resetForm();
 
-  form.userId = item.userId ?? item.user?.id ?? null;
   form.role = item.role ?? "";
   form.jerseyNumber = item.jerseyNumber ?? "";
   form.isHeadCoach = Boolean(item.isHeadCoach);
@@ -764,9 +798,10 @@ const openEditDialog = (item: any) => {
 };
 
 const onDialogSubmit = () => {
+  const isCreate = dialogMode.value === "create";
   const jerseyRequired = form.role === "PLAYER";
   if (
-    !form.userId ||
+    (isCreate && !form.userId) ||
     !form.role ||
     (jerseyRequired && form.jerseyNumber === "")
   ) {
@@ -778,22 +813,28 @@ const onDialogSubmit = () => {
     if (!valid) return;
 
     // seasonId = the season chosen in the toolbar / dialog.
-    const payload = {
-      userId: form.userId,
-      seasonId: selectedSeasonId.value,
-      role: form.role,
-      // coach → no jersey; player → never head coach
-      jerseyNumber: form.role === "PLAYER" ? Number(form.jerseyNumber) : null,
-      isHeadCoach: form.role === "COACH" ? form.isHeadCoach : false,
-    };
-
-    if (dialogMode.value === "create") {
+    if (isCreate) {
+      const payload = {
+        userId: form.userId,
+        seasonId: selectedSeasonId.value,
+        role: form.role,
+        // coach → no jersey; player → never head coach
+        jerseyNumber: form.role === "PLAYER" ? Number(form.jerseyNumber) : null,
+        isHeadCoach: form.role === "COACH" ? form.isHeadCoach : false,
+      };
       teamStore.addRosterMember(teamId.value, payload).then(() => {
         loadRoster();
         dialogOpen.value = false;
         resetForm();
       });
     } else {
+      // Update never sends userId — member is addressed by :memberId.
+      const payload = {
+        seasonId: selectedSeasonId.value,
+        role: form.role,
+        jerseyNumber: form.role === "PLAYER" ? Number(form.jerseyNumber) : null,
+        isHeadCoach: form.role === "COACH" ? form.isHeadCoach : false,
+      };
       teamStore
         .updateRosterMember(teamId.value, editingId.value!, payload)
         .then(() => {
@@ -813,9 +854,9 @@ onMounted(() => {
     dropdownStore.getSeasons();
   }
 
-  if (dropdownStore.usersResult.length === 0) {
-    dropdownStore.getDropdownUsers();
-  }
+  // Users are loaded role-first via loadUsersByRole() when the
+  // add/edit dialog picks COACH or PLAYER — no unfiltered preload.
+  dropdownStore.usersResult = [];
 
   // Always ask for the season — nothing is persisted across visits.
   seasonChoice.value = null;

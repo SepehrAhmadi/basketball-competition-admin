@@ -219,7 +219,6 @@ export function useDropdownActions(state: StateType) {
 
   const getDropdownUsers = (role?: string) => {
     const axios = useApi();
-    handlerStore.loading = true;
 
     return axios
       .get("/dropdowns/users", { params: role ? { role } : {} })
@@ -232,11 +231,6 @@ export function useDropdownActions(state: StateType) {
         const message = err.response?.data?.message || "خطای سرور";
         handlerStore.setError(message);
       })
-      .finally(() => {
-        setTimeout(() => {
-          handlerStore.loading = false;
-        }, 500);
-      });
   };
 
   // Static options — no global loading flag so it doesn't compete with
