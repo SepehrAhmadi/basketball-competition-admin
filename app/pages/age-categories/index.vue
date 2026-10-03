@@ -119,7 +119,7 @@
         <v-card
           rounded="lg"
           class="tw:mt-4!"
-          v-if="totalItems > pageSize / page"
+          v-if="totalItems > pageSize"
         >
           <Pagination
             v-model:page="page"
@@ -194,6 +194,122 @@
             </v-form>
           </v-card-text>
         </v-card>
+
+        <!-- ── Cutoffs card ── -->
+        <v-card v-if="editingId" class="tw:rounded-xl! tw:mt-4!">
+          <v-card-title
+            class="tw:flex! tw:items-center! tw:justify-between! tw:gap-1! tw:text-[14px]! tw:font-bold! tw:mb-2!"
+          >
+            <div>محدوده‌های سنی</div>
+            <v-btn
+              v-if="hasPermission('age-categories.create')"
+              size="x-small"
+              variant="outlined"
+              @click="addCutoffRow"
+            >
+              <icon-plus class="tw:text-[16px]" />
+              <span class="tw:mr-1!">افزودن</span>
+            </v-btn>
+          </v-card-title>
+
+          <v-card-text>
+            <div
+              v-if="ageCategoryStore.cutoffLoading"
+              class="tw:flex tw:justify-center tw:py-8"
+            >
+              <v-progress-circular indeterminate color="primary" />
+            </div>
+            <div
+              v-else-if="cutoffRows.length === 0"
+              class="tw:text-center tw:text-color-lighter tw:text-[13px] tw:py-4"
+            >
+              محدوده سنی ثبت نشده
+            </div>
+            <div v-else class="tw:flex tw:flex-col tw:gap-3">
+              <div
+                v-for="row in cutoffRows"
+                :key="row.key"
+                class="tw:flex tw:flex-col tw:gap-3 tw:p-3"
+              >
+                <v-select
+                  v-model="row.seasonId"
+                  :items="dropdownStore.seasonsResult"
+                  item-title="label"
+                  item-value="value"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                  dir="rtl"
+                  no-data-text="موردی یافت نشد"
+                  :disabled="!canEditRow(row)"
+                >
+                  <template #label>
+                    <span class="tw:text-[12px]">فصل</span>
+                    <span
+                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                    >
+                      (الزامی)
+                    </span>
+                  </template>
+                </v-select>
+
+                <div class="tw:relative!">
+                  <label
+                    v-if="row.minBirthDate"
+                    :for="`minBirthDate-${row.key}`"
+                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
+                  >
+                    <span class="tw:text-[12px]">حداقل تاریخ تولد</span>
+                    <span
+                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                    >
+                      (الزامی)
+                    </span>
+                  </label>
+                  <date-picker
+                    v-model="row.minBirthDate"
+                    :id="`minBirthDate-${row.key}`"
+                    simple
+                    placeholder="حداقل تاریخ تولد (الزامی)"
+                    format="jYYYY/jMM/jDD"
+                    display-format="jYYYY/jMM/jDD"
+                    :disabled="!canEditRow(row)"
+                    class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!"
+                    color="#1d202e"
+                  />
+                </div>
+
+                <div class="tw:flex tw:items-center tw:justify-end tw:gap-2">
+                  <v-btn
+                    v-if="canEditRow(row)"
+                    size="small"
+                    variant="outlined"
+                    :loading="row.saving"
+                    :disabled="row.saving"
+                    @click="onCutoffSubmit(row)"
+                  >
+                    <icon-check class="tw:text-[16px]" />
+                    <span class="tw:mr-1!">{{
+                      row.id === null ? "ثبت" : "ویرایش"
+                    }}</span>
+                  </v-btn>
+                  <v-btn
+                    v-if="
+                      row.id === null || hasPermission('age-categories.delete')
+                    "
+                    size="small"
+                    variant="outlined"
+                    :disabled="row.saving"
+                    @click="onCutoffDelete(row)"
+                  >
+                    <icon-trash class="tw:text-[16px]" />
+                    <span class="tw:mr-1!">حذف</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
 
@@ -255,15 +371,79 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!-- ─── Cutoff Delete Confirm Dialog ── -->
+    <v-dialog
+      v-model="cutoffDeleteDialogOpen"
+      max-width="400"
+      dir="rtl"
+      class="blur-dialog"
+    >
+      <v-card rounded="lg">
+        <v-card-title
+          class="tw:bg-secondary-dark tw:dark:bg-primary-dark! tw:mb-3!"
+        >
+          <div class="tw:flex tw:justify-between tw:items-center">
+            <div class="tw:invisible">
+              <v-btn icon variant="plain" size="x-small">
+                <icon-close class="tw:text-[18px] tw:text-white!" />
+              </v-btn>
+            </div>
+            <div class="tw:text-[14px]! tw:text-white">حذف محدوده سنی</div>
+            <div>
+              <v-btn
+                icon
+                variant="plain"
+                size="x-small"
+                @click="cutoffDeleteDialogOpen = false"
+              >
+                <icon-close class="tw:text-[18px] tw:text-white!" />
+              </v-btn>
+            </div>
+          </div>
+        </v-card-title>
+        <v-card-text class="tw:text-[16px]! tw:text-center!">
+          آیا از حذف این محدوده سنی مطمئن هستید؟
+        </v-card-text>
+        <v-card-actions class="tw:justify-end!">
+          <v-btn
+            variant="text"
+            @click="cutoffDeleteDialogOpen = false"
+            class="tw:text-[12px]!"
+          >
+            انصراف
+          </v-btn>
+          <v-btn
+            class="tw:bg-secondary-dark! tw:dark:bg-secondary-dark! tw:text-white! tw:rounded-md!"
+            :loading="handlerStore.loadingBtn"
+            :disabled="handlerStore.loadingBtn"
+            @click="onCutoffDeleteConfirm"
+          >
+            <icon-trash class="tw:text-[18px]" />
+            <span class="tw:mr-1! tw:text-[12px]! tw:px-2!">حذف</span>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useAgeCategoryStore } from "~/store/ageCategory";
 import { useHandlerStore } from "~/store/handler";
+import { useDeopdownStore } from "~/store/dropdown";
+
+interface CutoffRow {
+  key: string;
+  id: number | null;
+  seasonId: number | string | null;
+  minBirthDate: string;
+  saving?: boolean;
+}
 
 const ageCategoryStore = useAgeCategoryStore();
 const handlerStore = useHandlerStore();
+const dropdownStore = useDeopdownStore();
 
 // ─── Permissions ──
 const { hasPermission } = usePermission();
@@ -330,18 +510,114 @@ const defaultForm = () => ({
 
 const form = reactive(defaultForm());
 
+// ─── Cutoffs ──
+const cutoffRows = ref<CutoffRow[]>([]);
+const cutoffDeleteDialogOpen = ref<boolean>(false);
+const cutoffDeleteTarget = ref<CutoffRow | null>(null);
+
+const newRowKey = () =>
+  globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`;
+
+const loadCutoffs = async (categoryId: number) => {
+  const items = await ageCategoryStore.getCutoffs({
+    ageCategoryId: categoryId,
+    page: 1,
+    pageSize: 100,
+  });
+  // Ignore stale responses if the user switched category meanwhile.
+  if (editingId.value !== categoryId) return;
+  cutoffRows.value = (items ?? []).map((c: any) => ({
+    key: newRowKey(),
+    id: c.id,
+    seasonId: c.seasonId,
+    minBirthDate: c.minBirthDate ?? "",
+  }));
+};
+
+const canEditRow = (row: CutoffRow) =>
+  hasPermission(
+    row.id === null ? "age-categories.create" : "age-categories.update",
+  );
+
+const addCutoffRow = () => {
+  cutoffRows.value.push({
+    key: newRowKey(),
+    id: null,
+    seasonId: null,
+    minBirthDate: "",
+  });
+};
+
+const onCutoffSubmit = async (row: CutoffRow) => {
+  if (!editingId.value) return;
+  if (
+    row.seasonId === null ||
+    row.seasonId === "" ||
+    !/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(row.minBirthDate || "")
+  ) {
+    handlerStore.setError("لطفا فصل و تاریخ معتبر را وارد کنید.");
+    return;
+  }
+
+  row.saving = true;
+  try {
+    if (row.id === null) {
+      const created = await ageCategoryStore.createCutoff({
+        ageCategoryId: editingId.value,
+        seasonId: row.seasonId,
+        minBirthDate: row.minBirthDate,
+      });
+      if (created) {
+        row.id = created.id;
+        loadAgeCategories();
+      }
+    } else {
+      await ageCategoryStore.updateCutoff(row.id, {
+        seasonId: row.seasonId,
+        minBirthDate: row.minBirthDate,
+      });
+    }
+  } finally {
+    row.saving = false;
+  }
+};
+
+const onCutoffDelete = (row: CutoffRow) => {
+  if (row.id === null) {
+    cutoffRows.value = cutoffRows.value.filter((r) => r.key !== row.key);
+    return;
+  }
+  cutoffDeleteTarget.value = row;
+  cutoffDeleteDialogOpen.value = true;
+};
+
+const onCutoffDeleteConfirm = async () => {
+  const target = cutoffDeleteTarget.value;
+  if (!target || target.id === null) return;
+  const ok = await ageCategoryStore.deleteCutoff(target.id);
+  if (ok) {
+    cutoffRows.value = cutoffRows.value.filter((r) => r.key !== target.key);
+    cutoffDeleteDialogOpen.value = false;
+    cutoffDeleteTarget.value = null;
+    loadAgeCategories();
+  }
+};
+
 const openCreateMode = () => {
   editingId.value = null;
+  cutoffRows.value = [];
   Object.assign(form, defaultForm());
 };
 
 const openEdit = (id: number) => {
   editingId.value = id;
+  cutoffRows.value = [];
   ageCategoryStore.getAgeCategoryById(id).then(() => {
     if (ageCategoryStore.ageCategoryDetail) {
       form.name = ageCategoryStore.ageCategoryDetail.name || "";
     }
   });
+  loadCutoffs(id);
 };
 
 const onFormSubmit = () => {
@@ -360,12 +636,15 @@ const onFormSubmit = () => {
     if (editingId.value) {
       ageCategoryStore.updateAgeCategory(editingId.value, payload).then(() => {
         editingId.value = null;
+        cutoffRows.value = [];
         Object.assign(form, defaultForm());
         loadAgeCategories();
       });
     } else {
-      ageCategoryStore.createAgeCategory(payload).then(() => {
-        Object.assign(form, defaultForm());
+      ageCategoryStore.createAgeCategory(payload).then((created: any) => {
+        if (!created) return;
+        editingId.value = created.id;
+        cutoffRows.value = [];
         loadAgeCategories();
       });
     }
@@ -375,5 +654,8 @@ const onFormSubmit = () => {
 // ─── Init ──
 onMounted(() => {
   loadAgeCategories();
+  if (dropdownStore.seasonsResult.length === 0) {
+    dropdownStore.getSeasons();
+  }
 });
 </script>

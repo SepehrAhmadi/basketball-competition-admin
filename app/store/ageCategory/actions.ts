@@ -141,9 +141,7 @@ export function useAgeCategoryActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          state.cutoffLoading.value = false;
-        }, 2000);
+        state.cutoffLoading.value = false;
       });
   };
 
@@ -164,9 +162,7 @@ export function useAgeCategoryActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          state.cutoffLoading.value = false;
-        }, 2000);
+        state.cutoffLoading.value = false;
       });
   };
 
@@ -221,11 +217,13 @@ export function useAgeCategoryActions(state: StateType) {
       .delete(`/admin/age-category-cutoffs/${id}`)
       .then((res) => {
         handlerStore.setSuccess(res.data.message);
+        return true;
       })
       .catch((err) => {
         console.log(err);
         const message = err.response?.data?.message || "خطای سرور";
         handlerStore.setError(message);
+        return false;
       })
       .finally(() => {
         handlerStore.loadingBtn = false;
