@@ -181,6 +181,13 @@ const menuItems = computed(() => {
       routeName: "seasons",
       subItems: null,
     },
+    {
+      id: "age-categories",
+      title: "مدیریت رده‌های سنی",
+      icon: operationIcon,
+      routeName: "age-categories",
+      subItems: null,
+    },
 
     {
       id: "organizations",
@@ -210,6 +217,8 @@ const menuItems = computed(() => {
     if (item.id === "users") return hasPermission("users.view");
     if (item.id === "organizations") return hasPermission("organizations.view");
     if (item.id === "seasons") return hasPermission("seasons.view");
+    if (item.id === "age-categories")
+      return hasPermission("age-categories.view");
     if (item.id === "teams") return hasPermission("teams.view");
     return true;
   });
