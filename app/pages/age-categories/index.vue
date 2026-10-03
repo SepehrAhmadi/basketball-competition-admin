@@ -80,7 +80,7 @@
             cols="12"
             md="6"
           >
-            <v-card rounded="lg" class="tw:relative! tw:p-4!">
+            <v-card rounded="lg" class="tw:relative! tw:px-4! tw:py-5!">
               <div class="tw:flex tw:items-center tw:justify-between tw:gap-2">
                 <div class="tw:flex tw:items-center tw:gap-2 tw:min-w-0">
                   <div class="tw:text-[15px]! tw:font-bold! tw:truncate">
