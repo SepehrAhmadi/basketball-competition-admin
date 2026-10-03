@@ -28,9 +28,7 @@ export function useAgeCategoryActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
           state.loading.value = false;
-        }, 2000);
       });
   };
 
@@ -51,9 +49,8 @@ export function useAgeCategoryActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
           state.loading.value = false;
-        }, 2000);
+
       });
   };
 

@@ -55,7 +55,8 @@
         <!-- ── Card grid ── -->
         <div
           v-if="
-            ageCategoryStore.loading && ageCategoryStore.ageCategoryList.length === 0
+            ageCategoryStore.loading &&
+            ageCategoryStore.ageCategoryList.length === 0
           "
           class="tw:flex tw:justify-center tw:py-16"
         >
@@ -116,11 +117,7 @@
         </v-row>
 
         <!-- ── Pagination ── -->
-        <v-card
-          rounded="lg"
-          class="tw:mt-4!"
-          v-if="totalItems > pageSize"
-        >
+        <v-card rounded="lg" class="tw:mt-4!" v-if="totalItems > pageSize">
           <Pagination
             v-model:page="page"
             v-model:items-per-page="pageSize"
@@ -203,9 +200,10 @@
             <div>محدوده‌های سنی</div>
             <v-btn
               v-if="hasPermission('age-categories.create')"
-              size="x-small"
+              size="small"
               variant="outlined"
               @click="addCutoffRow"
+              class="tw:bg-secondary-dark! tw:dark:bg-secondary-dark! tw:text-white! tw:rounded-md!"
             >
               <icon-plus class="tw:text-[16px]" />
               <span class="tw:mr-1!">افزودن</span>
@@ -226,63 +224,71 @@
               محدوده سنی ثبت نشده
             </div>
             <div v-else class="tw:flex tw:flex-col tw:gap-3">
-              <div
+              <v-row
                 v-for="row in cutoffRows"
                 :key="row.key"
-                class="tw:flex tw:flex-col tw:gap-3 tw:p-3"
+                dense
+                class="tw:p-3 tw:mt-1!"
               >
-                <v-select
-                  v-model="row.seasonId"
-                  :items="dropdownStore.seasonsResult"
-                  item-title="label"
-                  item-value="value"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  dir="rtl"
-                  no-data-text="موردی یافت نشد"
-                  :disabled="!canEditRow(row)"
-                >
-                  <template #label>
-                    <span class="tw:text-[12px]">فصل</span>
-                    <span
-                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
-                    >
-                      (الزامی)
-                    </span>
-                  </template>
-                </v-select>
-
-                <div class="tw:relative!">
-                  <label
-                    v-if="row.minBirthDate"
-                    :for="`minBirthDate-${row.key}`"
-                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
-                  >
-                    <span class="tw:text-[12px]">حداقل تاریخ تولد</span>
-                    <span
-                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
-                    >
-                      (الزامی)
-                    </span>
-                  </label>
-                  <date-picker
-                    v-model="row.minBirthDate"
-                    :id="`minBirthDate-${row.key}`"
-                    simple
-                    placeholder="حداقل تاریخ تولد (الزامی)"
-                    format="jYYYY/jMM/jDD"
-                    display-format="jYYYY/jMM/jDD"
+                <v-col cols="6">
+                  <v-select
+                    v-model="row.seasonId"
+                    :items="dropdownStore.seasonsResult"
+                    item-title="label"
+                    item-value="value"
+                    variant="outlined"
+                    density="compact"
+                    hide-details
+                    dir="rtl"
+                    no-data-text="موردی یافت نشد"
                     :disabled="!canEditRow(row)"
-                    class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!"
-                    color="#1d202e"
-                  />
-                </div>
+                  >
+                    <template #label>
+                      <span class="tw:text-[12px]">فصل</span>
+                      <span
+                        class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                      >
+                        (الزامی)
+                      </span>
+                    </template>
+                  </v-select>
+                </v-col>
 
-                <div class="tw:flex tw:items-center tw:justify-end tw:gap-2">
+                <v-col cols="6">
+                  <div class="tw:relative!">
+                    <label
+                      v-if="row.minBirthDate"
+                      :for="`minBirthDate-${row.key}`"
+                      class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
+                    >
+                      <span class="tw:text-[12px]">حداقل تاریخ تولد</span>
+                      <span
+                        class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                      >
+                        (الزامی)
+                      </span>
+                    </label>
+                    <date-picker
+                      v-model="row.minBirthDate"
+                      :id="`minBirthDate-${row.key}`"
+                      simple
+                      placeholder="حداقل تاریخ تولد (الزامی)"
+                      format="jYYYY/jMM/jDD"
+                      display-format="jYYYY/jMM/jDD"
+                      :disabled="!canEditRow(row)"
+                      class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!"
+                      color="#1d202e"
+                    />
+                  </div>
+                </v-col>
+
+                <v-col
+                  cols="12"
+                  class="tw:flex tw:items-center tw:justify-end tw:gap-2"
+                >
                   <v-btn
                     v-if="canEditRow(row)"
-                    size="small"
+                    size="x-small"
                     variant="outlined"
                     :loading="row.saving"
                     :disabled="row.saving"
@@ -297,7 +303,7 @@
                     v-if="
                       row.id === null || hasPermission('age-categories.delete')
                     "
-                    size="small"
+                    size="x-small"
                     variant="outlined"
                     :disabled="row.saving"
                     @click="onCutoffDelete(row)"
@@ -305,8 +311,8 @@
                     <icon-trash class="tw:text-[16px]" />
                     <span class="tw:mr-1!">حذف</span>
                   </v-btn>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </v-card-text>
         </v-card>
@@ -594,13 +600,12 @@ const onCutoffDelete = (row: CutoffRow) => {
 const onCutoffDeleteConfirm = async () => {
   const target = cutoffDeleteTarget.value;
   if (!target || target.id === null) return;
-  const ok = await ageCategoryStore.deleteCutoff(target.id);
-  if (ok) {
+  await ageCategoryStore.deleteCutoff(target.id).then(() => {
     cutoffRows.value = cutoffRows.value.filter((r) => r.key !== target.key);
     cutoffDeleteDialogOpen.value = false;
     cutoffDeleteTarget.value = null;
     loadAgeCategories();
-  }
+  });
 };
 
 const openCreateMode = () => {
