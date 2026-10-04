@@ -517,7 +517,7 @@
                   <label
                     v-if="form.foundedDate"
                     for="foundedDate"
-                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
+                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-3 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
                   >
                     <span class="tw:text-[12px]">تاریخ تاسیس</span>
                   </label>

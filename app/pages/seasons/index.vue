@@ -23,7 +23,7 @@
                   <label
                     v-if="filterFromDate"
                     for="filterFromDate"
-                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
+                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-3 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
                     >از تاریخ</label
                   >
                   <date-picker
@@ -36,6 +36,7 @@
                     class="default-scroll tw:text-gray-300! tw:text-[14px]! tw:text-center!"
                     color="#1d202e"
                     @change="onFilterChange"
+                    clearable
                   />
                 </div>
               </v-col>
@@ -44,7 +45,7 @@
                   <label
                     v-if="filterToDate"
                     for="filterToDate"
-                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
+                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-3 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
                     >تا تاریخ</label
                   >
                   <date-picker
@@ -222,7 +223,7 @@
                 <label
                   v-if="form.startDate"
                   for="startDate"
-                  class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
+                  class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-3 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
                 >
                   <span class="tw:text-[12px]">تاریخ شروع</span>
                   <span
@@ -247,7 +248,7 @@
                 <label
                   v-if="form.endDate"
                   for="endDate"
-                  class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
+                  class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-3 tw:-top-1.75 tw:z-10! tw:text-color-reverse"
                 >
                   <span class="tw:text-[12px]">تاریخ پایان</span>
                   <span

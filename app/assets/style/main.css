@@ -247,7 +247,13 @@ html[dir="ltr"] .vpd-input-group input::placeholder {
 .vpd-clear-btn {
   font-size: 17px !important;
   padding-inline-end: 10px !important;
-  color: white !important;
+  color: black;
+}
+
+.dark .vpd-clear-btn {
+  font-size: 17px !important;
+  padding-inline-end: 10px !important;
+  color: white;
 }
 
 html[dir="ltr"] .vpd-clear-btn {
@@ -257,6 +263,12 @@ html[dir="ltr"] .vpd-clear-btn {
 
 .vpd-wrapper {
   backdrop-filter: blur(1px) !important;
+  /* Vuetify layout items (v-app-bar / v-navigation-drawer) use z-index ~1000
+     and v-dialog overlays start at ~2400. The picker ships with 9999 but it
+     gets trapped inside v-card / v-main stacking contexts, so it renders
+     under the header/sidebar. Teleported to <body> (see datePicker plugin)
+     this puts it above everything, including dialogs. */
+  z-index: 99999 !important;
 }
 
 .vpd-content {

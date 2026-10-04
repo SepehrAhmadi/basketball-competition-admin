@@ -6,7 +6,7 @@
   >
     <v-card rounded="lg" class="shadow-xs!" max-width="420" width="100%">
       <v-card-item class="text-center mb-3 pt-4">
-        <v-card-title class="text-h6 font-weight-bold">خوش آمدید</v-card-title>
+        <v-card-title class="font-weight-bold">خوش آمدید</v-card-title>
         <v-card-subtitle>به پنل مدیریت وارد شوید</v-card-subtitle>
       </v-card-item>
 

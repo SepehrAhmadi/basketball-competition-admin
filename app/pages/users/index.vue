@@ -420,7 +420,7 @@
               <v-col cols="12" md="6" lg="4" xl="3">
                 <div class="tw:relative!">
                   <label v-if="form.birthDate" for="birthDate"
-                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-10 tw:-top-1.75 tw:z-10! tw-text-color-reverse">تاریخ
+                    class="tw:text-[11px] tw:absolute! tw:bg-white! tw:dark:bg-primary-dark! tw:start-3 tw:-top-1.75 tw:z-10! tw-text-color-reverse">تاریخ
                     تولد</label>
                   <date-picker v-model="form.birthDate" id="birthDate" simple placeholder="تاریخ تولد"
                     format="jYYYY/jMM/jDD" display-format="jYYYY/jMM/jDD"
