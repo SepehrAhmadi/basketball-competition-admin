@@ -66,9 +66,10 @@
                   v-if="hasPermission('seasons.create')"
                   class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
                   @click="openCreateMode"
+                  block
                 >
                   <icon-plus class="tw:text-[20px]" />
-                  <span class="tw:mr-1!">افزودن فصل جدید</span>
+                  <span class="tw:mr-1!">افزودن</span>
                 </v-btn>
               </v-col>
             </v-row>
