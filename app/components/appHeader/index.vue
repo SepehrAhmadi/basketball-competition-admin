@@ -132,12 +132,11 @@
 
 <script setup lang="ts">
 import dashboardIcon from "~/components/icon/dashboard.vue";
-import operationIcon from "~/components/icon/layer.vue";
-import userIcon from "../icon/user.vue";
 import dateIcon from "../icon/date.vue";
 import buildingIcon from "../icon/building.vue";
-import teamIcon from "../icon/box.vue";
-import ThemeSwitcher from "./themeSwitcher.vue";
+import alignRight from "../icon/alignRight.vue";
+import checkShield from "../icon/checkShield.vue";
+import usersIcon from "../icon/users.vue";
 
 const isDesktop = ref(false);
 const drawer = ref(true);
@@ -184,7 +183,7 @@ const menuItems = computed(() => {
     {
       id: "age-categories",
       title: "مدیریت رده‌های سنی",
-      icon: operationIcon,
+      icon: alignRight,
       routeName: "age-categories",
       subItems: null,
     },
@@ -200,17 +199,17 @@ const menuItems = computed(() => {
     {
       id: "teams",
       title: "مدیریت تیم‌ها",
-      icon: teamIcon,
+      icon: checkShield,
       routeName: "teams",
       subItems: null,
     },
     {
       id: "users",
       title: "مدیریت کاربران",
-      icon: userIcon,
+      icon: usersIcon,
       routeName: "users",
       subItems: null,
-    }
+    },
   ];
 
   return items.filter((item) => {
