@@ -24,9 +24,7 @@ export function useDropdownActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          handlerStore.loading = false;
-        }, 500);
+handlerStore.loading = false
       });
   };
 
@@ -47,9 +45,7 @@ export function useDropdownActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          handlerStore.loading = false;
-        }, 500);
+handlerStore.loading = false
       });
   };
 
@@ -70,9 +66,7 @@ export function useDropdownActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          handlerStore.loading = false;
-        }, 500);
+handlerStore.loading = false
       });
   };
 
@@ -93,9 +87,7 @@ export function useDropdownActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          handlerStore.loading = false;
-        }, 500);
+handlerStore.loading = false
       });
   };
 
@@ -116,9 +108,7 @@ export function useDropdownActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          handlerStore.loading = false;
-        }, 500);
+handlerStore.loading = false
       });
   };
 
@@ -139,9 +129,7 @@ export function useDropdownActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          handlerStore.loading = false;
-        }, 500);
+handlerStore.loading = false
       });
   };
 
@@ -162,9 +150,7 @@ export function useDropdownActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          handlerStore.loading = false;
-        }, 500);
+handlerStore.loading = false
       });
   };
 
@@ -185,9 +171,7 @@ export function useDropdownActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          handlerStore.loading = false;
-        }, 500);
+handlerStore.loading = false
       });
   };
 
@@ -211,9 +195,7 @@ export function useDropdownActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          handlerStore.loading = false;
-        }, 500);
+handlerStore.loading = false
       });
   };
 

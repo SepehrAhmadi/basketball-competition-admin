@@ -27,9 +27,7 @@ export function useSeasonActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          state.loading.value = false;
-        }, 2000);
+state.loading.value = false
       });
   };
 
@@ -48,9 +46,7 @@ export function useSeasonActions(state: StateType) {
         handlerStore.setError(message);
       })
       .finally(() => {
-        setTimeout(() => {
-          state.loading.value = false;
-        }, 2000);
+state.loading.value = false
       });
   };
 
