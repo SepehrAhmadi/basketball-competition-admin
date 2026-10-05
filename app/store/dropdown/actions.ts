@@ -183,7 +183,7 @@ handlerStore.loading = false
       .get("/roles")
       .then((res) => {
         // Domain roles only — ADMIN / SUPER_ADMIN live in `adminLevel`.
-        const allowed = ["ORG_MANAGER", "COACH", "PLAYER", "REFEREE"];
+        const allowed = ["COACH", "PLAYER", "REFEREE"];
         const list = res.data.data.roles ?? res.data.data ?? [];
         state.roles.value = Array.isArray(list)
           ? list.filter((r: any) => allowed.includes(r?.value ?? r))

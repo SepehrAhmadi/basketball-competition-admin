@@ -626,8 +626,7 @@ const getRoleLabels = (roleValues: string[]): string[] => {
   const map: Record<string, string> = {
     PLAYER: "بازیکن",
     COACH: "مربی",
-    REFEREE: "داور",
-    ORG_MANAGER: "مدیر سازمان",
+    REFEREE: "داور"
   };
   return roleValues.map((val) => map[val] ?? val);
 };

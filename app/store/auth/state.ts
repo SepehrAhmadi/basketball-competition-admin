@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-export type DomainRole = "ORG_MANAGER" | "COACH" | "PLAYER" | "REFEREE";
+export type DomainRole = "COACH" | "PLAYER" | "REFEREE";
 export type AdminLevel = "ADMIN" | "SUPER_ADMIN" | null;
 export interface AccessTokenPayload {
   userId: number;

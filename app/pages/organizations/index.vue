@@ -1138,7 +1138,7 @@ onMounted(() => {
   loadOrganizations();
 
   if (dropdownStore.usersResult.length === 0) {
-    dropdownStore.getDropdownUsers("ORG_MANAGER");
+    dropdownStore.getDropdownUsers();
   }
 
   if (dropdownStore.organizationStatuses.length === 0) {
