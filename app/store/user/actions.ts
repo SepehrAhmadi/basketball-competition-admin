@@ -210,6 +210,116 @@ state.loading.value = false
       });
   };
 
+  // ─── Self profile (/users/me) ──
+  const getMe = getCurrentUser;
+
+  const updateMe = (value: any) => {
+    const axios = useApi();
+    handlerStore.loadingBtn = true;
+
+    return axios
+      .patch("/users/me", value)
+      .then((res) => {
+        state.currentUser.value =
+          res.data?.data ?? state.currentUser.value;
+        handlerStore.setSuccess(res.data.message);
+        return state.currentUser.value;
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      })
+      .finally(() => {
+        handlerStore.loadingBtn = false;
+      });
+  };
+
+  const uploadAvatar = (formData: FormData) => {
+    const axios = useApi();
+    handlerStore.loadingBtn = true;
+
+    return axios
+      .post("/users/me/avatar", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((res) => {
+        state.currentUser.value =
+          res.data?.data ?? state.currentUser.value;
+        handlerStore.setSuccess(res.data.message);
+        return state.currentUser.value;
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      })
+      .finally(() => {
+        handlerStore.loadingBtn = false;
+      });
+  };
+
+  const removeAvatar = () => {
+    const axios = useApi();
+    handlerStore.loadingBtn = true;
+
+    return axios
+      .delete("/users/me/avatar")
+      .then((res) => {
+        state.currentUser.value =
+          res.data?.data ?? state.currentUser.value;
+        handlerStore.setSuccess(res.data.message);
+        return state.currentUser.value;
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      })
+      .finally(() => {
+        handlerStore.loadingBtn = false;
+      });
+  };
+
+  const changePassword = (value: any) => {
+    const axios = useApi();
+    handlerStore.loadingBtn = true;
+
+    return axios
+      .patch("/users/me/password", value)
+      .then((res) => {
+        handlerStore.setSuccess(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      })
+      .finally(() => {
+        handlerStore.loadingBtn = false;
+      });
+  };
+
+  const deleteMe = () => {
+    const axios = useApi();
+    handlerStore.loadingBtn = true;
+
+    return axios
+      .delete("/users/me")
+      .then((res) => {
+        state.currentUser.value = null;
+        handlerStore.setSuccess(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      })
+      .finally(() => {
+        handlerStore.loadingBtn = false;
+      });
+  };
+
   return {
     getUsers,
     getUserById,
@@ -222,5 +332,11 @@ state.loading.value = false
     getUserPermissions,
     replaceUserPermissions,
     getCurrentUser,
+    getMe,
+    updateMe,
+    uploadAvatar,
+    removeAvatar,
+    changePassword,
+    deleteMe,
   };
 }
