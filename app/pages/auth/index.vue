@@ -22,7 +22,9 @@
           >
             <template #label>
               <span class="tw:text-[12px]"> شماره موبایل یا ایمیل </span>
-              <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"> (الزامی) </span>
+              <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]">
+                (الزامی)
+              </span>
             </template>
           </v-text-field>
           <v-text-field
@@ -38,7 +40,9 @@
           >
             <template #label>
               <span class="tw:text-[12px]"> رمز عبور </span>
-              <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"> (الزامی) </span>
+              <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]">
+                (الزامی)
+              </span>
             </template>
           </v-text-field>
         </v-form>
@@ -51,6 +55,7 @@
           :disabled="authStore.loading"
           class="tw:bg-primary-dark! tw:dark:bg-secondary-dark! tw:text-white! tw:rounded-md!"
           @click="submit"
+          @keyup.enter="submit"
         >
           <icon-login class="tw:text-[20px]" />
           <span class="tw:mr-1!">ورود</span>
