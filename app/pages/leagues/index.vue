@@ -193,12 +193,21 @@
               >
                 <div class="tw:flex tw:items-center tw:gap-1.5 tw:shrink-0">
                   <v-btn
+                    v-if="hasPermission('league-teams.view')"
+                    size="x-small"
+                    variant="outlined"
+                    @click="navigateTo(`/leagues/${item.id}/teams`)"
+                  >
+                    <icon-users class="tw:text-[16px]" />
+                    <span class="tw:mr-1!">مدیریت تیم‌ها</span>
+                  </v-btn>
+                  <v-btn
                     v-if="hasPermission('leagues.update')"
                     size="x-small"
                     variant="outlined"
                     @click="openStatusDialog(item)"
                   >
-                    <icon-refresh class="tw:text-[16px]" />
+                    <icon-refresh class="tw:text-[14px]" />
                     <span class="tw:mr-1!">تغییر وضعیت</span>
                   </v-btn>
                   <v-btn
