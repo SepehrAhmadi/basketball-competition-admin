@@ -89,7 +89,7 @@
 
         <div
           v-else-if="items.length === 0"
-          class="tw:flex tw:justify-center tw:items-center tw:gap-2 tw:py-16"
+          class="tw:flex tw:justify-center tw:items-center tw:gap-2 tw:py-16!"
         >
           <icon-row-chart class="tw:text-color-lighter tw:text-[35px]" />
           <div class="tw:text-color-lighter tw:text-[14px]">
