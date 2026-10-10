@@ -137,6 +137,7 @@ import buildingIcon from "../icon/building.vue";
 import alignRight from "../icon/alignRight.vue";
 import checkShield from "../icon/checkShield.vue";
 import usersIcon from "../icon/users.vue";
+import layerIcon from "../icon/layer.vue";
 
 const isDesktop = ref(false);
 const drawer = ref(true);
@@ -195,12 +196,18 @@ const menuItems = computed(() => {
       routeName: "organizations",
       subItems: null,
     },
-
     {
       id: "teams",
       title: "مدیریت تیم‌ها",
       icon: checkShield,
       routeName: "teams",
+      subItems: null,
+    },
+    {
+      id: "leagues",
+      title: "مدیریت لیگ‌ها",
+      icon: layerIcon,
+      routeName: "leagues",
       subItems: null,
     },
     {
