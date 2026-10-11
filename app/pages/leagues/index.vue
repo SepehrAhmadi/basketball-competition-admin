@@ -14,7 +14,7 @@
         <v-card class="tw:rounded-xl! tw:mb-4!">
           <v-card-text>
             <v-row align="center">
-              <v-col cols="12" sm="4" md="4">
+              <v-col cols="12" sm="4" md="4" lg="12" xl="4">
                 <v-text-field
                   v-model="query"
                   variant="outlined"
@@ -34,7 +34,7 @@
                 </v-text-field>
               </v-col>
 
-              <v-col cols="6" sm="2">
+              <v-col cols="6" sm="2" lg="3" xl="2">
                 <v-select
                   v-model="selectedStatus"
                   :items="statusOptions"
@@ -54,7 +54,7 @@
                 </v-select>
               </v-col>
 
-              <v-col cols="6" sm="2">
+              <v-col cols="6" sm="2" lg="3" xl="2">
                 <v-select
                   v-model="selectedSeasonId"
                   :items="dropdownStore.seasonsResult"
@@ -74,7 +74,7 @@
                 </v-select>
               </v-col>
 
-              <v-col cols="12" sm="3" md="2">
+              <v-col cols="12" sm="3" md="2" lg="3" xl="2">
                 <v-select
                   v-model="selectedAgeCategoryId"
                   :items="ageCategoryStore.ageCategoryList"
@@ -94,7 +94,7 @@
                 </v-select>
               </v-col>
 
-              <v-col cols="12" sm="2">
+              <v-col cols="12" sm="2" lg="" xl="2">
                 <v-btn
                   v-if="hasPermission('leagues.create')"
                   class="tw:bg-secondary-dark! tw:text-white! tw:rounded-md!"
@@ -131,7 +131,7 @@
             v-for="item in leagueStore.leagueList"
             :key="item.id"
             cols="12"
-            md="6"
+            xl="6"
           >
             <v-card rounded="lg" class="tw:relative! tw:px-4! tw:py-5!">
               <div class="tw:flex tw:items-center tw:justify-between tw:gap-2">
