@@ -391,8 +391,17 @@
                 <div
                   class="tw:flex tw:flex-wrap tw:items-center tw:gap-1! tw:mt-1!"
                 >
-                  <v-chip size="x-small" variant="tonal">
-                    {{ person.role === "COACH" ? "مربی" : "بازیکن" }}
+                  <v-chip
+                    size="x-small"
+                    variant="tonal"
+                  >
+                    {{
+                      person.isHeadCoach
+                        ? "سرمربی"
+                        : person.role === "COACH"
+                          ? "مربی"
+                          : "بازیکن"
+                    }}
                   </v-chip>
                   <v-chip v-if="person.jerseyNumber != null" size="x-small">
                     شماره {{ person.jerseyNumber }}

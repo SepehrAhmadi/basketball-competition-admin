@@ -158,8 +158,12 @@
                   <!-- نقش -->
                   <td>
                     <div class="tw:flex tw:justify-center tw:text-nowrap!">
-                      <v-chip size="x-small" variant="tonal">
-                        {{ getRoleLabel(item.role) }}
+                      <v-chip
+                        size="x-small"
+                        variant="tonal"
+                        :color="item.isHeadCoach ? 'success' : undefined"
+                      >
+                        {{ getRoleLabel(item) }}
                       </v-chip>
                     </div>
                   </td>
@@ -652,11 +656,13 @@ const tableHeaders = [
 const memberName = (item: any): string =>
   item?.user?.fullName ?? item?.fullName ?? item?.name ?? item?.username ?? "—";
 
-const getRoleLabel = (role: string): string => {
+const getRoleLabel = (item: any): string => {
+  if (item?.isHeadCoach) return "سرمربی";
   const map: Record<string, string> = {
     COACH: "مربی",
     PLAYER: "بازیکن",
   };
+  const role = typeof item === "string" ? item : item?.role;
   return map[role] ?? role ?? "—";
 };
 
