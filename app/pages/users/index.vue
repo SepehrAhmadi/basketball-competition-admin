@@ -450,7 +450,7 @@
               <v-col cols="12" md="6" lg="4" xl="3">
                 <v-autocomplete v-model="form.roles" :items="dropdownStore.roles" item-title="label" item-value="value"
                   multiple chips closable-chips variant="outlined" density="compact" hide-details
-                  :rules="[(v: string[]) => (v && v.length > 0) || '']">
+                  >
                   <template #label>
                     <span class="tw:text-[12px]">نقش‌ها</span>
                     <span class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]">
@@ -834,7 +834,7 @@ const openEditDialog = (id: number) => {
 };
 
 const onDialogSubmit = () => {
-  if (!form.fullName || !form.phone || !form.email || !form.roles.length) {
+  if (!form.fullName || !form.phone || !form.email) {
     handlerStore.setError("لطفا تمام فیلدهای الزامی را پر کنید.");
     return;
   }

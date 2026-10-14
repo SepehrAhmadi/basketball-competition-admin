@@ -45,6 +45,7 @@ export function useAuthActions(state: StateType) {
   const clearSession = () => {
     tokenCookie.value = null;
     state.userId.value = null;
+    state.adminLevel.value = null;
     state.roles.value = [];
     state.permissions.value = [];
     state.adminUser.value = null;

@@ -816,11 +816,17 @@ const onFormSubmit = () => {
 
 // ─── Init ──
 onMounted(() => {
+  if (!hasPermission("leagues.view")) return;
   loadLeagues();
   if (dropdownStore.seasonsResult.length === 0) {
     dropdownStore.getSeasons();
   }
-  if (ageCategoryStore.ageCategoryList.length === 0) {
+  // Only the league form needs categories — don't request them (and trigger
+  // a 403) for read-only users.
+  if (
+    (hasPermission("leagues.create") || hasPermission("leagues.update")) &&
+    ageCategoryStore.ageCategoryList.length === 0
+  ) {
     ageCategoryStore.getAgeCategories({ page: 1, pageSize: 100 });
   }
 });
