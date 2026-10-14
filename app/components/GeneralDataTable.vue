@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { computed } from "vue";
+import { useDisplay } from "vuetify";
+
 interface Props {
   headers: any[];
   items: any[];
@@ -7,9 +10,33 @@ interface Props {
   height?: string | number;
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   loading: false,
-  height: 720,
+  height: undefined,
+});
+
+const { name } = useDisplay();
+
+const getDynamicHeight = (breakpoint: string): number => {
+  switch (breakpoint) {
+    case "xxl":
+    case "xl":
+      return 685;
+    case "lg":
+      return 500;
+    case "md":
+      return 400;
+    case "sm":
+      return 300;
+    case "xs":
+    default:
+      return 300;
+  }
+};
+
+const tableHeight = computed<string | number>(() => {
+  if (props.height !== undefined) return props.height;
+  return getDynamicHeight(name.value);
 });
 
 const page = defineModel<number>("page", {
@@ -46,7 +73,7 @@ const onOptionsChange = (options: { page: number; itemsPerPage: number }) => {
       :items="items"
       :headers="headers"
       :loading="loading"
-      :height="height"
+      :height="tableHeight"
       fixed-header
       fixed-footer
       hide-default-footer
