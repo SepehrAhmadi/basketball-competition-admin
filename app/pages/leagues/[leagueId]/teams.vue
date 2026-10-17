@@ -374,7 +374,7 @@
               class="tw:flex tw:items-center tw:gap-3 tw:rounded-lg tw:border-2 tw:p-2! tw:transition"
               :class="[
                 person.selected
-                  ? 'tw:border-green-500 tw:bg-green-100'
+                  ? 'tw:border-green-500 tw:bg-green-100 tw:dark:bg-green-900/20'
                   : 'tw:border-transparent tw:bg-black/5 tw:dark:bg-white/5',
                 { 'tw:opacity-50': isLocked(person) },
               ]"
