@@ -23,7 +23,7 @@ const getDynamicHeight = (breakpoint: string): number => {
     case "xl":
       return 685;
     case "lg":
-      return 500;
+      return 375;
     case "md":
       return 400;
     case "sm":
@@ -77,7 +77,7 @@ const onOptionsChange = (options: { page: number; itemsPerPage: number }) => {
       fixed-header
       fixed-footer
       hide-default-footer
-      class="tw:bg-white! tw:dark:bg-primary-dark!"
+      class="general-data-table tw:bg-white! tw:dark:bg-primary-dark!"
       @update:options="onOptionsChange"
     >
 
@@ -119,3 +119,34 @@ const onOptionsChange = (options: { page: number; itemsPerPage: number }) => {
     </v-data-table-server>
   </v-card>
 </template>
+
+<style>
+/* tiny scrollbar for data table */
+.general-data-table .v-table__wrapper::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.general-data-table .v-table__wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.general-data-table .v-table__wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.5);
+  border-radius: 9999px;
+}
+
+.general-data-table .v-table__wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 116, 139, 0.8);
+}
+
+.general-data-table .v-table__wrapper::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* firefox */
+.general-data-table .v-table__wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
+}
+</style>

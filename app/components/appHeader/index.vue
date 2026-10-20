@@ -51,6 +51,7 @@
         >
           <!-- main items -->
           <div
+            v-tooltip:end="{ text: item.title, disabled: !rail }"
             class="tw:relative tw:flex tw:justify-between tw:items-center tw:gap-2 tw:cursor-pointer tw:group tw:w-full tw:py-2! tw:px-2.5!"
             :class="{
               'tw:bg-gray-200! tw:dark:bg-secondary-dark! tw:rounded-lg tw:border-b tw:border-slate-400':
@@ -321,6 +322,12 @@ onBeforeUnmount(() => {
 .v-navigation-drawer--left,
 .v-navigation-drawer--right {
   border: none !important;
+}
+
+/* tooltip text size */
+.v-tooltip > .v-overlay__content {
+  font-size: 12px !important;
+  line-height: 1.6;
 }
 
 /* slide-text transition */

@@ -6,10 +6,10 @@
         <v-row>
           <v-col cols="12" lg="11">
             <v-row>
-              <v-col cols="12" md="4" xl="1">
+              <v-col cols="12" md="4" lg="2" xl="1">
                 <TablePageSize v-model="pageSize" />
               </v-col>
-              <v-col cols="12" md="4" xl="3">
+              <v-col cols="12" md="4" lg="3" xl="3">
                 <v-text-field v-model="query" variant="outlined" density="compact" hide-details dir="rtl"
                   @update:model-value="onSearchChange">
                   <template #label>
@@ -20,7 +20,7 @@
                   </template>
                 </v-text-field>
               </v-col>
-              <v-col cols="6" md="3" xl="2">
+              <v-col cols="6" md="3" lg="2" xl="2">
                 <v-select v-model="selectedRole" :items="dropdownStore.roles" item-title="label" item-value="value"
                   variant="outlined" density="compact" hide-details clearable dir="rtl"
                   @update:model-value="onFilterChange">
@@ -29,7 +29,7 @@
                   </template>
                 </v-select>
               </v-col>
-              <v-col cols="6" md="3" xl="2">
+              <v-col cols="6" md="3" lg="2" xl="2">
                 <v-select v-model="selectedStatus" variant="outlined" density="compact" hide-details clearable dir="rtl"
                   @update:model-value="onFilterChange">
                   <template #label>
