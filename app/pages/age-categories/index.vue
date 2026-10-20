@@ -86,7 +86,7 @@
                   <div class="tw:text-[15px]! tw:font-bold! tw:truncate">
                     {{ item.name }}
                   </div>
-                  <v-chip size="x-small" variant="tonal" color="secondary">
+                  <v-chip size="x-small" variant="tonal" color="primary">
                     {{ item.cutoffsCount ?? 0 }} محدوده سنی
                   </v-chip>
                 </div>
