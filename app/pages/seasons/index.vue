@@ -133,25 +133,47 @@
                 تاریخ پایان: {{ item.endDate }}
               </div>
 
-              <div class="tw:flex tw:justify-end tw:gap-2 tw:mt-4!">
-                <v-btn
-                  v-if="hasPermission('seasons.update')"
-                  size="x-small"
-                  variant="outlined"
-                  @click="openEdit(item.id)"
+              <div class="tw:flex tw:justify-end tw:mt-4!">
+                <div
+                  class="tw:inline-flex tw:items-stretch tw:overflow-hidden tw:rounded-lg tw:border tw:border-gray-300 tw:dark:border-gray-600"
                 >
-                  <icon-edit-box class="tw:text-[16px]" />
-                  <span class="tw:mr-1!">ویرایش</span>
-                </v-btn>
-                <v-btn
-                  v-if="hasPermission('seasons.delete')"
-                  size="x-small"
-                  variant="outlined"
-                  @click="confirmDelete(item)"
-                >
-                  <icon-trash class="tw:text-[16px]" />
-                  <span class="tw:mr-1!">حذف</span>
-                </v-btn>
+                  <v-tooltip
+                    v-if="hasPermission('seasons.update')"
+                    location="top"
+                  >
+                    <template #activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        size="small"
+                        variant="text"
+                        rounded="0"
+                        class="tw:min-w-2! "
+                        @click="openEdit(item.id)"
+                      >
+                        <icon-edit-box class="tw:text-[16px]" />
+                      </v-btn>
+                    </template>
+                    <span class="tw:text-xs tw:p-2">ویرایش</span>
+                  </v-tooltip>
+                  <v-tooltip
+                    v-if="hasPermission('seasons.delete')"
+                    location="top"
+                  >
+                    <template #activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        size="small"
+                        variant="text"
+                        rounded="0"
+                        class="tw:min-w-2! tw:border-s! tw:border-gray-300! tw:dark:border-gray-600!"
+                        @click="confirmDelete(item)"
+                      >
+                        <icon-trash class="tw:text-[16px]" />
+                      </v-btn>
+                    </template>
+                    <span class="tw:text-xs tw:p-2">حذف</span>
+                  </v-tooltip>
+                </div>
               </div>
             </v-card>
           </v-col>

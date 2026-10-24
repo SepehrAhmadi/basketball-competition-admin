@@ -188,46 +188,89 @@
                 مهلت ثبت ترکیب: {{ item.rosterDeadline ?? "—" }}
               </div>
 
-              <div
-                class="tw:flex tw:justify-end tw:items-center tw:gap-2 tw:mt-4!"
-              >
-                <div class="tw:flex tw:items-center tw:gap-1.5 tw:shrink-0">
-                  <v-btn
+              <div class="tw:flex tw:justify-end tw:mt-4!">
+                <div
+                  class="tw:inline-flex tw:items-stretch tw:overflow-hidden tw:rounded-lg tw:border tw:border-gray-300 tw:dark:border-gray-600"
+                >
+                  <v-tooltip
                     v-if="hasPermission('league-teams.view')"
-                    size="x-small"
-                    variant="outlined"
-                    @click="navigateTo(`/leagues/${item.id}/teams`)"
+                    location="top"
                   >
-                    <icon-users class="tw:text-[16px]" />
-                    <span class="tw:mr-1!">مدیریت تیم‌ها</span>
-                  </v-btn>
-                  <v-btn
+                    <template #activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        size="small"
+                        variant="text"
+                        rounded="0"
+                        class="tw:min-w-2!
+"
+                        @click="navigateTo(`/leagues/${item.id}/teams`)"
+                      >
+                        <icon-users class="tw:text-[16px]" />
+                      </v-btn>
+                    </template>
+                    <span class="tw:text-xs tw:p-2">مدیریت تیم‌ها</span>
+                  </v-tooltip>
+
+                  <v-tooltip
                     v-if="hasPermission('leagues.update')"
-                    size="x-small"
-                    variant="outlined"
-                    @click="openStatusDialog(item)"
+                    location="top"
                   >
-                    <icon-refresh class="tw:text-[14px]" />
-                    <span class="tw:mr-1!">تغییر وضعیت</span>
-                  </v-btn>
-                  <v-btn
+                    <template #activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        size="small"
+                        variant="text"
+                        rounded="0"
+                        class="tw:min-w-2!
+"
+                        @click="openStatusDialog(item)"
+                      >
+                        <icon-refresh class="tw:text-[16px]" />
+                      </v-btn>
+                    </template>
+                    <span class="tw:text-xs tw:p-2">تغییر وضعیت</span>
+                  </v-tooltip>
+
+                  <v-tooltip
                     v-if="hasPermission('leagues.update')"
-                    size="x-small"
-                    variant="outlined"
-                    @click="openEdit(item.id)"
+                    location="top"
                   >
-                    <icon-edit-box class="tw:text-[16px]" />
-                    <span class="tw:mr-1!">ویرایش</span>
-                  </v-btn>
-                  <v-btn
+                    <template #activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        size="small"
+                        variant="text"
+                        rounded="0"
+                        class="tw:min-w-2!
+"
+                        @click="openEdit(item.id)"
+                      >
+                        <icon-edit-box class="tw:text-[16px]" />
+                      </v-btn>
+                    </template>
+                    <span class="tw:text-xs tw:p-2">ویرایش</span>
+                  </v-tooltip>
+
+                  <v-tooltip
                     v-if="hasPermission('leagues.delete')"
-                    size="x-small"
-                    variant="outlined"
-                    @click="confirmDelete(item)"
+                    location="top"
                   >
-                    <icon-trash class="tw:text-[16px]" />
-                    <span class="tw:mr-1!">حذف</span>
-                  </v-btn>
+                    <template #activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        size="small"
+                        variant="text"
+                        rounded="0"
+                        class="tw:min-w-2!
+"
+                        @click="confirmDelete(item)"
+                      >
+                        <icon-trash class="tw:text-[16px]" />
+                      </v-btn>
+                    </template>
+                    <span class="tw:text-xs tw:p-2">حذف</span>
+                  </v-tooltip>
                 </div>
               </div>
             </v-card>
