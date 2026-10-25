@@ -12,6 +12,8 @@ export function useLeagueState() {
   const leagueList = ref<any[]>([]);
   const leagueListMeta = ref<ListMeta | null>(null);
   const leagueDetail = ref<any>(null);
+  const formatDetail = ref<any>(null);
+  const formatLoading = ref<boolean>(false);
 
   // League teams (registered) + eligible teams (add mode)
   const leagueTeamList = ref<any[]>([]);
@@ -27,6 +29,8 @@ export function useLeagueState() {
     leagueList,
     leagueListMeta,
     leagueDetail,
+    formatDetail,
+    formatLoading,
     leagueTeamList,
     leagueTeamMeta,
     eligibleTeamList,

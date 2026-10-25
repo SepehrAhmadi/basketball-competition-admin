@@ -135,6 +135,51 @@ export function useLeagueActions(state: StateType) {
   const errorMessage = (err: any): string =>
     err.response?.data?.message || "خطای سرور";
 
+  // ─── League format ────────────────────────────────────────────────────────
+
+  // GET /admin/leagues/:leagueId/format — verifyPermission("leagues.view")
+  const getLeagueFormat = (id: number | string) => {
+    const axios = useApi();
+    state.formatLoading.value = true;
+
+    return axios
+      .get(`/admin/leagues/${id}/format`)
+      .then((res) => {
+        state.formatDetail.value = res.data.data;
+        return res.data.data;
+      })
+      .catch((err) => {
+        console.log(err);
+        handlerStore.setError(errorMessage(err));
+        return null;
+      })
+      .finally(() => {
+        state.formatLoading.value = false;
+      });
+  };
+
+  // PUT /admin/leagues/:leagueId/format — verifyPermission("leagues.update")
+  const updateLeagueFormat = (id: number | string, value: any) => {
+    const axios = useApi();
+    handlerStore.loadingBtn = true;
+
+    return axios
+      .put(`/admin/leagues/${id}/format`, value)
+      .then((res) => {
+        handlerStore.setSuccess(res.data.message);
+        state.formatDetail.value = res.data.data;
+        return true;
+      })
+      .catch((err) => {
+        console.log(err);
+        handlerStore.setError(errorMessage(err));
+        return false;
+      })
+      .finally(() => {
+        handlerStore.loadingBtn = false;
+      });
+  };
+
   // ─── League teams ───────────────────────────────────────────
   // Mutations resolve to `true` on success and `false` on failure, so
   // callers update the UI only when the request actually succeeded.
@@ -336,5 +381,7 @@ export function useLeagueActions(state: StateType) {
     updateLeague,
     updateLeagueStatus,
     deleteLeague,
+    getLeagueFormat,
+    updateLeagueFormat,
   };
 }
