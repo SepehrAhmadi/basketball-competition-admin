@@ -297,18 +297,35 @@
       >
         <v-card class="tw:rounded-xl!">
           <v-card-title
-            class="tw:flex! tw:items-center! tw:gap-1! tw:text-[14px]! tw:font-bold! tw:mb-2!"
+            dir="rtl"
+            class="tw:flex! tw:items-center! tw:gap-3! tw:flex-wrap! tw:text-[14px]! tw:font-bold! tw:mb-2!"
           >
-            <div>
+            <div class="tw:flex tw:items-center tw:gap-1">
               <icon-plus v-if="!editingId" class="tw:text-[20px]" />
               <icon-edit-box v-else class="tw:text-[20px]" />
+              <span>{{ editingId ? "ویرایش لیگ" : "افزودن لیگ" }}</span>
             </div>
-            <div>
-              {{ editingId ? "ویرایش لیگ" : "افزودن لیگ" }}
-            </div>
+
+            <v-btn-toggle
+              v-model="activeSideTab"
+              mandatory
+              divided
+              density="compact"
+              variant="outlined"
+              class="tw:mr-auto!"
+              @update:model-value="onSideTabChange"
+            >
+              <v-btn value="league" size="small" class="tw:text-[12px]!">
+                اطلاعات لیگ
+              </v-btn>
+              <v-btn value="format" size="small" class="tw:text-[12px]!">
+                ساختار مسابقات
+              </v-btn>
+            </v-btn-toggle>
           </v-card-title>
 
           <v-card-text>
+            <template v-if="activeSideTab === 'league'">
             <!-- Loading spinner while fetching for edit -->
             <div
               v-if="editingId && leagueStore.loading"
@@ -470,6 +487,157 @@
                 }}</span>
               </v-btn>
             </v-form>
+            </template>
+
+            <template v-else>
+              <v-alert
+                v-if="!editingId"
+                type="info"
+                variant="tonal"
+                density="compact"
+                class="tw:text-[12px]!"
+              >
+                برای تنظیم ساختار مسابقات، ابتدا اطلاعات لیگ را ذخیره کنید.
+              </v-alert>
+
+              <div
+                v-else-if="leagueStore.formatLoading"
+                class="tw:flex tw:justify-center tw:py-8"
+              >
+                <v-progress-circular indeterminate color="primary" />
+              </div>
+
+              <v-form v-else>
+                <v-alert
+                  v-if="isFormatLocked"
+                  type="warning"
+                  variant="tonal"
+                  density="compact"
+                  class="tw:text-[12px]! tw:mb-4!"
+                >
+                  {{ formatLockMessage }}
+                </v-alert>
+
+                <v-select
+                  v-model="formatForm.format"
+                  :items="dropdownStore.leagueFormats"
+                  item-title="label"
+                  item-value="value"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                  dir="rtl"
+                  :disabled="isFormatLocked"
+                  no-data-text="موردی یافت نشد"
+                >
+                  <template #label>
+                    <span class="tw:text-[12px]">ساختار مسابقات</span>
+                    <span
+                      class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                    >
+                      (الزامی)
+                    </span>
+                  </template>
+                </v-select>
+
+                <v-row dense class="tw:mt-3!">
+                  <v-col cols="6">
+                    <v-text-field
+                      v-model="formatForm.winPoints"
+                      type="number"
+                      min="0"
+                      max="10"
+                      step="1"
+                      variant="outlined"
+                      density="compact"
+                      hide-details
+                      :disabled="isFormatLocked"
+                    >
+                      <template #label>
+                        <span class="tw:text-[12px]">امتیاز برد</span>
+                      </template>
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      v-model="formatForm.lossPoints"
+                      type="number"
+                      min="0"
+                      max="10"
+                      step="1"
+                      variant="outlined"
+                      density="compact"
+                      hide-details
+                      :disabled="isFormatLocked"
+                    >
+                      <template #label>
+                        <span class="tw:text-[12px]">امتیاز باخت</span>
+                      </template>
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+
+                <template v-if="isGroupFormat">
+                  <v-select
+                    v-model="formatForm.groupRoundType"
+                    :items="dropdownStore.groupRoundTypes"
+                    item-title="label"
+                    item-value="value"
+                    variant="outlined"
+                    density="compact"
+                    hide-details
+                    dir="rtl"
+                    :disabled="isFormatLocked"
+                    no-data-text="موردی یافت نشد"
+                    class="tw:mt-4!"
+                  >
+                    <template #label>
+                      <span class="tw:text-[12px]">نوع دور مسابقات گروهی</span>
+                      <span
+                        class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                      >
+                        (الزامی)
+                      </span>
+                    </template>
+                  </v-select>
+
+                  <v-text-field
+                    v-model="formatForm.defaultQualifiersPerGroup"
+                    type="number"
+                    min="1"
+                    max="64"
+                    step="1"
+                    variant="outlined"
+                    density="compact"
+                    hide-details
+                    :disabled="isFormatLocked"
+                    class="tw:mt-4!"
+                  >
+                    <template #label>
+                      <span class="tw:text-[12px]">
+                        تعداد صعود‌کننده‌ی هر گروه
+                      </span>
+                      <span
+                        class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                      >
+                        (الزامی)
+                      </span>
+                    </template>
+                  </v-text-field>
+                </template>
+
+                <v-btn
+                  block
+                  :loading="handlerStore.loadingBtn"
+                  :disabled="handlerStore.loadingBtn || isFormatLocked"
+                  class="tw:bg-secondary-dark! tw:dark:bg-secondary-dark! tw:text-white! tw:rounded-md! tw:mt-4!"
+                  @click="onFormatSubmit"
+                >
+                  <icon-check class="tw:text-[18px]" />
+                  <span class="tw:mr-1!">ذخیره ساختار</span>
+                </v-btn>
+              </v-form>
+            </template>
           </v-card-text>
         </v-card>
       </v-col>
@@ -767,6 +935,142 @@ const defaultForm = () => ({
 
 const form = reactive(defaultForm());
 
+// ─── Side form tabs + league format ──
+const activeSideTab = ref<"league" | "format">("league");
+const formatLoadedId = ref<number | null>(null);
+
+const defaultFormatForm = () => ({
+  format: null as string | null,
+  winPoints: 2 as number | string,
+  lossPoints: 1 as number | string,
+  groupRoundType: null as string | null,
+  defaultQualifiersPerGroup: null as number | string | null,
+});
+
+const formatForm = reactive(defaultFormatForm());
+
+const isGroupFormat = computed(
+  () =>
+    formatForm.format === "GROUPS_KNOCKOUT" ||
+    formatForm.format === "SINGLE_GROUP_KNOCKOUT",
+);
+
+const isFormatLocked = computed(
+  () =>
+    !!editingId.value &&
+    leagueStore.formatDetail?.can?.edit === false,
+);
+
+const formatLockMessage = computed(() =>
+  leagueStore.formatDetail?.lockReason === "HAS_GAMES"
+    ? "پس از شروع اولین بازی، ساختار لیگ قابل تغییر نیست."
+    : "لیگ تمام‌شده قابل ویرایش نیست.",
+);
+
+const fillFormatForm = (detail: any) => {
+  formatForm.format = detail?.format ?? null;
+  formatForm.winPoints = detail?.winPoints ?? 2;
+  formatForm.lossPoints = detail?.lossPoints ?? 1;
+  formatForm.groupRoundType = detail?.groupRoundType ?? null;
+  formatForm.defaultQualifiersPerGroup =
+    detail?.defaultQualifiersPerGroup ?? null;
+};
+
+const resetFormatForm = () => {
+  Object.assign(formatForm, defaultFormatForm());
+  formatLoadedId.value = null;
+  leagueStore.formatDetail = null;
+};
+
+const loadFormat = async (id: number) => {
+  const detail = await leagueStore.getLeagueFormat(id);
+  if (!detail) return;
+  fillFormatForm(detail);
+  formatLoadedId.value = id;
+};
+
+const onSideTabChange = (value: "league" | "format") => {
+  if (value === "format" && editingId.value && formatLoadedId.value !== editingId.value) {
+    loadFormat(editingId.value);
+  }
+};
+
+const onFormatSubmit = () => {
+  if (!editingId.value) return;
+
+  if (!formatForm.format) {
+    handlerStore.setError("ساختار مسابقات را انتخاب کنید.");
+    return;
+  }
+
+  if (
+    formatForm.winPoints === "" ||
+    formatForm.winPoints === null ||
+    formatForm.lossPoints === "" ||
+    formatForm.lossPoints === null
+  ) {
+    handlerStore.setError("امتیاز برد و باخت الزامی است.");
+    return;
+  }
+
+  const winPoints = Number(formatForm.winPoints);
+  const lossPoints = Number(formatForm.lossPoints);
+
+  if (
+    !Number.isInteger(winPoints) ||
+    !Number.isInteger(lossPoints) ||
+    winPoints < 0 ||
+    lossPoints < 0 ||
+    winPoints > 10 ||
+    lossPoints > 10
+  ) {
+    handlerStore.setError("امتیازها باید عددی بین ۰ تا ۱۰ باشند.");
+    return;
+  }
+
+  if (winPoints <= lossPoints) {
+    handlerStore.setError("امتیاز برد باید بیشتر از امتیاز باخت باشد.");
+    return;
+  }
+
+  const payload: any = {
+    format: formatForm.format,
+    winPoints,
+    lossPoints,
+  };
+
+  if (isGroupFormat.value) {
+    if (!formatForm.groupRoundType) {
+      handlerStore.setError("نوع دور مسابقات گروهی را انتخاب کنید.");
+      return;
+    }
+
+    const qualifiers = Number(formatForm.defaultQualifiersPerGroup);
+    if (
+      formatForm.defaultQualifiersPerGroup === "" ||
+      formatForm.defaultQualifiersPerGroup === null ||
+      !Number.isInteger(qualifiers) ||
+      qualifiers < 1 ||
+      qualifiers > 64
+    ) {
+      handlerStore.setError(
+        "تعداد صعود‌کننده‌ی هر گروه باید بین ۱ تا ۶۴ باشد.",
+      );
+      return;
+    }
+
+    payload.groupRoundType = formatForm.groupRoundType;
+    payload.defaultQualifiersPerGroup = qualifiers;
+  }
+
+  leagueStore.updateLeagueFormat(editingId.value, payload).then((ok) => {
+    if (!ok) return;
+    if (leagueStore.formatDetail) fillFormatForm(leagueStore.formatDetail);
+    formatLoadedId.value = editingId.value;
+    loadLeagues();
+  });
+};
+
 // ─── Cutoff picker (two-step: category → cutoff list) ──
 const cutoffLoading = ref<boolean>(false);
 const cutoffOptions = ref<{ value: number; label: string }[]>([]);
@@ -800,12 +1104,16 @@ const onCategoryChange = (value: any) => {
 
 const openCreateMode = () => {
   editingId.value = null;
+  activeSideTab.value = "league";
+  resetFormatForm();
   cutoffOptions.value = [];
   Object.assign(form, defaultForm());
 };
 
 const openEdit = (id: number) => {
   editingId.value = id;
+  activeSideTab.value = "league";
+  resetFormatForm();
   leagueStore.getLeagueById(id).then(() => {
     const detail = leagueStore.leagueDetail;
     if (!detail) return;
@@ -843,12 +1151,16 @@ const onFormSubmit = () => {
     if (editingId.value) {
       leagueStore.updateLeague(editingId.value, payload).then(() => {
         editingId.value = null;
+        activeSideTab.value = "league";
+        resetFormatForm();
         cutoffOptions.value = [];
         Object.assign(form, defaultForm());
         loadLeagues();
       });
     } else {
       leagueStore.createLeague(payload).then(() => {
+        activeSideTab.value = "league";
+        resetFormatForm();
         cutoffOptions.value = [];
         Object.assign(form, defaultForm());
         loadLeagues();
@@ -871,6 +1183,16 @@ onMounted(() => {
     ageCategoryStore.ageCategoryList.length === 0
   ) {
     ageCategoryStore.getAgeCategories({ page: 1, pageSize: 100 });
+  }
+
+  // Format options are only needed by the side form.
+  if (hasPermission("leagues.create") || hasPermission("leagues.update")) {
+    if (dropdownStore.leagueFormats.length === 0) {
+      dropdownStore.getLeagueFormats();
+    }
+    if (dropdownStore.groupRoundTypes.length === 0) {
+      dropdownStore.getGroupRoundTypes();
+    }
   }
 });
 </script>

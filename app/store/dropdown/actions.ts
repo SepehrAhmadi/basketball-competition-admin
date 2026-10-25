@@ -180,7 +180,7 @@ handlerStore.loading = false
     handlerStore.loading = true;
 
     return axios
-      .get("/roles")
+      .get("/dropdown/roles")
       .then((res) => {
         // Domain roles only — ADMIN / SUPER_ADMIN live in `adminLevel`.
         const allowed = ["COACH", "PLAYER", "REFEREE"];
@@ -287,6 +287,41 @@ handlerStore.loading = false
       });
   };
 
+  // League competition format options for the league side form.
+  const getLeagueFormats = () => {
+    const axios = useApi();
+
+    return axios
+      .get("/dropdown/league-formats")
+      .then((res) => {
+        const list = res.data.data.formats ?? res.data.data ?? [];
+        state.leagueFormats.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response?.data?.message || "خطا در دریافت ساختارهای لیگ";
+        handlerStore.setError(message);
+      });
+  };
+
+  // Group round type options for group-based league formats.
+  const getGroupRoundTypes = () => {
+    const axios = useApi();
+
+    return axios
+      .get("/dropdown/group-round-types")
+      .then((res) => {
+        const list = res.data.data.roundTypes ?? res.data.data ?? [];
+        state.groupRoundTypes.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        const message =
+          err.response?.data?.message || "خطا در دریافت انواع دور مسابقات گروهی";
+        handlerStore.setError(message);
+      });
+  };
+
   return {
     getUnits,
     getPackagings,
@@ -302,5 +337,7 @@ handlerStore.loading = false
     getSeasons,
     getOrganizationDropdown,
     getTeamStatuses,
+    getLeagueFormats,
+    getGroupRoundTypes,
   };
 }
