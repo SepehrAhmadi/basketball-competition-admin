@@ -406,14 +406,10 @@
                   <v-chip v-if="person.jerseyNumber != null" size="x-small">
                     شماره {{ person.jerseyNumber }}
                   </v-chip>
-                  <v-chip
+                  <AdvisoryChip
                     v-if="!person.eligible && !person.selected"
-                    size="x-small"
-                    color="error"
-                    variant="tonal"
-                  >
-                    {{ reasonLabel(person.ineligibleReason) }}
-                  </v-chip>
+                    :advisory="person.ineligibility"
+                  />
                 </div>
               </div>
 
@@ -609,13 +605,6 @@ const people = ref<any[]>([]);
 // teamSeasonMemberId → league member id (required by DELETE .../members/:memberId)
 const memberIdMap = ref<Record<number, number>>({});
 const busyId = ref<number | null>(null);
-
-const reasonLabel = (reason: string | null): string =>
-  ({
-    BIRTH_DATE_MISSING: "تاریخ تولد ثبت نشده",
-    TOO_OLD: "خارج از رده سنی",
-    IN_OTHER_TEAM: "در تیم دیگری عضو است",
-  })[reason ?? ""] ?? "غیرمجاز";
 
 // Only the direction of the toggle (add / remove) needs its own permission.
 const isLocked = (person: any): boolean => {

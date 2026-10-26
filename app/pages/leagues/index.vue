@@ -555,6 +555,11 @@
                     >
                       <template #label>
                         <span class="tw:text-[12px]">امتیاز برد</span>
+                        <span
+                          class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                        >
+                          (الزامی)
+                        </span>
                       </template>
                     </v-text-field>
                   </v-col>
@@ -572,6 +577,11 @@
                     >
                       <template #label>
                         <span class="tw:text-[12px]">امتیاز باخت</span>
+                        <span
+                          class="tw:text-red-900 tw:dark:text-red-400 tw:text-[10px]"
+                        >
+                          (الزامی)
+                        </span>
                       </template>
                     </v-text-field>
                   </v-col>
@@ -958,13 +968,11 @@ const isGroupFormat = computed(
 const isFormatLocked = computed(
   () =>
     !!editingId.value &&
-    leagueStore.formatDetail?.can?.edit === false,
+    leagueStore.formatDetail?.lock != null,
 );
 
-const formatLockMessage = computed(() =>
-  leagueStore.formatDetail?.lockReason === "HAS_GAMES"
-    ? "پس از شروع اولین بازی، ساختار لیگ قابل تغییر نیست."
-    : "لیگ تمام‌شده قابل ویرایش نیست.",
+const formatLockMessage = computed(
+  () => leagueStore.formatDetail?.lock?.message ?? "",
 );
 
 const fillFormatForm = (detail: any) => {
