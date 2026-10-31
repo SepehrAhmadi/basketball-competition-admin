@@ -790,10 +790,10 @@
                         </template>
                       </div>
                     </template>
-                    <template #footer>
+                    <template #footer class="">
                       <div
                         v-if="groupStore.unassignedList.length === 0"
-                        class="tw:text-center tw:text-color-lighter tw:text-[13px] tw:py-6"
+                        class="tw:text-center tw:text-color-lighter tw:text-[13px] tw:py-7!"
                       >
                         <template v-if="unassignedQuery"
                           >موردی یافت نشد</template

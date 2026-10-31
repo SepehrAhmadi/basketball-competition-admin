@@ -139,7 +139,7 @@ import alignRight from "../icon/alignRight.vue";
 import checkShield from "../icon/checkShield.vue";
 import usersIcon from "../icon/users.vue";
 import layerIcon from "../icon/layer.vue";
-import pieChartIcon from "../icon/pieChart.vue";
+import cupIcon from "../icon/cup.vue";
 
 const isDesktop = ref(false);
 const drawer = ref(true);
@@ -215,7 +215,7 @@ const menuItems = computed(() => {
     {
       id: "competition",
       title: "مدیریت مسابقات",
-      icon: pieChartIcon,
+      icon: cupIcon,
       routeName: "competition",
       subItems: null,
     },
