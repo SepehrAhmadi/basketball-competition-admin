@@ -120,6 +120,14 @@ html {
   border-radius: 10px !important;
 }
 
+
+.v-list.v-list--one-line{
+  box-shadow: 0px 2px 2px 0px rgba(131, 131, 131, 0.8) !important;
+} 
+.dark .v-list.v-list--one-line{
+  box-shadow: 0px 2px 2px 0px rgba(71, 71, 71, 0.8) !important;
+} 
+
 .v-list-item__content>.v-list-item-title {
   font-size: 14px !important;
   font-weight: 400 !important;
@@ -166,6 +174,10 @@ html {
 
 .v-btn {
   text-transform: none !important;
+}
+
+.v-chip{
+  border-radius: 3px !important;
 }
 
 .v-pagination__item button .v-btn__content {

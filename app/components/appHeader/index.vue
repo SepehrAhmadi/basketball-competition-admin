@@ -139,6 +139,7 @@ import alignRight from "../icon/alignRight.vue";
 import checkShield from "../icon/checkShield.vue";
 import usersIcon from "../icon/users.vue";
 import layerIcon from "../icon/layer.vue";
+import pieChartIcon from "../icon/pieChart.vue";
 
 const isDesktop = ref(false);
 const drawer = ref(true);
@@ -212,6 +213,13 @@ const menuItems = computed(() => {
       subItems: null,
     },
     {
+      id: "competition",
+      title: "مدیریت مسابقات",
+      icon: pieChartIcon,
+      routeName: "competition",
+      subItems: null,
+    },
+    {
       id: "users",
       title: "مدیریت کاربران",
       icon: usersIcon,
@@ -228,6 +236,7 @@ const menuItems = computed(() => {
       return hasPermission("age-categories.view");
     if (item.id === "teams") return hasPermission("teams.view");
     if (item.id === "leagues") return hasPermission("leagues.view");
+    if (item.id === "competition") return hasPermission("groups.view");
     return true;
   });
 });
