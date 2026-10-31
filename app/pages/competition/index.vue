@@ -1101,16 +1101,17 @@
                                   />
                                 </v-btn>
                               </template>
-                              <v-list density="compact">
+                              <v-list density="compact" class="tw:py-0!">
                                 <v-list-item
                                   v-for="g in groupStore.groupList.filter(
                                     (x: any) => x.id !== group.id,
                                   )"
                                   :key="g.id"
                                   @click="moveTeam(element.leagueTeamId, g.id)"
+                                  class="tw:py-2!"
                                 >
                                   <v-list-item-title class="tw:text-[12px]!">
-                                    {{ g.name }} ({{ g.teamsCount }})
+                                    {{ g.name }} - {{ g.teamsCount }} تیم
                                   </v-list-item-title>
                                 </v-list-item>
                               </v-list>
@@ -1784,6 +1785,9 @@ const moveTeam = (leagueTeamId: number, toGroupId: number | null) => {
 };
 
 const onDragChange = (groupId: number | null, evt: any) => {
+  // Sorting is disabled (:sort="false"); ignore within-list reorder
+  // events so a drop always appends the team at the end of the group.
+  if (evt?.moved) return;
   if (evt?.added?.element) {
     moveTeam(evt.added.element.leagueTeamId, groupId);
   }
