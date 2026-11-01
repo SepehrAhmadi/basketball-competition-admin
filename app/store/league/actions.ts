@@ -41,11 +41,13 @@ export function useLeagueActions(state: StateType) {
       .get(`/admin/leagues/${id}`)
       .then((res) => {
         state.leagueDetail.value = res.data.data;
+        return res.data.data;
       })
       .catch((err) => {
         console.log(err);
         const message = err.response?.data?.message || "خطای سرور";
         handlerStore.setError(message);
+        return null;
       })
       .finally(() => {
         state.loading.value = false;

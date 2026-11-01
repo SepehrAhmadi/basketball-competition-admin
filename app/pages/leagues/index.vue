@@ -213,6 +213,26 @@
                   </v-tooltip>
 
                   <v-tooltip
+                    v-if="hasPermission('groups.view')"
+                    location="top"
+                  >
+                    <template #activator="{ props }">
+                      <v-btn
+                        v-bind="props"
+                        size="small"
+                        variant="text"
+                        rounded="0"
+                        class="tw:min-w-2!"
+                        aria-label="مدیریت مسابقات"
+                        @click="navigateTo(`/competition?leagueId=${item.id}`)"
+                      >
+                        <icon-pie-chart class="tw:text-[16px]" />
+                      </v-btn>
+                    </template>
+                    <span class="tw:text-xs tw:p-2">مدیریت مسابقات</span>
+                  </v-tooltip>
+
+                  <v-tooltip
                     v-if="hasPermission('leagues.update')"
                     location="top"
                   >
@@ -1178,9 +1198,24 @@ const onFormSubmit = () => {
 };
 
 // ─── Init ──
+const route = useRoute();
+
 onMounted(() => {
   if (!hasPermission("leagues.view")) return;
   loadLeagues();
+
+  // Deep link from the competition page: /leagues?editLeagueId=:id&tab=format
+  const editLeagueId = Number(route.query.editLeagueId);
+  if (Number.isInteger(editLeagueId) && editLeagueId > 0) {
+    if (hasPermission("leagues.update")) {
+      openEdit(editLeagueId);
+      if (route.query.tab === "format") {
+        activeSideTab.value = "format";
+        loadFormat(editLeagueId);
+      }
+    }
+    navigateTo({ path: "/leagues" }, { replace: true });
+  }
   if (dropdownStore.seasonsResult.length === 0) {
     dropdownStore.getSeasons();
   }

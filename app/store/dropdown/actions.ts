@@ -270,6 +270,25 @@ handlerStore.loading = false
       });
   };
 
+  // Leagues for the competition page selector (admin only, all statuses).
+  // Server-side search, no global loading flag.
+  const getLeagueDropdown = (params?: any) => {
+    const axios = useApi();
+
+    return axios
+      .get("/dropdowns/admin/leagues", { params })
+      .then((res) => {
+        const list = res.data.data.items ?? res.data.data ?? [];
+        state.leaguesResult.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        state.leaguesResult.value = [];
+        const message = err.response?.data?.message || "خطای سرور";
+        handlerStore.setError(message);
+      });
+  };
+
   // Team status filter options for the teams page.
   const getTeamStatuses = () => {
     const axios = useApi();
@@ -336,6 +355,7 @@ handlerStore.loading = false
     getOrganizationStatuses,
     getSeasons,
     getOrganizationDropdown,
+    getLeagueDropdown,
     getTeamStatuses,
     getLeagueFormats,
     getGroupRoundTypes,

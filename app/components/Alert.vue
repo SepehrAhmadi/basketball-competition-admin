@@ -46,7 +46,7 @@ const config = computed(() => {
     },
     2: {
       type: "error",
-      timeout: 500000,
+      timeout: 8000,
       color: "#AA2B1D",
       message: handlerStore.errorMessage,
     },

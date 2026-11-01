@@ -16,6 +16,9 @@ export function useDropdownState() {
   const organizationsResult = ref<
     { value: number; label: string; status?: string }[]
   >([]);
+  const leaguesResult = ref<
+    { value: number; label: string; status?: string }[]
+  >([]);
   const teamStatuses = ref<{ value: string; label: string }[]>([]);
   const leagueFormats = ref<{ value: string; label: string }[]>([]);
   const groupRoundTypes = ref<{ value: string; label: string }[]>([]);
@@ -34,6 +37,7 @@ export function useDropdownState() {
     organizationStatuses,
     seasonsResult,
     organizationsResult,
+    leaguesResult,
     teamStatuses,
     leagueFormats,
     groupRoundTypes,
