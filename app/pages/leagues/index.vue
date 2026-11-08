@@ -226,7 +226,7 @@
                         aria-label="مدیریت مسابقات"
                         @click="navigateTo(`/competition?leagueId=${item.id}`)"
                       >
-                        <icon-pie-chart class="tw:text-[16px]" />
+                        <icon-cup class="tw:text-[16px]" />
                       </v-btn>
                     </template>
                     <span class="tw:text-xs tw:p-2">مدیریت مسابقات</span>
