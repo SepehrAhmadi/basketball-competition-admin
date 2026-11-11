@@ -341,6 +341,80 @@ handlerStore.loading = false
       });
   };
 
+  // Groups of a league for the games filter / form (no global loading flag).
+  const getLeagueGroupDropdown = (leagueId: number | string) => {
+    const axios = useApi();
+
+    return axios
+      .get("/dropdowns/admin/league-groups", {
+        params: { leagueId, page: 1, pageSize: 100 },
+      })
+      .then((res) => {
+        const list = res.data.data.items ?? [];
+        state.leagueGroupsResult.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        state.leagueGroupsResult.value = [];
+        handlerStore.setError(err.response?.data?.message || "خطای سرور");
+      });
+  };
+
+  // Only the latest request may write into state (group filter changes fast).
+  let latestLeagueTeamsRequest = 0;
+
+  const getLeagueTeamDropdown = (
+    leagueId: number | string,
+    groupId?: number | null,
+  ) => {
+    const axios = useApi();
+    const requestId = ++latestLeagueTeamsRequest;
+
+    return axios
+      .get("/dropdowns/admin/league-teams", {
+        params: {
+          leagueId,
+          page: 1,
+          pageSize: 100,
+          ...(groupId ? { groupId } : {}),
+        },
+      })
+      .then((res) => {
+        if (requestId !== latestLeagueTeamsRequest) return;
+        const list = res.data.data.items ?? [];
+        state.leagueTeamsResult.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        if (requestId !== latestLeagueTeamsRequest) return;
+        state.leagueTeamsResult.value = [];
+        handlerStore.setError(err.response?.data?.message || "خطای سرور");
+      });
+  };
+
+  const getGameStatuses = () => {
+    const axios = useApi();
+
+    return axios
+      .get("/dropdown/game-statuses")
+      .then((res) => {
+        const list = res.data.data.statuses ?? [];
+        state.gameStatuses.value = Array.isArray(list) ? list : [];
+      })
+      .catch((err) => {
+        console.log(err);
+        handlerStore.setError(
+          err.response?.data?.message || "خطا در دریافت وضعیت‌های بازی",
+        );
+      });
+  };
+
+  const clearLeagueDropdowns = () => {
+    latestLeagueTeamsRequest += 1;
+    state.leagueGroupsResult.value = [];
+    state.leagueTeamsResult.value = [];
+  };
+
   return {
     getUnits,
     getPackagings,
@@ -359,5 +433,9 @@ handlerStore.loading = false
     getTeamStatuses,
     getLeagueFormats,
     getGroupRoundTypes,
+    getLeagueGroupDropdown,
+    getLeagueTeamDropdown,
+    getGameStatuses,
+    clearLeagueDropdowns,
   };
 }

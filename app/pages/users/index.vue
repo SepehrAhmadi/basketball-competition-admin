@@ -199,13 +199,22 @@
                     <v-expansion-panel v-for="group in permissionCatalog" :key="group.title" :title="group.title">
                       <v-expansion-panel-text>
                         <div class="tw:flex tw:flex-col tw:gap-2">
-                          <v-checkbox v-for="perm in group.permissions" :key="perm.code"
-                            :model-value="checkedPermissions.includes(perm.code)" density="compact" hide-details
-                            @update:model-value="togglePermission(perm.code)">
-                            <template #label>
-                              <span class="tw:text-[13px]">{{ perm.label }}</span>
-                            </template>
-                          </v-checkbox>
+                          <div v-for="perm in group.permissions" :key="perm.code">
+                            <v-tooltip location="top" :disabled="!isPermissionLocked(perm.code)">
+                              <template #activator="{ props }">
+                                <div v-bind="props">
+                                  <v-checkbox :model-value="checkedPermissions.includes(perm.code)"
+                                    :disabled="isPermissionLocked(perm.code)" density="compact" hide-details
+                                    @update:model-value="togglePermission(perm.code)">
+                                    <template #label>
+                                      <span class="tw:text-[13px]">{{ perm.label }}</span>
+                                    </template>
+                                  </v-checkbox>
+                                </div>
+                              </template>
+                              <span class="tw:text-xs tw:p-2">{{ lockHint(perm.code) }}</span>
+                            </v-tooltip>
+                          </div>
                         </div>
                       </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -508,13 +517,22 @@
             <v-expansion-panel v-for="group in permissionCatalog" :key="group.title" :title="group.title">
               <v-expansion-panel-text>
                 <div class="tw:flex tw:flex-col tw:gap-2">
-                  <v-checkbox v-for="perm in group.permissions" :key="perm.code"
-                    :model-value="checkedPermissions.includes(perm.code)" density="compact" hide-details
-                    @update:model-value="togglePermission(perm.code)">
-                    <template #label>
-                      <span class="tw:text-[13px]">{{ perm.label }}</span>
-                    </template>
-                  </v-checkbox>
+                  <div v-for="perm in group.permissions" :key="perm.code">
+                    <v-tooltip location="top" :disabled="!isPermissionLocked(perm.code)">
+                      <template #activator="{ props }">
+                        <div v-bind="props">
+                          <v-checkbox :model-value="checkedPermissions.includes(perm.code)"
+                            :disabled="isPermissionLocked(perm.code)" density="compact" hide-details
+                            @update:model-value="togglePermission(perm.code)">
+                            <template #label>
+                              <span class="tw:text-[13px]">{{ perm.label }}</span>
+                            </template>
+                          </v-checkbox>
+                        </div>
+                      </template>
+                      <span class="tw:text-xs tw:p-2">{{ lockHint(perm.code) }}</span>
+                    </v-tooltip>
+                  </div>
                 </div>
               </v-expansion-panel-text>
             </v-expansion-panel>
@@ -747,9 +765,51 @@ const activePermissionsUser = ref<{
   fullName: string;
 } | null>(null);
 const permissionCatalog = ref<
-  { title: string; permissions: { code: string; label: string }[] }[]
+  {
+    title: string;
+    permissions: { code: string; label: string; requires: string[] }[];
+  }[]
 >([]);
 const checkedPermissions = ref<string[]>([]);
+
+// ─── Permission dependencies ──
+type CatalogItem = { code: string; label: string; requires: string[] };
+
+const permissionItems = computed<CatalogItem[]>(() =>
+  permissionCatalog.value.flatMap((g) => g.permissions as CatalogItem[]),
+);
+const labelByCode = computed(
+  () => new Map(permissionItems.value.map((p) => [p.code, p.label])),
+);
+const requiresByCode = computed(
+  () => new Map(permissionItems.value.map((p) => [p.code, p.requires ?? []])),
+);
+
+// Codes plus all their transitive prerequisites (no duplicates).
+const closure = (codes: string[]): string[] => {
+  const result = new Set<string>();
+  const queue = [...codes];
+  while (queue.length) {
+    const code = queue.pop()!;
+    if (result.has(code)) continue;
+    result.add(code);
+    queue.push(...(requiresByCode.value.get(code) ?? []));
+  }
+  return [...result];
+};
+
+// Other checked permissions that depend on this code.
+const dependentsOf = (code: string): string[] =>
+  checkedPermissions.value.filter(
+    (c) => c !== code && closure([c]).includes(code),
+  );
+
+const isPermissionLocked = (code: string) => dependentsOf(code).length > 0;
+
+const lockHint = (code: string) =>
+  `لازمه‌ی: ${dependentsOf(code)
+    .map((c) => labelByCode.value.get(c) ?? c)
+    .join("، ")}`;
 
 const openPermissionsDrawer = (user: any) => {
   activePermissionsUser.value = { id: user.id, fullName: user.fullName };
@@ -762,7 +822,9 @@ const openPermissionsDrawer = (user: any) => {
   ])
     .then(([catalogRes, userPermissions]) => {
       permissionCatalog.value = catalogRes;
-      checkedPermissions.value = userPermissions;
+      // Permissions stored without their prerequisites are effective anyway,
+      // so they are shown as checked too. Must run after the catalog is set.
+      checkedPermissions.value = closure(userPermissions);
     })
     .finally(() => {
       permissionsLoading.value = false;
@@ -771,10 +833,21 @@ const openPermissionsDrawer = (user: any) => {
 
 const togglePermission = (code: string) => {
   const idx = checkedPermissions.value.indexOf(code);
-  if (idx === -1) {
-    checkedPermissions.value.push(code);
-  } else {
+  if (idx !== -1) {
+    if (isPermissionLocked(code)) return; // the checkbox is disabled in the UI too
     checkedPermissions.value.splice(idx, 1);
+    return;
+  }
+  const needed = closure([code]).filter(
+    (c) => c !== code && !checkedPermissions.value.includes(c),
+  );
+  checkedPermissions.value.push(code, ...needed);
+  if (needed.length) {
+    handlerStore.setInfo(
+      `برای «${labelByCode.value.get(code) ?? code}» دسترسی‌های «${needed
+        .map((c) => labelByCode.value.get(c) ?? c)
+        .join("، ")}» هم لازم است و به‌صورت خودکار اضافه شد.`,
+    );
   }
 };
 

@@ -213,7 +213,7 @@
                   </v-tooltip>
 
                   <v-tooltip
-                    v-if="hasPermission('groups.view')"
+                    v-if="hasPermission('competition.view')"
                     location="top"
                   >
                     <template #activator="{ props }">
