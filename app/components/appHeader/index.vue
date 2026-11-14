@@ -236,7 +236,7 @@ const menuItems = computed(() => {
       return hasPermission("age-categories.view");
     if (item.id === "teams") return hasPermission("teams.view");
     if (item.id === "leagues") return hasPermission("leagues.view");
-    if (item.id === "competition") return hasPermission("groups.view");
+    if (item.id === "competition") return hasPermission("competition.view");
     return true;
   });
 });

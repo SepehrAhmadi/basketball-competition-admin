@@ -121,12 +121,13 @@ html {
 }
 
 
-.v-list.v-list--one-line{
+.v-list.v-list--one-line {
   box-shadow: 0px 2px 2px 0px rgba(131, 131, 131, 0.8) !important;
-} 
-.dark .v-list.v-list--one-line{
+}
+
+.dark .v-list.v-list--one-line {
   box-shadow: 0px 2px 2px 0px rgba(71, 71, 71, 0.8) !important;
-} 
+}
 
 .v-list-item__content>.v-list-item-title {
   font-size: 14px !important;
@@ -176,7 +177,7 @@ html {
   text-transform: none !important;
 }
 
-.v-chip{
+.v-chip {
   border-radius: 3px !important;
 }
 
@@ -201,6 +202,46 @@ tbody tr th {
 
 
 /* ======= date picker ======= */
+.vpd-header {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background-color: white !important;
+  color: var(--color-primary-dark) !important;
+}
+
+.dark .vpd-header {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background-color: var(--color-primary-dark) !important;
+  color: var(--color-primary) !important;
+}
+
+.vpd-header div span {
+  font-size: 23px !important;
+  font-weight: 500 !important;
+}
+
+.dark .vpd-addon-list.vpd-time {
+  background-color: var(--color-primary-dark) !important;
+  border: none !important;
+}
+
+.vpd-time-column.vpd-time-h {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.vpd-time-column.vpd-time-m {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
 .vpd-input-group {
   border: 1px solid #9da0a8 !important;
   color: black !important;

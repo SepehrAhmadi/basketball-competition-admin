@@ -22,6 +22,16 @@ export function useDropdownState() {
   const teamStatuses = ref<{ value: string; label: string }[]>([]);
   const leagueFormats = ref<{ value: string; label: string }[]>([]);
   const groupRoundTypes = ref<{ value: string; label: string }[]>([]);
+  const leagueGroupsResult = ref<{ value: number; label: string }[]>([]);
+  const leagueTeamsResult = ref<
+    {
+      value: number;
+      label: string;
+      organizationName: string | null;
+      groupId: number | null;
+    }[]
+  >([]);
+  const gameStatuses = ref<{ value: string; label: string }[]>([]);
 
   return {
     unitsResult,
@@ -41,5 +51,8 @@ export function useDropdownState() {
     teamStatuses,
     leagueFormats,
     groupRoundTypes,
+    leagueGroupsResult,
+    leagueTeamsResult,
+    gameStatuses,
   };
 }
