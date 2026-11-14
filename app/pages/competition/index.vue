@@ -120,10 +120,10 @@
         <!-- ── Info + stats/form cards ── -->
         <v-row>
           <!-- League info card -->
-          <v-col cols="12" md="6" xl="7">
+          <v-col cols="12" xl="7">
             <v-card
               rounded="lg"
-              class="tw:flex! tw:flex-col! tw:justify-between! tw:relative! tw:px-4! tw:py-5! tw:h-full!"
+              class="tw:flex! tw:flex-col! tw:justify-between! tw:relative! tw:px-4! tw:py-4! tw:h-full!"
             >
               <div>
                 <div
@@ -158,7 +158,7 @@
 
                 <!-- grid info -->
                 <v-row>
-                  <v-col cols="6" md="4">
+                  <v-col cols="6" md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
                     >
@@ -173,7 +173,7 @@
                       </div>
                     </div>
                   </v-col>
-                  <v-col cols="6" md="4">
+                  <v-col cols="6" md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
                     >
@@ -187,7 +187,7 @@
                       </div>
                     </div>
                   </v-col>
-                  <v-col cols="6" md="4">
+                  <v-col cols="6"md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
                     >
@@ -201,7 +201,7 @@
                       </div>
                     </div>
                   </v-col>
-                  <v-col cols="6" md="4">
+                  <v-col cols="6" md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
                     >
@@ -215,7 +215,7 @@
                       </div>
                     </div>
                   </v-col>
-                  <v-col cols="6" md="4">
+                  <v-col cols="6" md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
                     >
@@ -229,7 +229,7 @@
                       </div>
                     </div>
                   </v-col>
-                  <v-col v-if="format" cols="6" md="4">
+                  <v-col v-if="format" cols="6" md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
                     >
@@ -243,7 +243,7 @@
                       </div>
                     </div>
                   </v-col>
-                  <v-col v-if="format" cols="6" md="4">
+                  <v-col v-if="format" cols="6" md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
                     >
@@ -257,7 +257,7 @@
                       </div>
                     </div>
                   </v-col>
-                  <v-col v-if="format" cols="6" md="4">
+                  <v-col v-if="format" cols="6" md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
                     >
@@ -271,7 +271,7 @@
                       </div>
                     </div>
                   </v-col>
-                  <v-col v-if="format && isGroupedFormat" cols="6" md="4">
+                  <v-col v-if="format && isGroupedFormat" cols="6" md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
                     >
@@ -285,7 +285,7 @@
                       </div>
                     </div>
                   </v-col>
-                  <v-col v-if="format && isGroupedFormat" cols="6" md="4">
+                  <v-col v-if="format && isGroupedFormat" cols="6" md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
                     >
@@ -304,16 +304,15 @@
               </div>
 
               <!-- league action -->
-              <div class="tw:flex tw:flex-wrap tw:items-center tw:justify-between tw:gap-2 tw:mt-4!">
+              <div class="tw:flex tw:flex-wrap tw:items-center tw:justify-end tw:gap-2 tw:mt-4!">
                 <div
                   v-if="hasBothViews"
                   class="tw:inline-flex tw:items-stretch tw:overflow-hidden tw:rounded-lg tw:border tw:border-gray-300 tw:dark:border-gray-600 tw:me-auto"
                 >
                   <v-btn
-                    size="small"
                     variant="text"
                     rounded="0"
-                    class="tw:px-8! tw:w-8!"
+                    class="tw:px-6! tw:w-6!"
                     :class="
                       activeView === 'groups'
                         ? 'tw:bg-secondary-dark! tw:text-white!'
@@ -325,10 +324,9 @@
                     <span class="tw:text-[12px] tw:ms-1!">گروه‌ها</span>
                   </v-btn>
                   <v-btn
-                    size="small"
                     variant="text"
                     rounded="0"
-                    class="tw:px-8! tw:w-8! tw:border-s! tw:border-gray-300! tw:dark:border-gray-600!"
+                    class="tw:px-6! tw:w-6! tw:border-s! tw:border-gray-300! tw:dark:border-gray-600!"
                     :class="
                       activeView === 'games'
                         ? 'tw:bg-secondary-dark! tw:text-white!'
@@ -340,40 +338,12 @@
                     <span class="tw:text-[12px] tw:ms-1!">بازی‌ها</span>
                   </v-btn>
                 </div>
-
-                <div class="tw:flex tw:justify-end tw:items-center tw:gap-2">
-                <v-btn
-                  v-if="hasPermission('leagues.update')"
-                  variant="text"
-                  rounded="lg"
-                  size="small"
-                  @click="goEditStructure"
-                  class="tw:border! tw:border-gray-300! tw:dark:border-gray-600!"
-                >
-                  <icon-edit-box class="tw:text-[16px]" />
-                  <span class="tw:text-[12px] tw:ms-1!">ویرایش ساختار</span>
-                </v-btn>
-
-                <v-btn
-                  v-if="hasPermission('league-teams.view')"
-                  variant="text"
-                  rounded="lg"
-                  size="small"
-                  @click="navigateTo(`/leagues/${league.id}/teams`)"
-                  class="tw:border! tw:border-gray-300! tw:dark:border-gray-600!"
-                >
-                  <icon-users class="tw:text-[16px]" />
-                  <span class="tw:text-[12px] tw:ms-1!"
-                    >مدیریت تیم‌های لیگ</span
-                  >
-                </v-btn>
-                </div>
               </div>
             </v-card>
           </v-col>
 
           <!-- Stats + form card -->
-          <v-col cols="12" md="6" xl="5">
+          <v-col cols="12" xl="5">
             <v-card ref="formCardRef" class="tw:rounded-xl! tw:h-full!">
               <!-- Statistics -->
               <v-card-text>
@@ -2176,16 +2146,14 @@
             <span>{{ resultTarget.awayTeam.team.name }}</span>
           </div>
 
-          <div class="tw:flex tw:items-center tw:gap-2 tw:mb-4!">
+          <div class="tw:grid tw:grid-cols-2 tw:items-center tw:gap-2 tw:mb-4!">
             <v-btn
-              block
-              class="tw:flex-1"
               rounded="lg"
               size="small"
               :variant="resultForm.type === 'NORMAL' ? 'flat' : 'outlined'"
               :class="
                 resultForm.type === 'NORMAL'
-                  ? 'tw:bg-secondary-dark! tw:text-white!'
+                  ? 'tw:bg-secondary-dark! tw:text-white! tw:border! tw:border-secondary-dark!'
                   : ''
               "
               @click="resultForm.type = 'NORMAL'"
@@ -2193,14 +2161,12 @@
               <span class="tw:text-[12px]">عادی</span>
             </v-btn>
             <v-btn
-              block
-              class="tw:flex-1"
               rounded="lg"
               size="small"
               :variant="resultForm.type === 'FORFEIT' ? 'flat' : 'outlined'"
               :class="
                 resultForm.type === 'FORFEIT'
-                  ? 'tw:bg-secondary-dark! tw:text-white!'
+                  ? 'tw:bg-secondary-dark! tw:text-white! tw:border! tw:border-secondary-dark!'
                   : ''
               "
               @click="resultForm.type = 'FORFEIT'"
