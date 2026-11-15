@@ -621,7 +621,7 @@
                     <!-- حالت ویرایش: فقط خواندنی -->
                     <div
                       v-if="gameFormMode === 'edit' && editingGame"
-                      class="tw:text-[13px] tw:mb-3!"
+                      class="tw:text-[13px] tw:mb-6!"
                     >
                       {{ editingGame.homeTeam.team.name }} -
                       {{ editingGame.awayTeam.team.name }}
@@ -1646,7 +1646,7 @@
                     @update:model-value="onGameFilterChange"
                   >
                     <template #label>
-                      <span class="tw:text-[12px]">فقط نتیجه‌ی ثبت‌نشده</span>
+                      <span class="tw:text-[12px]">فقط نتیجه‌ی ثبت نشده</span>
                     </template>
                   </v-switch>
                 </v-col>
