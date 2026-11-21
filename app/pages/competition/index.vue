@@ -157,7 +157,7 @@
                 </div>
 
                 <!-- grid info -->
-                <v-row>
+                <v-row dense class="compact-chips">
                   <v-col cols="6" md="3" xl="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
@@ -365,7 +365,7 @@
                 </v-alert>
 
                 <!-- stats -->
-                <v-row>
+                <v-row dense class="compact-chips">
                   <v-col cols="6" md="4">
                     <div
                       class="tw:p-4! tw:bg-gray-50 tw:dark:bg-gray-800 tw:border tw:border-gray-200 tw:dark:border-gray-600 tw:rounded-md tw:flex tw:justify-center tw:items-center! tw:gap-2"
@@ -3680,5 +3680,13 @@ onMounted(() => {
 <style>
 .team-ghost {
   opacity: 0.5;
+}
+.compact-chips > .v-col {
+  padding: 2px !important;
+}
+.compact-chips > .v-col > div {
+  padding: 4px 8px !important;
+  gap: 6px !important;
+  min-height: 34px !important;
 }
 </style>
