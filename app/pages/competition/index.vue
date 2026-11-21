@@ -1404,7 +1404,9 @@
                                 {{ element.lost ?? "—" }}
                               </td>
                               <td class="tw:py-2 tw:text-center tw:text-[12px]">
-                                {{ element.difference == null ? "—" : formatDiff(element.difference) }}
+                                <span dir="ltr" class="tw:inline-block">
+                                  {{ element.difference == null ? "—" : formatDiff(element.difference) }}
+                                </span>
                               </td>
                               <td class="tw:py-2 tw:text-center">
                                 <v-progress-circular
@@ -2933,7 +2935,7 @@ const groupRows = (group: any) => {
 };
 
 const formatDiff = (value: number) =>
-  value > 0 ? `+${value}` : value < 0 ? `−${Math.abs(value)}` : "0";
+  value > 0 ? `+ ${value}` : value < 0 ? `− ${Math.abs(value)}` : "0";
 
 const sortUnassigned = (list: any[]) =>
   [...list].sort((a, b) => a.leagueTeamId - b.leagueTeamId);
