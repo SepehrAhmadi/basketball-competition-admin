@@ -873,7 +873,7 @@
         <ClientOnly v-else>
           <v-row>
             <!-- Unassigned column (right) -->
-            <v-col cols="12" md="4" lg="3">
+            <v-col cols="12" md="4" lg="4" xl="3">
               <v-card rounded="lg" class="tw:p-4! tw:md:sticky">
                 <div
                   class="tw:flex tw:items-center tw:justify-between tw:gap-2 tw:mb-3!"
@@ -1106,7 +1106,7 @@
             </v-col>
 
             <!-- Groups column (left) -->
-            <v-col cols="12" md="8" lg="9">
+            <v-col cols="12" md="8" lg="8" xl="9">
               <div
                 v-if="groupStore.groupList.length === 0"
                 class="tw:flex tw:justify-center tw:items-center tw:gap-2 tw:py-16"
@@ -1123,7 +1123,7 @@
                   v-for="group in groupStore.groupList"
                   :key="group.id"
                   cols="12"
-                  md="6"
+                  xl="6"
                 >
                   <v-card
                     rounded="lg"
@@ -1305,183 +1305,200 @@
                       </div>
                     </div>
 
-                    <draggable
-                      :model-value="group.teams"
-                      item-key="leagueTeamId"
-                      :group="{
-                        name: 'teams',
-                        pull: !group.lock,
-                        put: !group.lock,
-                      }"
-                      :sort="false"
-                      :disabled="!canEdit"
-                      filter=".no-drag"
-                      :animation="150"
-                      :delay="150"
-                      :delay-on-touch-only="true"
-                      ghost-class="team-ghost"
-                      class="tw:flex tw:flex-col tw:gap-2 tw:mt-3! tw:min-h-20 tw:flex-1"
-                      @change="onDragChange(group.id, $event)"
-                      @start="isDragging = true"
-                      @end="isDragging = false"
-                    >
-                      <template #item="{ element }">
-                        <div
-                          :class="[
-                            teamRowClass,
-                            element.teamStatus === 'DELETED'
-                              ? 'tw:opacity-60'
-                              : '',
-                            isDraggable(element) ? 'tw:cursor-grab' : 'no-drag',
-                            busyTeamId === element.leagueTeamId
-                              ? 'no-drag'
-                              : '',
-                          ]"
+                    <div class="tw:mt-3! tw:w-full tw:overflow-x-auto">
+                      <table class="tw:w-full tw:min-w-125 tw:table-fixed tw:text-right">
+                        <thead>
+                          <tr class="tw:text-[11px] tw:text-color-lighter">
+                            <th class="tw:w-[42%] tw:py-2! tw:px-3.25! tw:font-normal">تیم</th>
+                            <th class="tw:w-12 tw:py-2 tw:text-center tw:font-normal">بازی</th>
+                            <th class="tw:w-12 tw:py-2 tw:text-center tw:font-normal">امتیاز</th>
+                            <th class="tw:w-10 tw:py-2 tw:text-center tw:font-normal">برد</th>
+                            <th class="tw:w-10 tw:py-2 tw:text-center tw:font-normal">باخت</th>
+                            <th class="tw:w-12 tw:py-2 tw:text-center tw:font-normal">تفاضل</th>
+                            <th class="tw:w-10 tw:py-2" />
+                          </tr>
+                        </thead>
+                        <draggable
+                          tag="tbody"
+                          :model-value="groupRows(group)"
+                          item-key="leagueTeamId"
+                          :group="{
+                            name: 'teams',
+                            pull: !group.lock,
+                            put: !group.lock,
+                          }"
+                          :sort="false"
+                          :disabled="!canEdit"
+                          filter=".no-drag"
+                          :animation="150"
+                          :delay="150"
+                          :delay-on-touch-only="true"
+                          ghost-class="team-ghost"
+                          class="tw:min-h-20"
+                          @change="onDragChange(group.id, $event)"
+                          @start="isDragging = true"
+                          @end="isDragging = false"
                         >
-                          <div
-                            class="tw:flex tw:justify-start tw:items-center tw:gap-2 tw:min-w-0"
-                          >
-                            <v-avatar
-                              size="40"
-                              class="tw:bg-secondary-dark! tw:p-1!"
+                          <template #item="{ element }">
+                            <tr
+                              :class="[
+                                'tw:border-t! tw:border-gray-100! tw:dark:border-gray-800!',
+                                element.qualified
+                                  ? 'tw:bg-green-100 tw:dark:bg-green-900/30  tw:rounded-lg!'
+                                  : '',
+                                element.teamStatus === 'DELETED' ? 'tw:opacity-60' : '',
+                                isDraggable(element) ? 'tw:cursor-grab' : 'no-drag',
+                                busyTeamId === element.leagueTeamId ? 'no-drag' : '',
+                              ]"
                             >
-                              <v-img
-                                v-if="element.team?.logoUrl"
-                                :src="element.team.logoUrl"
-                                cover
-                              />
-                              <v-img v-else :src="defaultTeamLogo" cover />
-                            </v-avatar>
-                            <div class="tw:min-w-0">
-                              <v-tooltip
-                                location="top"
-                                :disabled="mobile || isDragging"
-                              >
-                                <template #activator="{ props }">
-                                  <div
-                                    v-bind="props"
-                                    class="tw:text-[13px] tw:font-medium tw:truncate"
-                                  >
-                                    {{ element.team?.name ?? "—" }}
+                              <td class="tw:my-3! tw:ps-2!">
+                                <div class="tw:flex tw:items-center tw:gap-2 tw:min-w-0">
+                                  <v-avatar size="28" class="tw:bg-secondary-dark! tw:p-1! tw:shrink-0">
+                                    <v-img
+                                      v-if="element.team?.logoUrl"
+                                      :src="element.team.logoUrl"
+                                      cover
+                                    />
+                                    <v-img v-else :src="defaultTeamLogo" cover />
+                                  </v-avatar>
+                                  <div class="tw:min-w-0">
+                                    <v-tooltip location="top" :disabled="mobile || isDragging">
+                                      <template #activator="{ props }">
+                                        <div
+                                          v-bind="props"
+                                          class="tw:text-[12px] tw:font-medium tw:truncate"
+                                        >
+                                          {{ element.team?.name ?? "—" }}
+                                        </div>
+                                      </template>
+                                      <span class="tw:text-xs tw:p-2">
+                                        {{ element.organization?.name ?? "—" }}
+                                      </span>
+                                    </v-tooltip>
+                                    <div
+                                      v-if="mobile"
+                                      class="tw:text-[10px] tw:text-color-lighter tw:truncate"
+                                    >
+                                      {{ element.organization?.name ?? "—" }}
+                                    </div>
                                   </div>
-                                </template>
-                                <span class="tw:text-xs tw:p-2">
-                                  {{ element.organization?.name ?? "—" }}
+                                  <v-chip
+                                    v-if="element.teamStatus === 'DELETED'"
+                                    size="x-small"
+                                    variant="tonal"
+                                  >
+                                    حذف‌شده
+                                  </v-chip>
+                                </div>
+                              </td>
+                              <td class="tw:py-2 tw:text-center tw:text-[12px]">
+                                {{ element.played ?? "—" }}
+                              </td>
+                              <td class="tw:py-2 tw:text-center tw:text-[12px] tw:font-semibold">
+                                {{ element.points ?? "—" }}
+                              </td>
+                              <td class="tw:py-2 tw:text-center tw:text-[12px]">
+                                {{ element.won ?? "—" }}
+                              </td>
+                              <td class="tw:py-2 tw:text-center tw:text-[12px]">
+                                {{ element.lost ?? "—" }}
+                              </td>
+                              <td class="tw:py-2 tw:text-center tw:text-[12px]">
+                                <span dir="ltr" class="tw:inline-block">
+                                  {{ element.difference == null ? "—" : formatDiff(element.difference) }}
                                 </span>
-                              </v-tooltip>
-                              <div
-                                v-if="mobile"
-                                class="tw:text-[11px] tw:text-color-lighter tw:truncate"
+                              </td>
+                              <td class="tw:py-2 tw:text-center">
+                                <v-progress-circular
+                                  v-if="busyTeamId === element.leagueTeamId"
+                                  indeterminate
+                                  size="18"
+                                  width="2"
+                                  color="primary"
+                                />
+                                <v-menu v-else-if="canManage && !isDragging">
+                                  <template #activator="{ props }">
+                                    <v-btn
+                                      v-bind="props"
+                                      size="x-small"
+                                      variant="plain"
+                                      icon
+                                      :disabled="!canEdit || !!group.lock"
+                                      aria-label="عملیات تیم"
+                                      :title="group.lock?.message ?? 'عملیات تیم'"
+                                    >
+                                      <icon-more-vertical class="tw:text-[20px]" />
+                                    </v-btn>
+                                  </template>
+                                  <v-list density="compact" class="tw:py-0!">
+                                    <v-list-item
+                                      v-if="groupStore.groupList.length > 1"
+                                      :disabled="!canEdit || !!group.lock"
+                                      :subtitle="group.lock?.message"
+                                    >
+                                      <v-list-item-title class="tw:text-[12px]! tw:ps-1!">
+                                        انتقال به گروه دیگر
+                                      </v-list-item-title>
+                                      <template #prepend>
+                                        <icon-sync class="tw:text-[16px]" />
+                                      </template>
+                                      <v-menu activator="parent" location="start">
+                                        <v-list density="compact" class="tw:py-0!">
+                                          <v-list-item
+                                            v-for="targetGroup in groupStore.groupList.filter(
+                                              (item: any) => item.id !== group.id,
+                                            )"
+                                            :key="targetGroup.id"
+                                            :disabled="!!targetGroup.lock || !canEdit || !!group.lock"
+                                            :subtitle="targetGroup.lock?.message"
+                                            @click="moveTeam(element.leagueTeamId, targetGroup.id)"
+                                          >
+                                            <v-list-item-title class="tw:text-[12px]!">
+                                              {{ targetGroup.name }} - {{ targetGroup.teamsCount }} تیم
+                                            </v-list-item-title>
+                                          </v-list-item>
+                                        </v-list>
+                                      </v-menu>
+                                    </v-list-item>
+                                    <v-list-item
+                                      :disabled="!canEdit || !!group.lock"
+                                      :subtitle="group.lock?.message"
+                                      @click="moveTeam(element.leagueTeamId, null)"
+                                    >
+                                      <v-list-item-title class="tw:text-[12px]! tw:ps-1!">
+                                        حذف از گروه
+                                      </v-list-item-title>
+                                      <template #prepend>
+                                        <icon-close class="tw:text-[16px]" />
+                                      </template>
+                                    </v-list-item>
+                                  </v-list>
+                                </v-menu>
+                              </td>
+                            </tr>
+                          </template>
+                          <template #footer>
+                            <tr v-if="group.teams.length === 0">
+                              <td
+                                colspan="7"
+                                class="tw:border-t tw:border-dashed tw:border-gray-300 tw:dark:border-gray-600 tw:py-6 tw:text-center tw:text-[12px] tw:text-color-lighter"
                               >
-                                {{ element.organization?.name ?? "—" }}
-                              </div>
-                            </div>
-                            <v-chip
-                              v-if="element.teamStatus === 'DELETED'"
-                              size="x-small"
-                              variant="tonal"
-                            >
-                              حذف‌شده
-                            </v-chip>
-                          </div>
-
-                          <v-progress-circular
-                            v-if="busyTeamId === element.leagueTeamId"
-                            indeterminate
-                            size="18"
-                            width="2"
-                            color="primary"
-                          />
-                          <div
-                            v-else-if="canManage && !isDragging"
-                            class="tw:flex tw:items-center tw:shrink-0"
-                            :class="actionsClass"
-                          >
-                            <v-menu v-if="groupStore.groupList.length > 1">
-                              <template #activator="{ props }">
-                                <v-btn
-                                  v-bind="props"
-                                  size="x-small"
-                                  variant="plain"
-                                  rounded="pill"
-                                  icon
-                                  :disabled="!canEdit || !!group.lock"
-                                  aria-label="انتقال به گروه دیگر"
-                                  :title="group.lock?.message ?? 'انتقال به گروه دیگر'"
-                                >
-                                  <icon-sync
-                                    class="tw:text-color-lighter tw:text-[20px]"
-                                  />
-                                </v-btn>
-                              </template>
-                              <v-list density="compact" class="tw:py-0!">
-                                <v-list-item
-                                  v-for="g in groupStore.groupList.filter(
-                                    (x: any) => x.id !== group.id,
-                                  )"
-                                  :key="g.id"
-                                  :disabled="!!g.lock"
-                                  :subtitle="g.lock?.message"
-                                  @click="moveTeam(element.leagueTeamId, g.id)"
-                                  class="tw:py-2!"
-                                >
-                                  <v-list-item-title class="tw:text-[12px]!">
-                                    {{ g.name }} - {{ g.teamsCount }} تیم
-                                  </v-list-item-title>
-                                </v-list-item>
-                              </v-list>
-                            </v-menu>
-                            <v-btn
-                              v-else
-                              size="x-small"
-                              variant="plain"
-                              rounded="pill"
-                              icon
-                              disabled
-                              aria-label="انتقال به گروه دیگر"
-                            >
-                              <icon-sync
-                                class="tw:text-color-lighter tw:text-[20px]"
-                              />
-                            </v-btn>
-
-                            <v-btn
-                              size="x-small"
-                              variant="plain"
-                              rounded="pill"
-                              icon
-                              :disabled="!canEdit || !!group.lock"
-                              aria-label="حذف از گروه"
-                              :title="group.lock?.message ?? 'حذف از گروه'"
-                              @click="moveTeam(element.leagueTeamId, null)"
-                            >
-                              <icon-close
-                                class="tw:text-color-lighter tw:text-[20px]"
-                              />
-                            </v-btn>
-                          </div>
-                        </div>
-                      </template>
-                      <template #footer>
-                        <div
-                          v-if="group.teams.length === 0"
-                          class="tw:flex tw:flex-1! tw:min-h-35! tw:justify-center tw:items-center tw:text-center tw:text-color-lighter tw:text-[12px] tw:py-6 tw:border tw:border-dashed tw:border-gray-300 tw:dark:border-gray-600 tw:rounded-lg"
-                        >
-                          <div
-                            class="tw:flex tw:flex-col tw:justify-center tw:items-center tw:gap-1 tw:text-gray-500 tw:dark:text-gray-400"
-                          >
-                            <icon-exchange class="tw:text-[25px]!" />
-                            <div>
-                              {{
-                                canManage
-                                  ? "تیمی را به اینجا بکشید یا از دکمه انتقال استفاده کنید."
-                                  : "این گروه تیمی ندارد."
-                              }}
-                            </div>
-                          </div>
-                        </div>
-                      </template>
-                    </draggable>
+                                <div class="tw:flex tw:flex-col tw:items-center tw:gap-1 tw:pt-4!">
+                                  <icon-exchange class="tw:text-[25px]!" />
+                                  <div>
+                                    {{
+                                      canManage
+                                        ? "تیمی را به اینجا بکشید یا از منوی عملیات استفاده کنید."
+                                        : "این گروه تیمی ندارد."
+                                    }}
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </template>
+                        </draggable>
+                      </table>
+                    </div>
                   </v-card>
                 </v-col>
               </v-row>
@@ -2903,11 +2920,22 @@ const onDeleteConfirm = () => {
 const teamRowClass =
   "tw:group tw:flex tw:justify-between tw:items-center tw:gap-2 tw:rounded-lg! tw:p-3! tw:shadow-none! tw:border! tw:border-gray-300! tw:dark:border-gray-600!";
 
-const actionsClass = computed(() =>
-  mobile.value
-    ? ""
-    : "tw:opacity-0 tw:group-hover:opacity-100 tw:group-focus-within:opacity-100 tw:transition-opacity",
-);
+const groupRows = (group: any) => {
+  const standings = new Map<number, any>(
+    (group.standings ?? []).map(
+      (row: any) => [row.leagueTeamId, row] as const,
+    ),
+  );
+  return [...group.teams]
+    .map((team: any) => ({
+      ...team,
+      ...(standings.get(team.leagueTeamId) ?? {}),
+    }))
+    .sort((a: any, b: any) => (a.rank ?? Infinity) - (b.rank ?? Infinity));
+};
+
+const formatDiff = (value: number) =>
+  value > 0 ? `+ ${value}` : value < 0 ? `− ${Math.abs(value)}` : "0";
 
 const sortUnassigned = (list: any[]) =>
   [...list].sort((a, b) => a.leagueTeamId - b.leagueTeamId);
@@ -3004,7 +3032,7 @@ const moveTeam = (leagueTeamId: number, toGroupId: number | null) => {
       if (data.issues) groupStore.groupIssues = data.issues;
       mutating.value = false;
       busyTeamId.value = null;
-      return;
+      return refreshData();
     }
 
     // Failure: roll back, then always refetch (covers 404 / 409 / network).
