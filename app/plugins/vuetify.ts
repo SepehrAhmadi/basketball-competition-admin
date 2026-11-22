@@ -6,6 +6,10 @@ import { createVuetify } from "vuetify";
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     directives,
+    defaults: {
+      VAutocomplete: { clearIcon: "$close" },
+      VSelect: { clearIcon: "$close" },
+    },
     theme: {
       defaultTheme: "light",
 
