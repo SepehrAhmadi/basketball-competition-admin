@@ -105,6 +105,20 @@ html {
   font-size: 14px !important;
 }
 
+.v-field__clearable .v-btn {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.v-field__clearable .v-btn__overlay {
+  opacity: 0 !important;
+}
+
+.v-field__clearable .v-icon {
+  font-size: 15px !important;
+  opacity: 0.45;
+}
+
 .v-selection-control__input i {
   font-size: 20px !important;
 }
