@@ -37,7 +37,7 @@
               <v-col cols="6" sm="2" lg="3" xl="2">
                 <v-select
                   v-model="selectedStatus"
-                  :items="statusOptions"
+                  :items="LEAGUE_STATUS_OPTIONS"
                   item-title="label"
                   item-value="value"
                   variant="outlined"
@@ -141,9 +141,9 @@
                 <v-chip
                   size="x-small"
                   variant="tonal"
-                  :color="statusColor(item.status)"
+                  :color="leagueStatusColor(item.status)"
                 >
-                  {{ statusLabel(item.status) }}
+                    {{ leagueStatusLabel(item.status) }}
                 </v-chip>
               </div>
 
@@ -773,7 +773,7 @@
             <span class="tw:font-bold!">
               {{
                 statusFormValue
-                  ? statusOptions.find((o) => o.value === statusFormValue)
+                  ? LEAGUE_STATUS_OPTIONS.find((o) => o.value === statusFormValue)
                       ?.label
                   : "—"
               }}
@@ -783,7 +783,7 @@
 
           <v-select
             v-model="statusFormValue"
-            :items="statusOptions"
+            :items="LEAGUE_STATUS_OPTIONS"
             item-title="label"
             item-value="value"
             variant="outlined"
@@ -829,6 +829,11 @@ import { useLeagueStore } from "~/store/league";
 import { useHandlerStore } from "~/store/handler";
 import { useDeopdownStore } from "~/store/dropdown";
 import { useAgeCategoryStore } from "~/store/ageCategory";
+import {
+  LEAGUE_STATUS_OPTIONS,
+  leagueStatusColor,
+  leagueStatusLabel,
+} from "~/utils/league/status";
 
 const leagueStore = useLeagueStore();
 const handlerStore = useHandlerStore();
@@ -848,29 +853,6 @@ const page = ref<number>(1);
 const pageSize = ref<number>(8);
 const totalItems = computed(() => leagueStore.leagueListMeta?.total ?? 0);
 
-// ─── Status vocabulary (mirrors backend LEAGUE_STATUS_VALUES) ──
-const statusOptions = [
-  { value: "INACTIVE", label: "غیرفعال" },
-  { value: "REGISTRATION", label: "ثبت‌نام" },
-  { value: "ACTIVE", label: "فعال" },
-  { value: "FINISHED", label: "پایان‌یافته" },
-];
-
-const statusLabel = (status: string) =>
-  statusOptions.find((o) => o.value === status)?.label ?? status ?? "—";
-
-const statusColor = (status: string) => {
-  switch (status) {
-    case "ACTIVE":
-      return "success";
-    case "REGISTRATION":
-      return "info";
-    case "INACTIVE":
-      return "default";
-    default:
-      return "default";
-  }
-};
 
 // ─── Filters ──
 const query = ref<string>("");
